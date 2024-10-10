@@ -33,5 +33,15 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### 환경 설정 파일 ###
+/application.yml
+
+# macOS에서 생성되는 파일
+.DS_Store
+
+# Windows에서 생성되는 파일
+Thumbs.db
+desktop.ini
+
 ### VS Code ###
 .vscode/
