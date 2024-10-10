@@ -1,0 +1,16 @@
+create database shop_we;
+
+use shop_we;
+
+create table member
+(
+    id       bigint auto_increment
+        primary key,
+    login_id   varchar(255) not null,
+    password varchar(255) not null,
+    name     varchar(255) null,
+    email    varchar(255) null,
+    phone    varchar(20)  null
+)
+    charset = utf8mb4;
+
