@@ -1,0 +1,36 @@
+footer {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px; /* Add space above footer */
+}
+
+.footer-container {
+    max-width: 1200px; /* Limit the width of the footer content */
+    margin: 0 auto; /* Center align the footer content */
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+footer ul {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0;
+}
+
+footer ul li {
+    display: inline; /* Align items horizontally */
+    margin: 0 10px; /* Add space between items */
+}
+
+footer a {
+    text-decoration: none; /* Remove underline from links */
+    color: #007BFF; /* Set link color */
+}
+
+footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
