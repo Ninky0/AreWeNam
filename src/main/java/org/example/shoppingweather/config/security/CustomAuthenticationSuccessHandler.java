@@ -27,7 +27,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         // 세션설정
         HttpSession session = request.getSession();
-        session.setAttribute("userId", customer.getLogin_id());
+        session.setAttribute("loginId", customer.getLoginId());
         session.setAttribute("userName", customer.getName());
 
         response.setStatus(HttpServletResponse.SC_OK);
@@ -37,7 +37,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 .isLoggedIn(true)
                 .message("로그인 성공")
                 .url("/")
-                .login_id(customer.getLogin_id())
+                .loginId(customer.getLoginId())
                 .name(customer.getName())
                 .build();
 

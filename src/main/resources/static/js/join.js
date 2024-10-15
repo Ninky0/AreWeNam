@@ -2,7 +2,7 @@ $(document).ready(() => {
 
     $('#signup').click(() => {
 
-        let userId = $('#login_id').val();
+        let loginId = $('#loginId').val();
         let password = $('#password').val();
         let name = $('#name').val();
         let email = $('#email').val();
@@ -10,7 +10,7 @@ $(document).ready(() => {
         let address = $('#address').val();
 
         let formData = {
-            userId: userId,   // 수정된 부분: login_id -> userId
+            loginId: loginId,   // 수정된 부분: login_id -> userId
             password: password,
             name: name,
             email: email,
@@ -20,7 +20,7 @@ $(document).ready(() => {
 
         $.ajax({
             type: 'POST',
-            url: '/join', // 서버의 엔드포인트 URL
+            url: '/user/join', // 서버의 엔드포인트 URL
             data: JSON.stringify(formData), // 데이터를 JSON 형식으로 변환
             contentType: 'application/json; charset=utf-8', // 전송 데이터의 타입
             dataType: 'json', // 서버에서 받을 데이터의 타입

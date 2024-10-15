@@ -18,7 +18,13 @@ public class Review {
 
     private String picture;
 
+    // Product와의 다대일 관계 설정
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     private Product product;
+
+    // Customer와의 다대일 관계 설정
+    @ManyToOne
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 }

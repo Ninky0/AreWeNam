@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Getter
 public class SignUpRequestDTO {
-    private String login_id;
+    private String loginId;
     private String password;
     private String name;
     private String email;
@@ -15,7 +15,7 @@ public class SignUpRequestDTO {
 
     public Customer toCustomer(BCryptPasswordEncoder bCryptPasswordEncoder) {
         return Customer.builder()
-                .login_id(login_id)
+                .loginId(loginId)
                 .password(bCryptPasswordEncoder.encode(password))  // 비밀번호 암호화
                 .name(name)
                 .email(email)

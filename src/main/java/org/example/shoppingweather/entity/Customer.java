@@ -24,8 +24,8 @@ public class Customer implements UserDetails {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "login_id", nullable = false, unique = true)
-    private String login_id;
+    @Column(name = "loginId", nullable = false, unique = true)
+    private String loginId;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -44,7 +44,7 @@ public class Customer implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login_id;
+        return loginId;
     }
 
     @Override

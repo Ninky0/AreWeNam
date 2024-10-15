@@ -3,18 +3,17 @@ $(document).ready(() => {
 
     $('#signin').click(() => {
 
-        let userId = $('#login_id').val();
+        let loginId = $('#loginId').val();
         let password = $('#password').val();
 
         let formData = {
-            username : userId,
+            username : loginId,
             password : password
         }
 
-
         $.ajax({
             type: 'POST',
-            url: '/login', // 서버의 엔드포인트 URL
+            url: '/user/login', // 서버의 엔드포인트 URL
             // data: JSON.stringify(formData), // 데이터를 JSON 형식으로 변환
             // contentType: 'application/json; charset=utf-8', // 전송 데이터의 타입
             data: $.param(formData), // 데이터를 URL 인코딩된 형식으로 변환

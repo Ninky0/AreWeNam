@@ -4,7 +4,7 @@
 <mapper namespace="org.example.shoppingweather.mapper.CustomerMapper">
 
     <resultMap id="customerResultMap" type="org.example.shoppingweather.entity.Customer">
-        <result property="userId" column="login_id"/>
+        <result property="login_id" column="login_id"/>
         <result property="password" column="password"/>
         <result property="name" column="name"/>
         <result property="email" column="email"/>
@@ -14,13 +14,13 @@
 
     <insert id="signUp" parameterType="org.example.shoppingweather.entity.Customer">
         INSERT INTO customer (login_id, password, name, email, phone, address)
-        VALUES (#{userId}, #{password}, #{name}, #{email}, #{phone}, #{address});
+        VALUES (#{login_id}, #{password}, #{name}, #{email}, #{phone}, #{address});
     </insert>
 
     <select id="signIn"
             parameterType="String"
             resultMap="customerResultMap">
-        SELECT * FROM customer WHERE login_id = #{userId};
+        SELECT * FROM customer WHERE login_id = #{login_id};
     </select>
 
 </mapper>
