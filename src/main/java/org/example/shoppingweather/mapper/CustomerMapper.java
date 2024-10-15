@@ -6,5 +6,5 @@ import org.example.shoppingweather.entity.Customer;
 @Mapper
 public interface CustomerMapper {
     void signUp(Customer customer);
-    Customer signIn(String login_id);
+    Customer signIn(String loginId);
 }

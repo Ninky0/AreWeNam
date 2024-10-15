@@ -19,7 +19,7 @@ public class Ootd {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customerId")
     private Customer customer;
 
     private LocalDateTime date;

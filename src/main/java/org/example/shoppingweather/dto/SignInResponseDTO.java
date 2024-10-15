@@ -9,6 +9,6 @@ public class SignInResponseDTO {
     private boolean isLoggedIn;
     private String url;
     private String name;
-    private String login_id;
+    private String loginId;
     private String message;
 }

@@ -14,7 +14,7 @@ public class UserService {
 
     public Long save(AddUserRequest dto) {
         return customerRepository.save(Customer.builder()
-                .login_id(dto.getLogin_id())  // dto 필드명에 맞춰 수정
+                .loginId(dto.getLoginId())  // dto 필드명에 맞춰 수정
                 .password(dto.getPassword())
                 .name(dto.getName())
                 .email(dto.getEmail())

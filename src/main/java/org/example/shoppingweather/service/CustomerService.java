@@ -19,7 +19,7 @@ public class CustomerService {
 
     public SignInResponseDTO signIn(Customer customer, HttpSession session) {
         // 로그인 ID로 고객 정보 조회
-        Customer getCustomer = customerMapper.signIn(customer.getLogin_id()); // login_id를 사용하여 조회
+        Customer getCustomer = customerMapper.signIn(customer.getLoginId()); // login_id를 사용하여 조회
 
         if (getCustomer == null) {
             return makeSignInRequestDTO(false, "존재하지 않는 회원입니다.", null, null);
@@ -30,7 +30,7 @@ public class CustomerService {
         }
 
         // 세션 설정
-        session.setAttribute("userId", getCustomer.getLogin_id());
+        session.setAttribute("loginId", getCustomer.getLoginId());
         session.setAttribute("userName", getCustomer.getName());
 
         return makeSignInRequestDTO(true, "로그인이 성공했습니다.", "/", getCustomer);  // 세션 설정 후 getCustomer를 전달
@@ -41,7 +41,7 @@ public class CustomerService {
                 .isLoggedIn(isloggedIn)
                 .message(message)
                 .url(url)
-                .login_id(isloggedIn ? customer.getLogin_id() : null)  // login_id를 사용
+                .loginId(isloggedIn ? customer.getLoginId() : null)  // login_id를 사용
                 .name(isloggedIn ? customer.getName() : null)
                 .build();
     }
