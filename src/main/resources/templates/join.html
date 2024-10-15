@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/join.js}"></script>
+    <link th:href="@{/css/join.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+
+
+    <title>회원가입 페이지</title>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>WeatherWear</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#">전체상품</a></li>
+                <li><a href="#">계절별</a></li>
+                <li><a href="#">커뮤니티</a></li>
+            </ul>
+        </nav>
+        <div class="icon-container">
+            <ul>
+                <li><a href="#"><img src="/images/main_icon_1.png" alt="User"></a></li>
+                <li><a href="#"><img src="/images/main_icon_2.png" alt="Delivery"></a></li>
+                <li><a href="#"><img src="/images/main_icon_3.png" alt="Cart"></a></li>
+                <li><a href="#"><img src="/images/main_icon_4.png" alt="Search"></a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <h2 id="test">사용할 아이디와 비밀번호를 입력해주세요.
+        </h2>
+        <div>
+            <div class="form-group">
+                <label for="login_id"></label>
+                <input type="text" id="login_id" placeholder="아이디를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password"></label>
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name"></label>
+                <input type="text" id="name" placeholder="이름을 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email"></label>
+                <input type="email" id="email" placeholder="이메일을 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone"></label>
+                <input type="text" id="phone" placeholder="전화번호를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address"></label>
+                <input type="text" id="address" placeholder="주소를 입력하세요" required>
+            </div>
+            <input id="signup" type="submit" value="회원가입">
+        </div>
+        <div class="signup-link">
+            아이디가 있으신가요? <a th:href="@{/member/login}">로그인하기</a>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>
