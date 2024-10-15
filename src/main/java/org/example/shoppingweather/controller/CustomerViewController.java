@@ -1,10 +1,10 @@
-package org.example.shoppingweather.arewenam.controller;
+package org.example.shoppingweather.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MemberViewController {
+public class CustomerViewController {
     @GetMapping("/login")
     public String login(){
         return "login";

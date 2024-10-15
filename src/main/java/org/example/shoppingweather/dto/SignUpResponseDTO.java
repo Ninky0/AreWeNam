@@ -1,4 +1,4 @@
-package org.example.shoppingweather.arewenam.dto;
+package org.example.shoppingweather.dto;
 
 import lombok.Builder;
 import lombok.Getter;

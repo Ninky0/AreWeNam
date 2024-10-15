@@ -2,7 +2,7 @@ create database shop_we;
 
 use shop_we;
 
-create table member
+create table customer
 (
     id       bigint auto_increment
         primary key,

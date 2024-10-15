@@ -1,4 +1,4 @@
-package org.example.shoppingweather.arewenam.dto;
+package org.example.shoppingweather.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +9,6 @@ public class SignInResponseDTO {
     private boolean isLoggedIn;
     private String url;
     private String name;
-    private String userId;
+    private String login_id;
     private String message;
 }

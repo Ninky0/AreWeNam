@@ -10,12 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "customer")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA에서 사용될 기본 생성자
+@AllArgsConstructor // 모든 필드를 사용하는 생성자를 만듦
+@Builder(toBuilder = true) // 빌더 패턴 적용
 @Getter
 @Setter
 @Entity
-public class Customer implements UserDetails { // UserDetails를 상속받아 인증 객체로 사용
+@Table(name = "customer")
+public class Customer implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,17 +35,9 @@ public class Customer implements UserDetails { // UserDetails를 상속받아 �
     private String phone;
     private String address;
 
-    @Builder
-    public Customer(String login_id, String password, String name, String email, String phone, String address) {
-        this.login_id = login_id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
-    }
+    // UserDetails 메소드들...
 
-    @Override // 권한 반환
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("customer"));
     }
@@ -58,28 +52,24 @@ public class Customer implements UserDetails { // UserDetails를 상속받아 �
         return password;
     }
 
-    // 계정 만료 여부 반환
     @Override
-    public boolean isAccountNonExpired(){
-        // 만료되었는지 확인하는 로직
-        return true; // true -> 만료되지 않음
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    // 계정 잠금 여부 반환
     @Override
-    public boolean isAccountNonLocked(){
-        return true; // true -> 잠금되지 않음
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    // 패스워드 만료 여부 반환
     @Override
-    public boolean isCredentialsNonExpired(){
-        return true; // true -> 만료되지 않음
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    // 계정 사용 가능 여부 변환
     @Override
-    public boolean isEnabled(){
-        return true; // true -> 사용 가능
+    public boolean isEnabled() {
+        return true;
     }
 }
+

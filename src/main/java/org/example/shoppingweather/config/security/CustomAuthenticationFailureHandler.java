@@ -1,4 +1,4 @@
-package org.example.shoppingweather.arewenam.config.security;
+package org.example.shoppingweather.config.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.arewenam.dto.SignInResponseDTO;
+import org.example.shoppingweather.dto.SignInResponseDTO;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         SignInResponseDTO build = SignInResponseDTO.builder()
                 .isLoggedIn(false)
                 .message("로그인 실패\n다시 로그인해주세요.")
-                .url("/member/login")
+                .url("/user/login")
                 .build();
 
         response.getWriter().write(objectMapper.writeValueAsString(build));

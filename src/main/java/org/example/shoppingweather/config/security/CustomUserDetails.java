@@ -1,8 +1,8 @@
-package org.example.shoppingweather.arewenam.config.security;
+package org.example.shoppingweather.config.security;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.example.shoppingweather.arewenam.model.Member;
+import org.example.shoppingweather.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Builder
 public class CustomUserDetails implements UserDetails {
-    private Member member;
+    private Customer customer;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -21,12 +21,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return customer.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getUserId();
+        return customer.getLogin_id();
     }
 
     @Override
