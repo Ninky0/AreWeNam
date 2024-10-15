@@ -1,10 +1,7 @@
 package org.example.shoppingweather.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -13,11 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "member")
+@Table(name = "customer")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Entity
-public class Member implements UserDetails { // UserDetails를 상속받아 인증 객체로 사용
+public class Customer implements UserDetails { // UserDetails를 상속받아 인증 객체로 사용
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,20 +28,13 @@ public class Member implements UserDetails { // UserDetails를 상속받아 인�
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "phone")
     private String phone;
-
-    @Column(name = "address")
     private String address;
 
     @Builder
-    public Member(String login_id, String password, String name, String email, String phone, String address) {
+    public Customer(String login_id, String password, String name, String email, String phone, String address) {
         this.login_id = login_id;
         this.password = password;
         this.name = name;
@@ -54,7 +45,7 @@ public class Member implements UserDetails { // UserDetails를 상속받아 인�
 
     @Override // 권한 반환
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("member"));
+        return List.of(new SimpleGrantedAuthority("customer"));
     }
 
     @Override
