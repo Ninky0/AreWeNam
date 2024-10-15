@@ -1,8 +1,8 @@
-package org.example.shoppingweather.arewenam.config;
+package org.example.shoppingweather.config;
 
 
-import org.example.shoppingweather.arewenam.config.security.CustomAuthenticationFailureHandler;
-import org.example.shoppingweather.arewenam.config.security.CustomAuthenticationSuccessHandler;
+import org.example.shoppingweather.config.security.CustomAuthenticationFailureHandler;
+import org.example.shoppingweather.config.security.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,15 +33,15 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(
-                                        new AntPathRequestMatcher("/member/login"),
-                                        new AntPathRequestMatcher("/member/join"),
+                                        new AntPathRequestMatcher("/user/login"),
+                                        new AntPathRequestMatcher("/user/join"),
                                         new AntPathRequestMatcher("/join")
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(
                         form -> form
-                                .loginPage("/member/login")
+                                .loginPage("/user/login")
                                 .loginProcessingUrl("/login")
                                 .successHandler(successHandler)
                                 .failureHandler(failureHandler)
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                 .logout(
                         logout -> logout
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/member/login")
+                                .logoutSuccessUrl("/user/login")
                 )
                 .csrf(AbstractHttpConfigurer::disable);
 

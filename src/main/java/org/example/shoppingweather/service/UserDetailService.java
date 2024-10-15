@@ -1,9 +1,9 @@
-package org.example.shoppingweather.arewenam.service;
+package org.example.shoppingweather.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.arewenam.config.security.CustomUserDetails;
-import org.example.shoppingweather.arewenam.model.Member;
-import org.example.shoppingweather.arewenam.mapper.MemberMapper;
+import org.example.shoppingweather.config.security.CustomUserDetails;
+import org.example.shoppingweather.entity.Customer;
+import org.example.shoppingweather.mapper.CustomerMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,18 +12,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailService implements UserDetailsService {
 
-    private final MemberMapper memberMapper;
+    private final CustomerMapper customerMapper;
 
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Member member = memberMapper.signIn(username);
-        if (member == null) {
+        Customer customer = customerMapper.signIn(username);
+        if (customer == null) {
             throw new UsernameNotFoundException(username + " not found");
         }
 
         return CustomUserDetails.builder()
-                .member(member)
+                .customer(customer)
                 .build();
     }
 }
