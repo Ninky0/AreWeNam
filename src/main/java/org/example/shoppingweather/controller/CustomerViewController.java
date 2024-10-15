@@ -2,16 +2,20 @@ package org.example.shoppingweather.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/user")
 public class CustomerViewController {
+
+    @GetMapping("/join")
+    public String signUp() {
+        return "join";
+    }
+
     @GetMapping("/login")
-    public String login(){
+    public String signIn() {
         return "login";
     }
 
-    @GetMapping("/signup")
-    public String signup(){
-        return "join";
-    }
 }

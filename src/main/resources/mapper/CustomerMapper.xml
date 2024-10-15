@@ -12,11 +12,6 @@
         <result property="address" column="address"/>
     </resultMap>
 
-    <insert id="signUp" parameterType="org.example.shoppingweather.entity.Customer">
-        INSERT INTO customer (login_id, password, name, email, phone, address)
-        VALUES (#{login_id}, #{password}, #{name}, #{email}, #{phone}, #{address});
-    </insert>
-
     <select id="signIn"
             parameterType="String"
             resultMap="customerResultMap">

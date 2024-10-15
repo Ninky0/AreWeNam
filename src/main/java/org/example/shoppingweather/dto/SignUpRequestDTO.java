@@ -12,15 +12,4 @@ public class SignUpRequestDTO {
     private String email;
     private String phone;
     private String address;
-
-    public Customer toCustomer(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        return Customer.builder()
-                .loginId(loginId)
-                .password(bCryptPasswordEncoder.encode(password))  // 비밀번호 암호화
-                .name(name)
-                .email(email)
-                .phone(phone)
-                .address(address)
-                .build();
-    }
 }

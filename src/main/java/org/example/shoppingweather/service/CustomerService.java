@@ -2,10 +2,13 @@ package org.example.shoppingweather.service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.dto.SignInResponseDTO;
 import org.example.shoppingweather.mapper.CustomerMapper;
+import org.example.shoppingweather.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
@@ -13,8 +16,18 @@ public class CustomerService {
 
     private final CustomerMapper customerMapper;
 
-    public void signUp(Customer customer) {
-        customerMapper.signUp(customer);
+    private final CustomerRepository customerRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public Long save(SignUpRequestDTO dto) {
+        return customerRepository.save(Customer.builder()
+                .loginId(dto.getLoginId())  // dto 필드명에 맞춰 수정
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .phone(dto.getPhone())
+                .address(dto.getAddress())
+                .build()).getId();
     }
 
     public SignInResponseDTO signIn(Customer customer, HttpSession session) {
