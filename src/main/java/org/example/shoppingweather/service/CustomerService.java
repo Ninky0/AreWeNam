@@ -2,6 +2,7 @@ package org.example.shoppingweather.service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.dto.sign.SignInResponseDTO;
@@ -22,6 +23,26 @@ public class CustomerService {
     public Long save(SignUpRequestDTO dto) {
         return customerRepository.save(Customer.builder()
                 .loginId(dto.getLoginId())  // dto 필드명에 맞춰 수정
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .phone(dto.getPhone())
+                .address(dto.getAddress())
+                .build()).getId();
+    }
+
+    public void updateUser(Long id, CustomerUpdateRequestDTO dto, String  loggedInCustomerId) {
+        if (!id.equals(loggedInCustomerId)) {
+            throw new RuntimeException("You are not authorized to update this user.");
+        }
+
+        // 고객을 데이터베이스에서 찾기
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+
+        // 고객 정보 업데이트
+        customerRepository.save(Customer.builder()
+                // dto 필드명에 맞춰 수정
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
                 .email(dto.getEmail())
@@ -58,4 +79,5 @@ public class CustomerService {
                 .name(isloggedIn ? customer.getName() : null)
                 .build();
     }
+
 }
