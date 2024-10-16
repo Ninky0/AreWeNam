@@ -3,7 +3,7 @@ header {
     height: 50px;
     top: -30px;
     width: 100%;
-    background-color: #ffffff9e;
+    background-color: rgba(255, 255, 255, 0.62);
     z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -12,7 +12,9 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 40px;
+    padding: 10px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 img {
     width: 35px;
@@ -28,7 +30,22 @@ img {
     list-style: none;
     gap: 15px;
 }
-
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
 body {
+
+    font-family: 'Pretendard-Regular', sans-serif;
     margin-top: 70px; /* 헤더 높이만큼 콘텐츠가 헤더에 가리지 않게 함 */
+}
+.icon-container {
+    color: black;
+}
+a{
+    text-decoration-line: none;
+    color : black;
+
 }

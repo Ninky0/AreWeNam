@@ -12,7 +12,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private Integer price;
     private String mainPicture;
@@ -37,4 +36,23 @@ public class Product {
     }
 
 
+
+// Getters and Setters
+public Long getId() { return id; }
+public void setId(Long id) { this.id = id; }
+
+public String getName() { return name; }
+public void setName(String name) { this.name = name; }
+
+public Double getPrice() { return price; }
+public void setPrice(Double price) { this.price = price; }
+
+public String getPicture() { return picture; }
+public void setPicture(String picture) { this.picture = picture; }
+
+public Long getSeason() { return season; }
+public void setSeason(Long season) { this.season = season; }
+
+public Double getTemperature() { return temperature; }
+public void setTemperature(Double temperature) { this.temperature = temperature; }
 }

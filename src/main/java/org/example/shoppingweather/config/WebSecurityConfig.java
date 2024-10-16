@@ -19,7 +19,7 @@ public class WebSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers(
-                        "/static/**", "/css/**", "/js/**" , "/images/**"
+                        "/static/**", "/css/**", "/js/**" , "/images/**" , "/product_list"
                 );
     }
 
