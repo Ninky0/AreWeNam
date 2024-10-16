@@ -1,0 +1,90 @@
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background-color: #f2f2f2;
+    width: 20%;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: black;
+}
+
+.main-content {
+    width: 80%;
+    padding: 20px;
+}
+
+/* '알위님, 반갑습니다' 부분 스타일 */
+.welcome-section {
+    margin-bottom: 20px;
+}
+
+.welcome-section h1 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.divider {
+    border-bottom: 3px solid black; /* 굵은 선 추가 */
+    margin-bottom: 20px;
+}
+
+.order-status {
+    margin-top: 20px;
+}
+
+.order-status h2 {
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #ccc;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}

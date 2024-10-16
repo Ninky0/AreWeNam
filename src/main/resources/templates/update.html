@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/update.js}"></script>
+    <link th:href="@{/css/update.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+
+
+    <title>회원정보수정 페이지</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main>
+    <div class="container">
+        <h2 id="test">수정할 내용을 입력해주세요</h2>
+        <div>
+
+            <div class="form-group">
+                <label for="loginId"></label>
+                <input type="text" id="loginId" placeholder="아이디를 입력하세요" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="password"></label>
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name"></label>
+                <input type="text" id="name" placeholder="이름을 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email"></label>
+                <input type="email" id="email" placeholder="이메일을 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone"></label>
+                <input type="text" id="phone" placeholder="전화번호를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address"></label>
+                <input type="text" id="address" placeholder="주소를 입력하세요" required>
+            </div>
+            <input id="update" type="submit" value="수정">
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>
