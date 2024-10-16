@@ -2,9 +2,8 @@ package org.example.shoppingweather.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.AddUserRequest;
-import org.example.shoppingweather.dto.SignUpRequestDTO;
-import org.example.shoppingweather.dto.SignUpResponseDTO;
+import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
+import org.example.shoppingweather.dto.sign.SignUpResponseDTO;
 import org.example.shoppingweather.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

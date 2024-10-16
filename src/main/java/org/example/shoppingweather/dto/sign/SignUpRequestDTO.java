@@ -1,11 +1,9 @@
-package org.example.shoppingweather.dto;
+package org.example.shoppingweather.dto.sign;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class AddUserRequest {
+public class SignUpRequestDTO {
     private String loginId;
     private String password;
     private String name;

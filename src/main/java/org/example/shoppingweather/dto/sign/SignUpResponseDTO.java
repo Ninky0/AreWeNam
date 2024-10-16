@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto;
+package org.example.shoppingweather.dto.sign;
 
 import lombok.Builder;
 import lombok.Getter;

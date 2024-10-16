@@ -2,9 +2,9 @@ package org.example.shoppingweather.service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.SignUpRequestDTO;
+import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
-import org.example.shoppingweather.dto.SignInResponseDTO;
+import org.example.shoppingweather.dto.sign.SignInResponseDTO;
 import org.example.shoppingweather.mapper.CustomerMapper;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.springframework.stereotype.Service;

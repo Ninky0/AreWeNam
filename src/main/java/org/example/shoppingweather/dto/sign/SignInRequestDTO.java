@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto;
+package org.example.shoppingweather.dto.sign;
 
 import lombok.Getter;
 import lombok.ToString;
