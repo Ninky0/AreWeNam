@@ -10,11 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA에서 사용될 기본 생성자
-@AllArgsConstructor // 모든 필드를 사용하는 생성자를 만듦
-@Builder(toBuilder = true) // 빌더 패턴 적용
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
 @Entity
 @Table(name = "customer")
 public class Customer implements UserDetails {
@@ -36,6 +33,16 @@ public class Customer implements UserDetails {
     private String address;
 
     // UserDetails 메소드들...
+
+    @Builder
+    public Customer(String loginId, String password, String name, String email, String phone, String address) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
