@@ -2,11 +2,13 @@ let regions = [];
 
 // 페이지 로드 시 CSV 데이터를 서버에서 받아옴
 window.onload = function () {
-    fetch('/user/weather/regions')
+    // 지역 데이터 로드
+    fetch('/home/weather/regions')
         .then(response => response.json())
         .then(data => {
             regions = data;
             populateRegions();
+            submitSearchForm(); // 페이지 로딩 시 날씨 정보 로드
         })
         .catch(error => console.error('Error fetching regions:', error));
 };
@@ -147,7 +149,7 @@ function submitSearchForm() {
         const ny = selectedRegionData.ny;
 
         // 날씨 API 요청
-        fetch(`/user/weather/search?nx=${nx}&ny=${ny}`)
+        fetch(`/home/weather/search?nx=${nx}&ny=${ny}`)
             .then(response => response.json())
             .then(data => {
                 // weather-text 요소를 비움

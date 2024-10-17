@@ -33,17 +33,4 @@ public class CustomerApiController {
         );
     }
 
-    @GetMapping("/weather/regions")
-    @ResponseBody
-    public List<Region> getRegionList() {
-        //csv파일 읽어옴(지역별 위도 경도)
-        return weatherService.getRegionsFromCSV();
-    }
-
-    @GetMapping("/weather/search")
-    public ResponseEntity searchWeather(@RequestParam int nx, @RequestParam int ny) {
-        WeatherResponse weather = weatherService.getWeatherData(nx, ny);
-        return ResponseEntity.ok(weather);
-    }
-
 }
