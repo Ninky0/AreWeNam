@@ -37,12 +37,14 @@ public class WebSecurityConfig {
                                         new AntPathRequestMatcher("/user/join"),
                                         new AntPathRequestMatcher("/join")
                                 ).permitAll()
+                                .requestMatchers("/admin/product/list", "/admin/product/upload"
+                                ).hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(
                         form -> form
                                 .loginPage("/user/login")
-                                .loginProcessingUrl("/login")
+                                .loginProcessingUrl("/user/login")
                                 .successHandler(successHandler)
                                 .failureHandler(failureHandler)
                 )

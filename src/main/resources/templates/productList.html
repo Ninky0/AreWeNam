@@ -10,7 +10,7 @@
     <link th:href="@{/css/footer.css}" rel="stylesheet">
 
 
-    <title>회원가입 페이지</title>
+    <title>상품 목록 페이지</title>
 </head>
 <body>
 <header>
@@ -23,8 +23,8 @@
 
         <h2>상품 목록</h2>
         <div class="button-group">
-            <button id="button_red">상품삭제</button>
-            <button>상품등록</button>
+            <a id="button_red" type="button">상품삭제</a>
+            <a id="button_black" th:href="@{/admin/product/upload}" type="button">상품등록</a>
         </div>
         <table>
             <thead>
@@ -43,7 +43,7 @@
             <tr>
                 <td><input type="checkbox" class="checkbox"></td>
                 <td>01</td>
-                <td><img src="/images/sample_img_01.jpg" alt="상품 이미지"></td>
+                <td><img src="/images/sample_img_01.jpeg" alt="상품 이미지"></td>
                 <td>자켓</td>
                 <td>70,000</td>
                 <td>awn</td>
