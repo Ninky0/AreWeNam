@@ -1,5 +1,6 @@
 package org.example.shoppingweather.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.weather.Region;
 import org.example.shoppingweather.dto.weather.WeatherResponse;
 import org.example.shoppingweather.service.WeatherService;
@@ -17,12 +18,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class CustomerViewController {
 
-    private final WeatherService weatherService;
-
-    public CustomerViewController(WeatherService weatherService) {
-        this.weatherService = weatherService;
-    }
-
     @GetMapping("/join")
     public String signUp() {
         return "join";
@@ -32,14 +27,5 @@ public class CustomerViewController {
     public String signIn() {
         return "login";
     }
-
-    @GetMapping("/home")
-    public String home(Model model) {
-        //그냥 디폴트 값으로 (60,127) 일단 넘겨줌.
-        model.addAttribute("weather", weatherService.getWeatherData(60, 127));
-        return "home";
-    }
-
-
 
 }
