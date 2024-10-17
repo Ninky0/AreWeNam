@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.example.shoppingweather.entity.Customer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Getter
 @ToString
@@ -17,10 +18,10 @@ public class CustomerUpdateRequestDTO {
     private String phone;
     private String address;
 
-    public Customer customer() {
+    public Customer toCustomer(BCryptPasswordEncoder bCryptPasswordEncoder) {
         return Customer.builder()
                 .loginId(loginId)
-                .password(password)
+                .password(bCryptPasswordEncoder.encode(password))
                 .name(name)
                 .email(email)
                 .phone(phone)
