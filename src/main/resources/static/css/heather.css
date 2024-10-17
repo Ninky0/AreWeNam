@@ -1,51 +1,75 @@
-header {
-    position: fixed;
-    height: 50px;
-    top: -30px;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.62);
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.header-container {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.8); /* 반투명 배경 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: padding 0.3s ease, background-color 0.3s ease; /* 부드러운 전환 효과 */
 }
-img {
-    width: 35px;
+
+.logo h1 {
+    margin: 0;
+    font-size: 24px;
 }
+
+.main-nav {
+    flex-grow: 1;
+    text-align: center;
+}
+
 .main-nav ul {
-    display: flex;
     list-style: none;
-    gap: 20px;
+    padding: 0;
+}
+
+.main-nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
 }
 
 .icon-container ul {
-    display: flex;
     list-style: none;
-    gap: 15px;
+    display: flex;
+    padding: 0;
 }
-@font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-body {
 
-    font-family: 'Pretendard-Regular', sans-serif;
-    margin-top: 70px; /* 헤더 높이만큼 콘텐츠가 헤더에 가리지 않게 함 */
+.icon-container ul li {
+    margin-left: 20px;
 }
-.icon-container {
-    color: black;
-}
-a{
-    text-decoration-line: none;
-    color : black;
 
+.icon-container ul li a {
+    text-decoration: none;
+    color: #000;
+}
+
+/* 스크롤 시 크기 조절 */
+body.scrolled .header {
+    padding: 5px 20px; /* 위 아래 패딩 감소 */
+    background-color: rgba(255, 255, 255, 0.9); /* 배경을 조금 더 불투명하게 */
+}
+
+body.scrolled .header h1 {
+    font-size: 20px; /* 로고 크기 감소 */
 }
