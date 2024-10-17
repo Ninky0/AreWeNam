@@ -10,7 +10,7 @@ public class AdminViewController {
 
     @GetMapping("/product/list")
     public String productList(){
-        return "productList";
+        return "product_list";
     }
 
     @GetMapping("/product/upload")

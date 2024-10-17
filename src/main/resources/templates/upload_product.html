@@ -1,25 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/upload_product.js}"></script>
+    <link th:href="@{/css/upload_product.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <title>상품등록 페이지</title>
 </head>
-<body>
-<!--// name : 상품 이름-->
-<!--// price : 상품 가격-->
-<!--// mainPicture : 대표 이미지-->
-<!--// detailPicture : 상세 이미지-->
-<!--// description : 상품 설명-->
-<!--// quantity : 재고-->
-<!--// category : 카테고리(겉옷, 상의, 하의, 악세서리)-->
-<!--// season : 추천계절-->
-<!--// temperature : 추천기온-->
-<!-- js에서 post, admin/product/upload 로 formData 넘겨주세요 -->
+<body class="product-registration-body">
+<header>
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+<main>
+    <form id="productForm" method="POST" enctype="multipart/form-data">
+        <h2>상품등록</h2>
+        <div class="product-row">
+            <div class="product-col-md-4">
+                <div class="product-image-upload">
+                    <div class="product-image-placeholder">
+                        <img id="imagePreview" src="" alt="미리보기" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" />
+                        <span id="placeholderText">권장 이미지 크기 <br>700 × 1040 픽셀</span>
+                    </div>
+                    <input type="file" id="mainPicture" name="mainPicture" accept="image/*" class="product-file-input" required onchange="previewMainImage(event)">
+                </div>
+            </div>
+            <div class="product-col-md-8">
+                <select id="season" name="season" class="product-select" required>
+                    <option value="">시즌선택</option>
+                    <option value="1">봄</option>
+                    <option value="2">여름</option>
+                    <option value="3">가을</option>
+                    <option value="4">겨울</option>
+                </select>
 
-<h2>상품 등록</h2>
+                <select id="temperature" name="temperature" class="product-select product-mt-2" required>
+                    <option value="">온도선택</option>
+                    <option value="1">28℃</option>
+                    <option value="2">27~23℃</option>
+                    <option value="3">22~20℃</option>
+                    <option value="4">19~17℃</option>
+                    <option value="5">16~12℃</option>
+                    <option value="6">11~9℃</option>
+                    <option value="7">8~5℃</option>
+                    <option value="8">4℃이하</option>
+                </select>
 
+                <select id="category" name="category" class="product-select product-mt-2" required>
+                    <option value="">카테고리선택</option>
+                    <option value="jk">자켓</option>
+                    <option value="sk">스커트</option>
+                </select>
 
+                <input type="text" id="name" name="name" placeholder="상품명을 입력하세요" class="product-input product-mt-2" required>
+                <input type="number" id="price" name="price" placeholder="가격을 입력하세요" class="product-input product-mt-2" required>
+                <input type="number" id="quantity" name="quantity" placeholder="재고 수량 입력하세요" class="product-input product-mt-2" required>
+            </div>
+        </div>
+        <div id="editor" style="height: 400px;"></div>
+        <textarea id="description" name="description" style="display:none;"></textarea>
+        <button class="product-button" type="button" onclick="submitForm()">상품 등록</button>
+    </form>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
 
+<script>
 
+</script>
 </body>
 </html>

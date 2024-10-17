@@ -12,16 +12,7 @@ body {
     background-color: #f9f9f9;
 }
 
-header {
-    background-color: #fff;
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-    max-width: 1500px;
-}
 
-nav {
-    text-align: center;
-}
 
 main {
     display: flex;

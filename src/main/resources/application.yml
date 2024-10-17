@@ -2,10 +2,15 @@ spring:
   application:
     name: shop_we
   datasource:
-    url: jdbc:mysql://localhost:3306/shop_we?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/shop_we?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 server:
   port: 8080
@@ -13,3 +18,7 @@ server:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
+weather:
+  api:
+    url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"
+    key: "GJknCo2+o53WsSBM4W0ttkLBvCtF+kvm/3KuMDytZg5vXJqK5HoFxAY5mhAKV1k1uolapSgbLfGTmfWoNrEC2g=="
