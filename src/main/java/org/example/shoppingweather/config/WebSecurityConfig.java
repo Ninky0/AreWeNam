@@ -35,7 +35,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(
                                         new AntPathRequestMatcher("/user/login"),
                                         new AntPathRequestMatcher("/user/join"),
-                                        new AntPathRequestMatcher("/join")
+                                        new AntPathRequestMatcher("/join"),
+                                        new AntPathRequestMatcher("/update/**")
                                 ).permitAll()
                                 .requestMatchers("/admin/product/list", "/admin/product/upload"
                                 ).hasRole("ADMIN")
