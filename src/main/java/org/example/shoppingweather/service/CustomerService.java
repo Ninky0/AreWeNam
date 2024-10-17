@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
-import org.example.shoppingweather.dto.sign.SignInResponseDTO;
-import org.example.shoppingweather.mapper.CustomerMapper;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,20 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class CustomerService {
 
-    private final CustomerMapper customerMapper;
-
     private final CustomerRepository customerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Long save(SignUpRequestDTO dto) {
-        return customerRepository.save(Customer.builder()
-                .loginId(dto.getLoginId())  // dto 필드명에 맞춰 수정
-                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .phone(dto.getPhone())
-                .address(dto.getAddress())
-                .build()).getId();
+    public void save(SignUpRequestDTO dto) {
+        Customer customer = dto.toCustomer(bCryptPasswordEncoder);
+        customer.setRole("ROLE_CUSTOMER");
+        customerRepository.save(customer);
     }
 
     public void updateUser(Long id, CustomerUpdateRequestDTO dto, String  loggedInCustomerId) {
@@ -50,34 +41,4 @@ public class CustomerService {
                 .address(dto.getAddress())
                 .build()).getId();
     }
-
-    public SignInResponseDTO signIn(Customer customer, HttpSession session) {
-        // 로그인 ID로 고객 정보 조회
-        Customer getCustomer = customerMapper.signIn(customer.getLoginId()); // login_id를 사용하여 조회
-
-        if (getCustomer == null) {
-            return makeSignInRequestDTO(false, "존재하지 않는 회원입니다.", null, null);
-        }
-
-        if (!customer.getPassword().equals(getCustomer.getPassword())) {
-            return makeSignInRequestDTO(false, "비밀번호가 틀렸습니다.", null, null);
-        }
-
-        // 세션 설정
-        session.setAttribute("loginId", getCustomer.getLoginId());
-        session.setAttribute("userName", getCustomer.getName());
-
-        return makeSignInRequestDTO(true, "로그인이 성공했습니다.", "/", getCustomer);  // 세션 설정 후 getCustomer를 전달
-    }
-
-    private SignInResponseDTO makeSignInRequestDTO(boolean isloggedIn, String message, String url, Customer customer) {
-        return SignInResponseDTO.builder()
-                .isLoggedIn(isloggedIn)
-                .message(message)
-                .url(url)
-                .loginId(isloggedIn ? customer.getLoginId() : null)  // login_id를 사용
-                .name(isloggedIn ? customer.getName() : null)
-                .build();
-    }
-
 }

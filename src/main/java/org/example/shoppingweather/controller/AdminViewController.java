@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminViewController {
 
-    // 미영님의 boardviewcontroller와 합칠 예정
-    // productlist
-    // @GetMapping("/product-list")
-    // Public String productlist(){
-    //      return "boardlist";
-    // }
+    @GetMapping("/product/list")
+    public String productList(){
+        return "productList";
+    }
 
     @GetMapping("/product/upload")
     public String uploadProduct() {

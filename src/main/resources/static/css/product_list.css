@@ -127,7 +127,7 @@ img {
     border-radius: 5px;
     cursor: pointer;
 }
-button {
+#button_black {
     padding: 10px 20px;
     margin-right: 10px;
     background-color: #000000;
@@ -137,7 +137,8 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+#button_red:hover,
+#button_black:hover {
     background-color: #45a049;
 }
 /* Checkbox Styles */

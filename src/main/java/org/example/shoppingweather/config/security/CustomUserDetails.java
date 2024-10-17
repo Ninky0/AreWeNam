@@ -6,6 +6,7 @@ import org.example.shoppingweather.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,19 +15,36 @@ import java.util.List;
 public class CustomUserDetails implements UserDetails {
     private Customer customer;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
+    //    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority("customer"));
+//    }
 
     @Override
-    public String getPassword() {
-        return customer.getPassword();
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+
+        collection.add(new GrantedAuthority() {
+
+            @Override
+            public String getAuthority() {
+
+                return customer.getRole();
+            }
+        });
+
+        return collection;
     }
 
     @Override
     public String getUsername() {
         return customer.getLoginId();
+    }
+
+    @Override
+    public String getPassword() {
+        return customer.getPassword();
     }
 
     @Override

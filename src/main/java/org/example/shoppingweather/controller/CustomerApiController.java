@@ -4,6 +4,7 @@ package org.example.shoppingweather.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.dto.sign.SignUpResponseDTO;
+import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,19 +23,14 @@ public class CustomerApiController {
 
     @PostMapping("/join")
     public ResponseEntity<SignUpResponseDTO> signup(@RequestBody SignUpRequestDTO signUpRequestDTO) {
-        customerService.save(signUpRequestDTO); // 회원가입 메소드 호출
+
+        customerService.save(signUpRequestDTO); // 회원가입 진행(db 저장)
+
         return ResponseEntity.ok(
                 SignUpResponseDTO.builder()
                         .url("/user/login") // 회원 가입이 완료된 후 로그인 페이지로 이동
                         .build()
         );
     }
-
-//    @PostMapping("/login")
-//    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO signInRequestDTO, HttpSession session) {
-//        return ResponseEntity.ok(
-//                memberService.signIn(signInRequestDTO.toMember(), session)
-//        );
-//    }
 
 }

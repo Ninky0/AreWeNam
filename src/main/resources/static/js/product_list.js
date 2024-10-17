@@ -4,12 +4,12 @@ $(document).ready(() => {
     getBoards();
 });
 
-let checkSession = () => {
-    let hUserId = $('#hiddenUserId').val();
-
-    if (hUserId == null || hUserId === '')
-        window.location.href = "/member/login";
-}
+// let checkSession = () => {
+//     let hUserId = $('#hiddenUserId').val();
+//
+//     if (hUserId == null || hUserId === '')
+//         window.location.href = "/user/login";
+// }
 
 let getBoards = () => {
     let currentPage = 1;
@@ -37,7 +37,7 @@ let getBoards = () => {
 let loadBoard = (page, size) => {
     $.ajax({
         type: 'GET',
-        url: '/api/board',
+        url: '/admin/product/list',
         data: {
             page: page,
             size: size
