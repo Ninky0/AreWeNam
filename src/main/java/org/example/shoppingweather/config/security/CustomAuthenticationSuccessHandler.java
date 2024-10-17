@@ -36,7 +36,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         SignInResponseDTO build = SignInResponseDTO.builder()
                 .isLoggedIn(true)
                 .message("로그인 성공")
-                .url("/admin/product/list")
+                .url("/user/home")
                 .loginId(customer.getLoginId())
                 .name(customer.getName())
                 .build();

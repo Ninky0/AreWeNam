@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Weather Information</title>
+</head>
+<body>
+<h1>Weather Information</h1>
+
+<form class="form-inline" id="searchForm">
+    <label for="region">Select Region:</label>
+    <select id="region" name="region" onchange="populateSubRegions()" autocomplete="region">
+        <!-- 대범위 지역 옵션 -->
+    </select>
+
+    <label for="region2">Select Detail Region:</label>
+    <select id="region2" name="region2" autocomplete="region2">
+        <!-- 소범위 지역 옵션 -->
+    </select>
+
+    <button id="searchButton" type="button">Get Weather</button>
+    <div id="weather-text"></div>
+</form>
+
+<script src="/js/weather_search.js"></script>
+</body>
+</html>
