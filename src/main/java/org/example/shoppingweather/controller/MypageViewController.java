@@ -42,4 +42,20 @@ public class MypageViewController {
         return "update"; // 뷰 이름 반환
     }
 
+    @GetMapping("/quitout")
+    public String quitout(HttpSession session, Model model) {
+        // 세션에서 loginId를 가져옴 (String으로 캐스팅)
+        String loginId = (String) session.getAttribute("loginId");
+
+        // loginId로 고객 정보를 데이터베이스에서 조회
+        Customer customer = customerRepository.findByLoginId(loginId);
+
+        // 모델에 고객 정보를 추가
+        model.addAttribute("customer", customer);
+
+        // 고객의 ID 출력
+        System.out.println(customer.getId());
+        return "quit";
+    }
+
 }

@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CustomerResponseDTO {
 
+    private String loginId;
     private String password;
     private String name;
     private String email;
