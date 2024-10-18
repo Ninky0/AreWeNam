@@ -1,6 +1,7 @@
 package org.example.shoppingweather.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.ProdUploadRequestDTO;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.ProductRepository;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,22 +21,22 @@ public class AdminService {
 
     private final ProductRepository productRepository;
 
+    public List<ProdReadResponseDTO> findAll(){
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(Product::toProdReadResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     public Long save(ProdUploadRequestDTO dto) throws IOException {
         // Save main picture and get its path
         String mainPicturePath = saveFile(dto.getMainPicture());
 
+        Product product = dto.toProduct();
+        product.setMainPicture(mainPicturePath);    // Store the main picture path as a String
+
         // Create and save the Product entity
-        return productRepository.save(Product.builder()
-                .name(dto.getName())
-                .price(dto.getPrice())
-                .mainPicture(mainPicturePath)  // Store the main picture path as a String
-                .detailPicture(dto.getDescription()) // Assuming detail images are part of description
-                .description(dto.getDescription())
-                .quantity(dto.getQuantity())
-                .category(dto.getCategory())
-                .season(dto.getSeason())
-                .temperature(dto.getTemperature())
-                .build()).getId();
+        return productRepository.save(product).getId();
     }
 
     public String saveFile(MultipartFile file) throws IOException {

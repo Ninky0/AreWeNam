@@ -1,15 +1,26 @@
 package org.example.shoppingweather.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.ProdReadResponseDTO;
+import org.example.shoppingweather.service.AdminService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminViewController {
 
+    private final AdminService adminService;
+
     @GetMapping("/product/list")
-    public String productList(){
+    public String productList(Model model){
+        List<ProdReadResponseDTO> products = adminService.findAll();
+        model.addAttribute("products", products);
         return "product_list";
     }
 
@@ -17,15 +28,6 @@ public class AdminViewController {
     public String uploadProduct() {
         //상품 등록 폼으로 이동
         return "upload_product";
-        // name : 상품 이름
-        // price : 상품 가격
-        // mainPicture : 대표 이미지
-        // detailPicture : 상세 이미지
-        // description : 상품 설명
-        // quantity : 재고
-        // category : 카테고리(겉옷, 상의, 하의, 악세서리)
-        // season : 추천계절
-        // temperature : 추천온도(범위 제시8)
 
         // *여름(23~) - 민소매, 반팔, 반바지, 치마
         // *봄가을(9~23) - 긴팔티, 자켓/코트(트렌치), 긴바지, 얇은니트/가디건, 맨투맨, 후드, 치마
