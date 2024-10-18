@@ -1,0 +1,227 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+main {
+    background-color: #f7f7f7;
+    padding: 20px;
+    text-align: center;
+}
+.banner img{
+    width: 100%;
+}
+div#productSlider {
+    margin: 30px 0 30px;
+}
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0px auto;
+    /* padding: 30px; */
+}
+
+/* Arrow Buttons */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+    user-select: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.left-arrow {
+    left: 10px; /* Position arrow just inside the container */
+}
+
+.right-arrow {
+    right: 10px; /* Position arrow just inside the container */
+}
+
+/* Product Slider */
+.product-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform; /* Performance hint for better sliding */
+}
+
+/* Product Item Styling */
+.product-item {
+    width: 250px;
+    flex: 0 0 auto;
+    transition: transform 0.5s ease-in-out;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.product-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.product-item h4 {
+    font-size: 12px;
+    font-weight: 900;
+    margin: 10px 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+h2.sub_title {
+    font-size: 40px;
+    font-weight: 900;
+    font-family: 'Pretendard-Bold';
+    margin: 30px 0 0 0;
+}
+.title {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.price {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 10px 0 18px 0;
+}
+
+.recommendation {
+    text-align: center;
+    padding: 20px;
+}
+
+.recommendation-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 550px;
+    margin: -30px auto;
+    position: relative;
+}
+
+.dropdown-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid;
+    background-color: #ffffff;
+    width: 150px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.weather-icon-container {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.floating-icon {
+    width: 150px;
+    animation: floating 3s ease-in-out infinite;
+}
+
+.temperature {
+    position: absolute;
+    top: 6%;
+    left: 100%;
+    transform: translate(-33%, -50%);
+    font-size: 50px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+/* Animation for weather icon to float up and down */
+@keyframes floating {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+.special-item {
+    min-width: 200px;
+    padding: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    margin: 0 auto;
+    width: 600px;
+}
+.special-slider {
+    display: flex;
+    gap: 20px;
+    overflow: auto;
+    padding: 20px;
+}
+
+.special-item {
+    min-width: 200px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.special-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.special-slider h3{
+    font-size: 40px;
+    margin: -30px;
+}
+.special-item p{
+    margin: 30px;
+}
