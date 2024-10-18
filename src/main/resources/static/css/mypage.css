@@ -6,6 +6,10 @@
     box-sizing: border-box;
 }
 
+header {
+    margin-bottom: 40px; /* header와 body 사이에 공간 추가 */
+}
+
 body {
     font-family: 'Arial', sans-serif;
 }

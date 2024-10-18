@@ -1,6 +1,8 @@
 package org.example.shoppingweather.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
+import org.example.shoppingweather.dto.CustomerDeleteResponseDTO;
 import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.CustomerUpdateResponseDTO;
 import org.example.shoppingweather.service.CustomerService;
@@ -27,6 +29,20 @@ public class MypageApiController {
                         .url("/mypage")
                         .build()
                 );
+    }
+
+    @DeleteMapping("/quitout/{id}")
+    public ResponseEntity<CustomerDeleteResponseDTO> delete(
+            @PathVariable Long id,
+            @RequestBody CustomerDeleteRequestDTO dto) {
+
+        customerService.deleteUser(id, dto);
+
+        return ResponseEntity.ok(
+                CustomerDeleteResponseDTO.builder()
+                        .url("/user/login")
+                        .build()
+        );
     }
 
 }

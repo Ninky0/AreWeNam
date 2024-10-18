@@ -2,6 +2,7 @@ package org.example.shoppingweather.service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
@@ -42,4 +43,28 @@ public class CustomerService {
         customerRepository.save(existingCustomer);
     }
 
+    public void deleteUser(Long id, CustomerDeleteRequestDTO dto) {
+        // 기존 고객 정보 조회
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+
+        // 비밀번호 검증 (입력된 비밀번호와 저장된 비밀번호 비교)
+        if (bCryptPasswordEncoder.matches(dto.getPassword(), existingCustomer.getPassword())) {
+
+            // 비밀번호가 일치할 경우 고객 삭제
+            customerRepository.delete(existingCustomer);
+        } else {
+            throw new RuntimeException("Incorrect password.");
+        }
+
+    }
+
 }
+
+// 비밀번호 검증 (입력된 비밀번호와 저장된 비밀번호 비교)
+//    if (bCryptPasswordEncoder.matches(dto.getPassword(), existingCustomer.getPassword())) {
+//        // 비밀번호가 일치할 경우 고객 삭제
+//        customerRepository.delete(existingCustomer);
+//    } else {
+//            throw new RuntimeException("Incorrect password.");
+//    }

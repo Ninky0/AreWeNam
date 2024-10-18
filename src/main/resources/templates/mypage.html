@@ -11,9 +11,10 @@
 
   <title>마이 페이지</title>
 </head>
-
 <body>
-<div th:replace="~{fragments/navbar::navbar}"></div>
+<header>
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
 
 <div class="container">
   <aside class="sidebar">
@@ -24,7 +25,7 @@
       <li><a href="" class="sidebar-button">장바구니</a></li>
       <li><a href="" class="sidebar-button">게시글</a></li>
       <li><a href="/mypage/update" class="sidebar-button">회원정보수정</a></li>
-      <li><a href="" class="sidebar-button">회원탈퇴</a></li>
+      <li><a href="/mypage/quitout" class="sidebar-button">회원탈퇴</a></li>
     </ul>
   </aside>
 
