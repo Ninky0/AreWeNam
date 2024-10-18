@@ -21,60 +21,30 @@ public class AdminApiController {
 
     @PostMapping("/product/upload")
     public ResponseEntity<ProdUploadResponseDTO> uploadProduct(
-            @RequestParam("name") String name,
-            @RequestParam("price") Integer price,
-            @RequestParam("quantity") String quantity,
-            @RequestParam("category") String category,
-            @RequestParam("season") Integer season,
-            @RequestParam("temperature") Integer temperature,
-            @RequestParam("description") String description,
-            @RequestParam(value = "detailPicture", required = false) List<MultipartFile> detailPictures,
-            @RequestParam(value = "mainPicture", required = false) MultipartFile mainPicture) {
+            @ModelAttribute ProdUploadRequestDTO dto) {
 
-        System.out.println("상품명: " + name);
-        System.out.println("가격: " + price);
-        System.out.println("수량: " + quantity);
-        System.out.println("카테고리: " + category);
-        System.out.println("시즌: " + season);
-        System.out.println("온도: " + temperature);
-        System.out.println("설명: " + description);
+        System.out.println("상품명 : " + dto.getName() + '\n'
+                + "가격 : " + dto.getPrice() + '\n'
+                + "수량 : " + dto.getQuantity() + '\n'
+                + "카테고리 : " + dto.getCategory() + '\n'
+                + "시즌 : " + dto.getSeason() + '\n'
+                + "온도 : " + dto.getTemperature() + '\n'
+                + "설명 : " + dto.getDescription() + '\n'
+        );
+
+        MultipartFile mainPicture = dto.getMainPicture();
         System.out.println("메인 이미지: " + (mainPicture != null ? mainPicture.getOriginalFilename() : "없음"));
-        System.out.println("디테일 이미지 수: " + (detailPictures != null ? detailPictures.size() : 0));
 
-        List<String> detailPicturePaths = new ArrayList<>();
         String mainPicturePath = null;
 
         try {
-            // Process detail pictures
-            if (detailPictures != null) {
-                for (MultipartFile detailPicture : detailPictures) {
-                    if (!detailPicture.isEmpty()) {
-                        String path = adminService.saveFile(detailPicture); // Save file method
-                        detailPicturePaths.add(path);
-                    }
-                }
-            }
-
             // Process main picture
             if (mainPicture != null && !mainPicture.isEmpty()) {
                 mainPicturePath = adminService.saveFile(mainPicture); // Save file method
             }
 
-            // Create request DTO
-            ProdUploadRequestDTO requestDTO = ProdUploadRequestDTO.builder()
-                    .name(name)
-                    .price(price)
-                    .quantity(quantity)
-                    .category(category)
-                    .season(season)
-                    .temperature(temperature)
-                    .description(description) // Use description for Quill content
-                    .mainPicture(mainPicture) // Pass the MultipartFile
-                    .detailPictures(detailPictures) // Pass the List<MultipartFile>
-                    .build();
-
             // Save product information
-            adminService.save(requestDTO);
+            adminService.save(dto);
 
             // Return response with redirection URL
             return ResponseEntity.ok(
