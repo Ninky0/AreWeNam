@@ -1,5 +1,6 @@
 package org.example.shoppingweather.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.CustomerDeleteResponseDTO;
@@ -43,6 +44,14 @@ public class MypageApiController {
                         .url("/user/login")
                         .build()
         );
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+
+        session.invalidate();
+
+        return "redirect:/user/login";
     }
 
 }
