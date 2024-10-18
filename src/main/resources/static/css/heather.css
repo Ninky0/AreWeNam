@@ -8,7 +8,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 1rem;
     background-color: rgba(255, 255, 255, 0.8); /* 반투명 배경 */
     position: fixed;
     top: 0;
@@ -18,9 +18,11 @@ body {
     transition: padding 0.3s ease, background-color 0.3s ease; /* 부드러운 전환 효과 */
 }
 
-.logo h1 {
+.logo h1 a {
     margin: 0;
-    font-size: 24px;
+    font-size: 40px;
+    text-decoration: none;
+    color: black;
 }
 
 .main-nav {

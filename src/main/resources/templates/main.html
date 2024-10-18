@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <title>Slider with Infinite Loop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
+<main>
+    <section class="banner">
+        <img src="/images/main_img01.jpg" alt="Fall & Winter Items">
+        <div class="banner-text">
+            <h2 class = "sub_title">오늘, 이 옷 어때?</h2>
+            <p>지금 계절에 함께하기 좋은 아이템</p>
+        </div>
+    </section>
+    <!-- Recommendation Section -->
+    <section class="recommendation">
+        <div class="recommendation-container">
+            <!-- Dropdown Containers -->
+            <div class="dropdown-container">
+                <select class="dropdown">
+                    <option value="seoul">서울</option>
+                    <option value="busan">부산</option>
+                    <option value="daegu">대구</option>
+                    <option value="incheon">인천</option>
+                </select>
+                <select class="dropdown">
+                    <option value="district">구 선택</option>
+                    <option value="district1">강남구</option>
+                    <option value="district2">서초구</option>
+                    <option value="district3">동작구</option>
+                </select>
+                <button class="search-button">검색</button>
+            </div>
+            <!-- Weather Icon and Temperature -->
+            <div class="weather-icon-container">
+                <img src="/images/snow.png" alt="Weather Icon" class="floating-icon">
+                <div class="temperature">11.3°C</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Slider Section -->
+    <section class="slider-container">
+        <button class="arrow left-arrow" id="prevArrow">&#10094;</button>
+        <div class="product-slider" id="productSlider">
+            <!-- Product Items -->
+            <div class="product-item">
+                <img src="/images/sample_img_01.jpg" alt="Product 5">
+                <h4>PIASTUDIO</h4>
+                <p class="title">BA_Lapel color-blocked coat_2color</p>
+                <p class="price">188,100원</p>
+            </div>
+
+            <div class="product-item">
+                <img src="/images/sample_img_02.jpg" alt="Product 1">
+                <h4>PIASTUDIO</h4>
+                <p class="title">BA_Shiny leather jacket_BROWN</p>
+                <p class="price">151,050원</p>
+            </div>
+            <div class="product-item">
+                <img src="/images/sample_img_03.jpg" alt="Product 2">
+                <h4>MONGDOL</h4>
+                <p class="title">울 숏 구름 더블 코트 라이트그레이</p>
+                <p class="price">220,500원</p>
+            </div>
+            <div class="product-item">
+                <img src="/images/sample_img_04.jpg" alt="Product 3">
+                <h4>MONGDOL</h4>
+                <p class="title">리버서블 숏헤어 무스탕 베이지</p>
+                <p class="price">223,200원</p>
+            </div>
+            <div class="product-item">
+                <img src="/images/sample_img_05.jpg" alt="Product 4">
+                <h4>PIASTUDIO</h4>
+                <p class="title">BA_Knitted zipper hooded jacket_3color</p>
+                <p class="price">226,100원</p>
+            </div>
+            <div class="product-item">
+                <img src="/images/sample_img_06.jpg" alt="Product 5">
+                <h4>PIASTUDIO</h4>
+                <p class="title">BA_Lapel color-blocked coat_2color</p>
+                <p class="price">188,100원</p>
+            </div>
+
+        </div>
+        <button class="arrow right-arrow" id="nextArrow">&#10095;</button>
+    </section>
+    <section class="special-items">
+        <h2 class = "sub_title">파워를 위한 아이템</h2>
+        <p>미리미리 준비하는 아이템</p>
+        <div class="special-slider">
+            <div class="special-item">
+                <img src="/images/special_1.png" alt="Special Product 1">
+                <h3>SPRING</h3>
+                <p>봄과 어울리는 아이템</p>
+            </div>
+            <div class="special-item">
+                <img src="/images/special_2.png" alt="Special Product 2">
+                <h3>SUMMER</h3>
+                <p>여름과 어울리는 아이템</p>
+            </div>
+            <div class="special-item">
+                <img src="/images/special_3.png"  alt="Special Product 3">
+                <h3>FALL</h3>
+                <p>가을과 어울리는 아이템</p>
+            </div>
+            <div class="special-item">
+                <img src="/images/special_4.png"  alt="Special Product 4">
+                <h3>WINTER</h3>
+                <p>겨울과 어울리는 아이템</p>
+            </div>
+        </div>
+    </section>
+
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+<script src="main.js"></script>
+</body>
+</html>

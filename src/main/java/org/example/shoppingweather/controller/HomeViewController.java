@@ -41,4 +41,9 @@ public class HomeViewController {
         return ResponseEntity.ok(weather);
     }
 
+    @GetMapping("/index")
+    public String index() {
+        return "main";
+    }
+
 }

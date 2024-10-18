@@ -6,7 +6,8 @@
     font-style: normal;
 }
 body {
-
+    display: flex;
+    flex-direction: column;
     font-family: 'Pretendard-Regular', sans-serif;
     margin: 0;
     padding: 0;
