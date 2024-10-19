@@ -1,6 +1,5 @@
 package org.example.shoppingweather.service;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;

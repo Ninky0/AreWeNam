@@ -1,25 +1,27 @@
 package org.example.shoppingweather.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.ProdUploadRequestDTO;
-import org.example.shoppingweather.dto.ProdUploadResponseDTO;
+import org.example.shoppingweather.dto.product.ProdUploadRequestDTO;
+import org.example.shoppingweather.dto.product.ProdUploadResponseDTO;
 import org.example.shoppingweather.service.AdminService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/product")
 @RequiredArgsConstructor
 public class AdminApiController {
 
     private final AdminService adminService;
 
-    @PostMapping("/product/upload")
+    @PostMapping
     public ResponseEntity<ProdUploadResponseDTO> uploadProduct(
             @ModelAttribute ProdUploadRequestDTO dto) {
 
@@ -62,4 +64,26 @@ public class AdminApiController {
             );
         }
     }
+
+    @DeleteMapping
+    //상품 상세페이지에서 넘겨줄때도 매개변수 타입을 리스트로 넘겨주면 좋겠음
+    public ResponseEntity<?> deleteProducts(@RequestBody List<Long> productIds) {
+        // productIds 잘 넘어오나 확인용
+//        for (Long productId : productIds) {
+//            System.out.println(productId);
+//        }
+        try {
+            adminService.deleteProductsByIds(productIds);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "상품이 성공적으로 삭제되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "상품 삭제에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(response);
+        }
+    }
+
 }

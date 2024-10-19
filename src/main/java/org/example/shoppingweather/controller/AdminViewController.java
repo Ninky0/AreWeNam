@@ -1,7 +1,7 @@
 package org.example.shoppingweather.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

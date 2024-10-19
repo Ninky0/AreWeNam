@@ -2,7 +2,7 @@ package org.example.shoppingweather.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.shoppingweather.dto.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -24,7 +24,8 @@ public class Product {
     private Integer temperature;
 
     @Builder
-    public Product(String name, Integer price, String mainPicture, String description, String quantity, String category, Integer season, Integer temperature) {
+    public Product(Long id, String name, Integer price, String mainPicture, String description, String quantity, String category, Integer season, Integer temperature) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.mainPicture = mainPicture;
@@ -37,6 +38,7 @@ public class Product {
 
     public ProdReadResponseDTO toProdReadResponseDTO() {
         return ProdReadResponseDTO.builder()
+                .id(id)
                 .name(name)
                 .price(price)
                 .mainPicture(mainPicture)

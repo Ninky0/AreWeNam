@@ -1,10 +1,10 @@
-package org.example.shoppingweather.dto.sign;
+package org.example.shoppingweather.dto.product;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class SignUpResponseDTO {
+public class ProdUploadResponseDTO {
     private String url;
 }

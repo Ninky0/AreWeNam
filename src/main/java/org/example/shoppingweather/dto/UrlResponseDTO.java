@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ProdUploadResponseDTO {
+public class UrlResponseDTO {
     private String url;
 }

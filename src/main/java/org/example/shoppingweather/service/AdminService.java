@@ -1,8 +1,8 @@
 package org.example.shoppingweather.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.ProdReadResponseDTO;
-import org.example.shoppingweather.dto.ProdUploadRequestDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.product.ProdUploadRequestDTO;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -72,5 +72,9 @@ public class AdminService {
         }
 
         return uniquePath;
+    }
+
+    public void deleteProductsByIds(List<Long> productIds) {
+        productRepository.deleteAllById(productIds);
     }
 }
