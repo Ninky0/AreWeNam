@@ -1,6 +1,5 @@
 package org.example.shoppingweather.config;
 
-
 import org.example.shoppingweather.config.security.CustomAuthenticationFailureHandler;
 import org.example.shoppingweather.config.security.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +35,7 @@ public class WebSecurityConfig {
                                         new AntPathRequestMatcher("/user/login"),
                                         new AntPathRequestMatcher("/user/join"),
                                         new AntPathRequestMatcher("/join"),
-                                        new AntPathRequestMatcher("/update/**")
+                                        new AntPathRequestMatcher("/home/**")
                                 ).permitAll()
                                 .requestMatchers("/admin/product/list", "/admin/product/upload", "/admin/**"
                                 ).hasRole("ADMIN")

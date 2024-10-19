@@ -6,7 +6,6 @@ import org.example.shoppingweather.dto.weather.WeatherResponse;
 import org.example.shoppingweather.service.WeatherService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,10 +21,8 @@ public class HomeViewController {
     private final WeatherService weatherService;
 
     @GetMapping
-    public String home(Model model) {
-        //그냥 디폴트 값으로 (60,127) 일단 넘겨줌.
-        model.addAttribute("weather", weatherService.getWeatherData(60, 127));
-        return "weather_weather";
+    public String home() {
+        return "main";
     }
 
     @GetMapping("/weather/regions")
@@ -39,11 +36,6 @@ public class HomeViewController {
     public ResponseEntity searchWeather(@RequestParam int nx, @RequestParam int ny) {
         WeatherResponse weather = weatherService.getWeatherData(nx, ny);
         return ResponseEntity.ok(weather);
-    }
-
-    @GetMapping("/index")
-    public String index() {
-        return "main";
     }
 
 }

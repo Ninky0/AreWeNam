@@ -14,11 +14,4 @@ public class CustomerDeleteRequestDTO {
     private String loginId;
     private String password;
 
-    public Customer toCustomer(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        return Customer.builder()
-                .loginId(loginId)
-                .password(bCryptPasswordEncoder.encode(password))
-                .build();
-    }
-
 }

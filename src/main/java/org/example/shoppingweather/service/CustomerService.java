@@ -1,5 +1,6 @@
 package org.example.shoppingweather.service;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
@@ -18,12 +19,19 @@ public class CustomerService {
 
     public void save(SignUpRequestDTO dto) {
         Customer customer = dto.toCustomer(bCryptPasswordEncoder);
-        customer.setRole("ROLE_ADMIN");
+
+        // 여기서 권한 조정하기 ROLE_ADMIN 또는 ROLE_CUSTOMER
+        customer.setRole("ROLE_CUSTOMER");
+
         customerRepository.save(customer);
     }
 
+    public Customer findBySession(HttpSession session) {
+        String loginId = (String) session.getAttribute("loginId");
+        return customerRepository.findByLoginId(loginId);
+    }
+
     public void updateUser(Long id, CustomerUpdateRequestDTO dto) {
-        // 기존 고객 정보 조회
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
 
