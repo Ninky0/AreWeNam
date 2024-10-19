@@ -16,7 +16,7 @@ public class MypageApiController {
 
     private final CustomerService customerService;
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<UrlResponseDTO> update(
             @PathVariable Long id,
             @RequestBody CustomerUpdateRequestDTO dto) {
@@ -40,7 +40,7 @@ public class MypageApiController {
 
         return ResponseEntity.ok(
                 UrlResponseDTO.builder()
-                        .url("/user/login")
+                        .url("/home")
                         .build()
         );
     }
@@ -50,7 +50,7 @@ public class MypageApiController {
 
         session.invalidate();
 
-        return "redirect:/user/login";
+        return "redirect:/home";
     }
 
 }

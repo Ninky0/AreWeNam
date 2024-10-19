@@ -9,7 +9,7 @@
     <script th:src="@{/js/heather.js}"></script>
     <div class="header">
         <div class="logo">
-            <h1><a href="home">WeatherWear</a></h1>
+            <h1><a th:href="@{/home}">WeatherWear</a></h1>
         </div>
         <nav class="main-nav">
             <ul>
@@ -20,10 +20,10 @@
         </nav>
         <div class="icon-container">
             <ul>
-                <li><a href="/mypage"><i class="fa-regular fa-user" style="color: #000000;"></i></a></li>
-                <li><a href="#"><i class="fa-solid fa-truck" style="color: #000000;"></i></a></li>
-                <li><a href="#"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a></li>
-                <li><a href="#"><i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i></a></li>
+                <li><a th:href="@{/mypage}"><i class="fa-regular fa-user" style="color: #000000;"></i></a></li>
+                <li><a th:href="@{/mypage/history}"><i class="fa-solid fa-truck" style="color: #000000;"></i></a></li>
+                <li><a th:href="@{/mypage/cart}"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a></li>
+                <li><a id="search-product"><i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i></a></li>
             </ul>
         </div>
     </div>

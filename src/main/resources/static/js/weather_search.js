@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('searchButton').addEventListener('click', submitSearchForm);
+});
+
 let regions = [];
 
 // 페이지 로드 시 CSV 데이터를 서버에서 받아옴
@@ -54,9 +58,48 @@ function populateSubRegions() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('searchButton').addEventListener('click', submitSearchForm);
-});
+function submitSearchForm() {
+    const selectedRegion = document.getElementById('region').value;
+    const selectedSubRegion = document.getElementById('region2').value;
+
+    const selectedRegionData = regions.find(item => item.regionParent === selectedRegion && item.regionChild === selectedSubRegion);
+
+    if (selectedRegionData) {
+        const nx = selectedRegionData.nx;
+        const ny = selectedRegionData.ny;
+
+        // 날씨 API 요청
+        fetch(`/home/weather/search?nx=${nx}&ny=${ny}`)
+            .then(response => response.json())
+            .then(data => {
+                // weather-text 요소를 비움
+                const weatherTextDiv = document.getElementById('weather-text');
+                weatherTextDiv.innerHTML = ''; // 기존 내용 제거
+
+                // 날씨 데이터가 존재하는지 확인
+                if (data && data.response && data.response.body && data.response.body.items && data.response.body.items.item) {
+                    const weatherItems = data.response.body.items.item;
+
+                    // 각 날씨 항목을 사용자 친화적인 텍스트로 변환하여 출력
+                    weatherItems.forEach(item => {
+                        const friendlyText = convertCategoryName(item.category, item.obsrValue);
+                        const p = document.createElement('p');
+                        p.textContent = friendlyText;
+                        if(item.category==='TMP'||item.category==='T1H'){
+                            weatherTextDiv.appendChild(p);
+                        }
+                    });
+
+                } else {
+                    weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching weather:', error);
+                document.getElementById('weather-text').textContent = '날씨 정보를 불러오는 중 오류가 발생했습니다.';
+            });
+    }
+}
 
 // 각 category 값을 사용자 친화적인 텍스트로 변환하는 함수
 function convertCategoryName(category, value) {
@@ -73,8 +116,8 @@ function convertCategoryName(category, value) {
         REH: { name: '습도', unit: '%', bit: 8 },        // 습도
         SNO: { name: '1시간 신적설', customFormatter: formatSnow, bit: 8 }, // 신적설
         SKY: { name: '하늘상태', values: { '1': '맑음', '3': '구름많음', '4': '흐림' }, bit: 4 },  // 하늘상태
-        T1H: { name: '1시간 기온', unit: '°C', bit: 10 }, // 1시간 기온
-        TMP: { name: '1시간 기온', unit: '°C', bit: 10 }, // 1시간 기온
+        T1H: { name: '', unit: '°C', bit: 10 }, // 1시간 기온
+        TMP: { name: '', unit: '°C', bit: 10 }, // 1시간 기온
         TMN: { name: '일 최저기온', unit: '°C', bit: 10 }, // 일 최저기온
         TMX: { name: '일 최고기온', unit: '°C', bit: 10 }, // 일 최고기온
         UUU: { name: '풍속(동서성분)', customFormatter: formatWindComponent, unit: 'm/s', bit: 12 }, // 동서 바람 성분
@@ -97,7 +140,7 @@ function convertCategoryName(category, value) {
         }
 
         // 단순 값 + 단위 표시
-        return `${categoryInfo.name}: ${value}${categoryInfo.unit || ''}`;
+        return `${categoryInfo.name} ${value}${categoryInfo.unit || ''}`;
     }
     return `${category}: ${value}`;
 }
@@ -136,44 +179,4 @@ function formatWindComponent(value) {
         return `${Math.abs(value)} (서/남쪽으로)`;
     }
     return '바람 없음';
-}
-
-function submitSearchForm() {
-    const selectedRegion = document.getElementById('region').value;
-    const selectedSubRegion = document.getElementById('region2').value;
-
-    const selectedRegionData = regions.find(item => item.regionParent === selectedRegion && item.regionChild === selectedSubRegion);
-
-    if (selectedRegionData) {
-        const nx = selectedRegionData.nx;
-        const ny = selectedRegionData.ny;
-
-        // 날씨 API 요청
-        fetch(`/home/weather/search?nx=${nx}&ny=${ny}`)
-            .then(response => response.json())
-            .then(data => {
-                // weather-text 요소를 비움
-                const weatherTextDiv = document.getElementById('weather-text');
-                weatherTextDiv.innerHTML = ''; // 기존 내용 제거
-
-                // 날씨 데이터가 존재하는지 확인
-                if (data && data.response && data.response.body && data.response.body.items && data.response.body.items.item) {
-                    const weatherItems = data.response.body.items.item;
-
-                    // 각 날씨 항목을 사용자 친화적인 텍스트로 변환하여 출력
-                    weatherItems.forEach(item => {
-                        const friendlyText = convertCategoryName(item.category, item.obsrValue);
-                        const p = document.createElement('p');
-                        p.textContent = friendlyText;
-                        weatherTextDiv.appendChild(p);
-                    });
-                } else {
-                    weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching weather:', error);
-                document.getElementById('weather-text').textContent = '날씨 정보를 불러오는 중 오류가 발생했습니다.';
-            });
-    }
 }
