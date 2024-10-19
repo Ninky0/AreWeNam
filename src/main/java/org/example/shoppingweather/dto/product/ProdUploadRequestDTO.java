@@ -1,13 +1,9 @@
-package org.example.shoppingweather.dto;
+package org.example.shoppingweather.dto.product;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import org.example.shoppingweather.entity.Product;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Data
 @Builder

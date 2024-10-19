@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto;
+package org.example.shoppingweather.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class ProdReadResponseDTO {
+    private Long id;
     private String name;
     private Integer price;
     private String mainPicture;

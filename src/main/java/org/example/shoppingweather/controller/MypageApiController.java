@@ -3,9 +3,8 @@ package org.example.shoppingweather.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
-import org.example.shoppingweather.dto.CustomerDeleteResponseDTO;
 import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
-import org.example.shoppingweather.dto.CustomerUpdateResponseDTO;
+import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class MypageApiController {
     private final CustomerService customerService;
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CustomerUpdateResponseDTO> update(
+    public ResponseEntity<UrlResponseDTO> update(
             @PathVariable Long id,
             @RequestBody CustomerUpdateRequestDTO dto) {
 
@@ -26,21 +25,21 @@ public class MypageApiController {
         customerService.updateUser(id, dto);
 
         return ResponseEntity.ok(
-                CustomerUpdateResponseDTO.builder()
+                UrlResponseDTO.builder()
                         .url("/mypage")
                         .build()
                 );
     }
 
     @DeleteMapping("/quitout/{id}")
-    public ResponseEntity<CustomerDeleteResponseDTO> delete(
+    public ResponseEntity<UrlResponseDTO> delete(
             @PathVariable Long id,
             @RequestBody CustomerDeleteRequestDTO dto) {
 
         customerService.deleteUser(id, dto);
 
         return ResponseEntity.ok(
-                CustomerDeleteResponseDTO.builder()
+                UrlResponseDTO.builder()
                         .url("/user/login")
                         .build()
         );

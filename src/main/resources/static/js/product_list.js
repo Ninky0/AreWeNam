@@ -1,8 +1,48 @@
-
 $(document).ready(() => {
-    checkSession();
+    //checkSession();
     getBoards();
+
+    $('body').on('click', '#check_all', function() {
+        $('input[type="checkbox"].checkbox').prop('checked', $(this).is(':checked'));
+    });
+
+    // 동적 이벤트 바인딩: 페이지의 어느 시점에서든지 요소가 존재하면 이벤트가 실행됩니다.
+    $('body').on('click', '#button_red', function() {
+        let selectedProducts = $('.checkbox:checked').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (selectedProducts.length === 0) {
+            alert('삭제할 상품을 선택해 주세요.');
+            return;
+        }
+
+        if (confirm('선택한 상품을 정말 삭제하시겠습니까?')) {
+            deleteProducts(selectedProducts);
+        }
+    });
 });
+
+function deleteProducts(productIds) {
+    $.ajax({
+        type: 'DELETE',
+        url: '/admin/product',
+        contentType: 'application/json',
+        data: JSON.stringify(productIds),
+        success: function(response) {
+            if (response.success) {
+                alert(response.message); // 서버에서 보낸 메시지를 표시
+                location.reload(); // 페이지를 다시 로드하여 업데이트된 목록을 표시
+            } else {
+                alert(response.message); // 서버에서 보낸 실패 메시지를 표시
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('오류 발생:', error);
+            alert('상품 삭제 중 오류가 발생했습니다.');
+        }
+    });
+}
 
 // let checkSession = () => {
 //     let hUserId = $('#hiddenUserId').val();

@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(`${key}: ${value}`);
             }
 
-            fetch('/admin/product/upload', { //여기가 문제로군
+            fetch('/admin/product', {
                 method: 'POST',
                 body: formData
             })
