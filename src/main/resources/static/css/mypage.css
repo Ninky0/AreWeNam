@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    padding-top: 70px; /* 헤더의 높이만큼 여백을 추가해서 내용이 가려지지 않게 조정 */
+    padding-top: 100px; /* 헤더의 높이만큼 여백을 추가해서 내용이 가려지지 않게 조정 */
     margin: 0;
 }
 
@@ -20,7 +20,7 @@ body {
     width: 20%;
     padding: 20px;
     position: fixed; /* 사이드바 고정 */
-    top: 70px; /* 헤더 아래에 위치하게 */
+    top: 60px; /* 헤더 아래에 위치하게 */
     bottom: 0;
 }
 
@@ -65,7 +65,7 @@ button {
 
 /* '알위님, 반갑습니다' 부분 스타일 */
 .welcome-section {
-    margin-top: 60px; /* 로그아웃 버튼 아래 여백 */
+    margin-top: 80px; /* 로그아웃 버튼 아래 여백 */
 }
 
 .welcome-section h1 {
