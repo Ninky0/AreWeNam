@@ -19,6 +19,7 @@
 
         <div class="product-detail-row">
             <input type="hidden" id="productId" th:value="${product.id}">
+            <input type="hidden" id="customerId" th:value="${customer.id}">
             <div class="product-col-md-4">
 <!--                <img src="/images/sample_img_02.jpg" alt="상세 이미지">-->
                 <img th:src="@{/uploads/{file}(file=${product.mainPicture})}" alt="상세 이미지">

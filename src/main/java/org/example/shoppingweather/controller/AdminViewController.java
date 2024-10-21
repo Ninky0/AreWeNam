@@ -1,8 +1,11 @@
 package org.example.shoppingweather.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.service.AdminService;
+import org.example.shoppingweather.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,7 @@ import java.util.List;
 public class AdminViewController {
 
     private final AdminService adminService;
+    private final CustomerService customerService;
 
     @GetMapping("/product/list")
     public String productList(Model model){
@@ -41,9 +45,10 @@ public class AdminViewController {
         model.addAttribute("product", product);
         return "detail_product"; // 상세 페이지 HTML 파일 이름
     }
+
     // customer 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail/{id}")
-    public String detail(@PathVariable Long id, Model model) {
+    public String detail(HttpSession session, @PathVariable Long id, Model model) {
         // id로 상품 정보 찾기
         ProdReadResponseDTO product = adminService.findById(id);
 
@@ -53,8 +58,11 @@ public class AdminViewController {
             product.setMainPicture(mainPicturePath); // 경로 수정 후 다시 설정
         }
 
+        Customer customer = customerService.findBySession(session);
+
         // 수정된 product 객체를 모델에 추가
         model.addAttribute("product", product);
+        model.addAttribute("customer",customer);
 
         // 상세 페이지 HTML 파일로 반환
         return "detail";
