@@ -1,0 +1,165 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+.product-detail-body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+img {
+    width: 100%;
+}
+.product-container {
+    max-width: 900px;
+    margin: 150px auto;
+    padding: 30px;
+    background-color: #fff;
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    border-radius: 10px;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.product-detail-row {
+    display: flex;
+    justify-content: space-evenly;
+    width: 980px;
+}
+
+
+.product-col-md-4 {
+    width: 40%;
+    text-align: center;
+}
+.product-col-md-8 {
+    width: 40%;
+}
+
+.product-detail-image {
+    width: 100%;
+
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.image-placeholder-text {
+    display: block;
+    margin-top: 10px;
+    color: #777;
+    font-size: 14px;
+}
+
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border: 0;
+}
+
+.product-price {
+    font-size: 22px;
+    margin: 10px 10px;
+    border: 0;
+    font-weight: 900;
+}
+
+.product-price strong {
+    font-weight: 900;
+    font-size: 28px;
+}
+
+.product-detail-info {
+    margin-top: 20px;
+}
+.product-detail-info p {
+    margin: 5px 0;
+    font-size: 12px;
+    color: #767676;
+}
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+.action-button {
+    flex: 1;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #333;
+    color: #333;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action-button.black-button {
+    background-color: #333;
+    color: #fff;
+}
+
+.action-button:hover {
+    background-color: #555;
+    color: white;
+}
+
+.product-review {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.product-description {
+    margin-top: 50px;
+}
+
+.product-description h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.description-image {
+    width: 100%;
+    padding: 10px;
+}
+
+.description-image img {
+    width: 100%;
+    height: auto;
+}
+.product-quantity {
+    margin: 15px 0 15px 0;
+    font-size: 16px;
+}
+
+.quantity-input {
+    width: 60px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+.price-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+#price {
+    outline: none; /* 기본 outline 제거 */
+    border: none; /* 필요에 따라 기본 border도 제거 가능 */
+}
+
+/* 포커스 시 커서만 활성화하고 스타일을 없앱니다 */
+#price:focus {
+    outline: none;
+}
