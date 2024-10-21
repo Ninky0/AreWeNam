@@ -2,95 +2,120 @@ document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('productSlider');
     const slides = Array.from(slider.children);
     const totalItems = slides.length;
-    const itemWidth = 250; // Width of each slide
-    const gap = 10; // Gap between slides
-    const slideDistance = itemWidth + gap; // Distance each slide should move
-    let currentIndex = totalItems; // Start at the first set of clones
+    const itemWidth = 250; // 각 슬라이드의 너비
+    const gap = 10; // 슬라이드 사이의 간격
+    const slideDistance = itemWidth + gap; // 각 슬라이드가 이동해야 하는 거리
+    let currentIndex = 0; // 첫 번째 슬라이드에서 시작
     let autoSlideInterval;
 
-    // Clone all slides at the start and end for seamless looping
+    // 화살표 버튼 요소 가져오기
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+
+    // 무한 루프 효과를 위해 모든 슬라이드를 한 번만 복제하여 끝에 추가
     slides.forEach(slide => {
-        const cloneStart = slide.cloneNode(true);
-        const cloneEnd = slide.cloneNode(true);
-        slider.appendChild(cloneEnd);
-        slider.insertBefore(cloneStart, slider.firstChild);
+        const clone = slide.cloneNode(true);
+        slider.appendChild(clone);
     });
 
-    // Update total slides count to reflect the new set of slides
-    const updatedTotalItems = slider.children.length;
+    // 슬라이더의 총 슬라이드 수를 반영하여 너비 설정
+    const totalSlides = slider.children.length;
+    slider.style.width = `${totalSlides * slideDistance}px`;
 
-    // Set slider width to accommodate all slides and avoid wrapping
-    slider.style.width = `${updatedTotalItems * slideDistance}px`;
-
-    // Set initial slide position to start at the first set of real slides
-    slider.style.transform = `translateX(${-slideDistance * currentIndex}px)`;
-
+    // 슬라이드 위치를 업데이트하는 함수
     function updateSlidePosition() {
         slider.style.transition = 'transform 0.5s ease-in-out';
         slider.style.transform = `translateX(${-slideDistance * currentIndex}px)`;
     }
 
+    // 다음 슬라이드로 이동하는 함수
     function nextSlide() {
         currentIndex++;
         updateSlidePosition();
 
-        // When reaching the end, reset to the first set of slides without visible jump
-        slider.addEventListener('transitionend', handleLooping, { once: true });
-    }
-
-    function prevSlide() {
-        currentIndex--;
-        updateSlidePosition();
-
-        // When reaching the beginning, reset to the last set of slides without visible jump
-        slider.addEventListener('transitionend', handleLooping, { once: true });
-    }
-
-    function handleLooping() {
-        if (currentIndex >= updatedTotalItems - totalItems) {
-            // Reached the end, reset to the first real slide
-            slider.style.transition = 'none';
-            currentIndex = totalItems; // Jump to the start of the real slides
-            slider.style.transform = `translateX(${-slideDistance * currentIndex}px)`;
-            requestAnimationFrame(() => {
-                // Re-enable transition after one frame
-                slider.style.transition = 'transform 0.5s ease-in-out';
-            });
-        } else if (currentIndex < totalItems) {
-            // Reached the beginning, reset to the last real slide
-            slider.style.transition = 'none';
-            currentIndex = updatedTotalItems - totalItems * 2; // Jump to the end of the real slides
-            slider.style.transform = `translateX(${-slideDistance * currentIndex}px)`;
-            requestAnimationFrame(() => {
-                // Re-enable transition after one frame
-                slider.style.transition = 'transform 0.5s ease-in-out';
-            });
+        // 모든 슬라이드를 보여준 후 처음으로 부드럽게 돌아가기
+        if (currentIndex >= totalItems) {
+            setTimeout(() => {
+                slider.style.transition = 'none';
+                currentIndex = 0;
+                slider.style.transform = `translateX(0)`;
+                setTimeout(() => {
+                    slider.style.transition = 'transform 0.5s ease-in-out';
+                }, 50);
+            }, 500); // 트랜지션이 끝난 후 실행
         }
     }
 
-    // Start auto-slide
-    function startAutoSlide() {
-        autoSlideInterval = setInterval(nextSlide, 3000); // Auto-slide every 3 seconds
+    // 이전 슬라이드로 이동하는 함수
+    function prevSlide() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = totalItems - 1;
+            slider.style.transition = 'none';
+            slider.style.transform = `translateX(${-slideDistance * (totalItems * 2 - 1)}px)`;
+            setTimeout(() => {
+                slider.style.transition = 'transform 0.5s ease-in-out';
+                updateSlidePosition();
+            }, 50);
+        } else {
+            updateSlidePosition();
+        }
     }
 
-    // Stop auto-slide
+    // 자동 슬라이드 시작
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
+    }
+
+    // 자동 슬라이드 정지
     function stopAutoSlide() {
         clearInterval(autoSlideInterval);
     }
 
-    // Add arrow button event listeners
-    document.querySelector('.left-arrow').addEventListener('click', () => {
-        stopAutoSlide(); // Stop auto-slide while manually navigating
-        prevSlide();
-        startAutoSlide(); // Resume auto-slide after manual navigation
-    });
-
-    document.querySelector('.right-arrow').addEventListener('click', () => {
-        stopAutoSlide(); // Stop auto-slide while manually navigating
+    // 화살표 버튼에 이벤트 리스너 추가
+    nextButton.addEventListener('click', () => {
+        stopAutoSlide();
         nextSlide();
-        startAutoSlide(); // Resume auto-slide after manual navigation
+        startAutoSlide();
     });
 
-    // Start auto-slide on page load
+    prevButton.addEventListener('click', () => {
+        stopAutoSlide();
+        prevSlide();
+        startAutoSlide();
+    });
+
+    // 슬라이더에 마우스 오버 시 자동 슬라이드 정지
+    slider.addEventListener('mouseenter', stopAutoSlide);
+
+    // 슬라이더에서 마우스 아웃 시 자동 슬라이드 재시작
+    slider.addEventListener('mouseleave', startAutoSlide);
+
+    // 페이지 로드 시 자동 슬라이드 시작
     startAutoSlide();
 });
+
+let slideIndex = 0;
+showSlides();
+
+function showSlides() {
+    let slides = document.getElementsByClassName("banner-slide");
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}
+    slides[slideIndex - 1].style.display = "block";
+    setTimeout(showSlides, 5000); // 5초마다 슬라이드 변경
+}
+
+function plusSlides(n) {
+    slideIndex += n;
+    let slides = document.getElementsByClassName("banner-slide");
+    if (slideIndex > slides.length) {slideIndex = 1}
+    if (slideIndex < 1) {slideIndex = slides.length}
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+}

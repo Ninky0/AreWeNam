@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <link th:href="@{/css/detail.css}" rel="stylesheet">
+    <script th:src="@{/js/detail.js}"></script>
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <title>상품 상세 정보</title>
+</head>
+<body class="product-registration-body">
+<header>
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+<main>
+    <div class="product-container">
+
+        <div class="product-detail-row">
+            <input type="hidden" id="productId" th:value="${product.id}">
+            <div class="product-col-md-4">
+<!--                <img src="/images/sample_img_02.jpg" alt="상세 이미지">-->
+                <img th:src="@{/uploads/{file}(file=${product.mainPicture})}" alt="상세 이미지">
+            </div>
+
+            <div class="product-col-md-8">
+                <div class="breadcrumb">
+                    <span>겨울 &gt; 11도씨 &gt; 자켓</span>
+                </div>
+                <input type="text" id="name" name="name" class="product-title" th:value="${product.name}" readonly>
+                <div class="price-container">
+                    <label for="price">판매가  </label>
+                    <input type="number" id="price" name="price" class="product-price" th:value="${product.price}" readonly>
+
+                </div>
+                <div class="product-quantity">
+                    <label for="quantityInput">수량 선택:</label>
+                    <input type="number" id="quantityInput" class="quantity-input" name="quantity" value="1" min="1"
+                           max="100">
+                </div>
+
+                <img class="product-detail-image" src="/images/detail_event_bn1.png" alt="상품 이미지">
+
+                <div class="product-detail-info">
+                    <p>구매 적립금 : 2% 적립</p>
+                    <p>배송정보 : 3일 이내 출고</p>
+                    <p>배송비 : 2,500원</p>
+                    <p>제주/도서산간 3,000원 추가</p>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" id="addToCartBtn" class="action-button">장바구니 담기</button>
+                    <button class="action-button black-button">구매하기</button>
+                </div>
+
+                <p class="product-review">리뷰 30건</p>
+            </div>
+        </div>
+
+
+        <div class="product-description">
+            <h2>상세정보</h2>
+            <div class="description-image">
+                <img src="/images/sample_img_02.jpg" alt="상세 이미지">
+            </div>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>

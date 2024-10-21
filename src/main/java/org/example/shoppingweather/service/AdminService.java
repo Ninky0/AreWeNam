@@ -27,7 +27,11 @@ public class AdminService {
                 .map(Product::toProdReadResponseDTO)
                 .collect(Collectors.toList());
     }
-
+    public ProdReadResponseDTO findById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
+        return product.toProdReadResponseDTO();
+    }
     public Long save(ProdUploadRequestDTO dto) throws IOException {
         // Save main picture and get its path
         String mainPicturePath = saveFile(dto.getMainPicture());
@@ -38,7 +42,29 @@ public class AdminService {
         // Create and save the Product entity
         return productRepository.save(product).getId();
     }
+    public void updateProduct(Long id, ProdUploadRequestDTO dto) throws IOException {
+        // 기존 상품을 찾습니다
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
 
+        // 기존 상품 정보를 수정합니다
+        existingProduct.setName(dto.getName());
+        existingProduct.setPrice(dto.getPrice());
+        existingProduct.setQuantity(dto.getQuantity());
+        existingProduct.setCategory(dto.getCategory());
+        existingProduct.setSeason(dto.getSeason());
+        existingProduct.setTemperature(dto.getTemperature());
+        existingProduct.setDescription(dto.getDescription());
+
+        // 메인 이미지가 변경된 경우 처리
+        if (dto.getMainPicture() != null && !dto.getMainPicture().isEmpty()) {
+            String mainPicturePath = saveFile(dto.getMainPicture());
+            existingProduct.setMainPicture(mainPicturePath);
+        }
+
+        // 수정된 상품을 저장합니다
+        productRepository.save(existingProduct);
+    }
     public String saveFile(MultipartFile file) throws IOException {
         String uploadDir = "uploads/";
         String fileName = file.getOriginalFilename();

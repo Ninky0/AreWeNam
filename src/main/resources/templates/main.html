@@ -17,12 +17,41 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
-    <section class="banner">
-        <img src="/images/main_img01.jpg" alt="Fall & Winter Items">
-        <div class="banner-text">
-            <h2 class="sub_title">오늘, 이 옷 어때?</h2>
-            <p>지금 계절에 함께하기 좋은 아이템</p>
+    <section class="banner-slider">
+        <div class="banner-slide fade">
+            <img src="/images/main_img01.jpg" alt="Fall & Winter Items">
+            <div class="banner-text">
+                <h2 class="sub_title">오늘, 이 옷 어때?</h2>
+                <p>지금 계절에 함께하기 좋은 아이템</p>
+            </div>
         </div>
+
+        <div class="banner-slide fade">
+            <img src="/images/main_img02.jpg" alt="Spring Collection">
+            <div class="banner-text">
+                <h2 class="sub_title">따뜻한 봄을 준비하세요!</h2>
+                <p>봄 컬렉션 특가 세일</p>
+            </div>
+        </div>
+
+        <div class="banner-slide fade">
+            <iframe width="100%" height="500px"
+                    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+
+        <div class="banner-slide fade">
+            <img src="/images/main_img03.jpg" alt="Summer Essentials">
+            <div class="banner-text">
+                <h2 class="sub_title">여름 필수 아이템</h2>
+                <p>뜨거운 여름을 위한 가벼운 옷</p>
+            </div>
+        </div>
+
+        <!-- 이전/다음 버튼 -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
     </section>
     <!-- Recommendation Section -->
     <section class="recommendation">
@@ -49,9 +78,8 @@
         </form>
     </section>
 
-    <!-- Product Slider Section -->
     <section class="slider-container">
-        <button class="arrow left-arrow" id="prevArrow">&#10094;</button>
+        <button class="arrow left-arrow" id="prevButton">&#10094;</button>
         <div class="product-slider" id="productSlider">
             <!-- Product Items -->
             <div class="product-item">
@@ -93,7 +121,7 @@
             </div>
 
         </div>
-        <button class="arrow right-arrow" id="nextArrow">&#10095;</button>
+        <button class="arrow right-arrow" id="nextButton">&#10095;</button>
     </section>
     <section class="special-items">
         <h2 class="sub_title">파워를 위한 아이템</h2>
@@ -132,6 +160,5 @@
         </ul>
     </div>
 </footer>
-<script src="main.js"></script>
 </body>
 </html>

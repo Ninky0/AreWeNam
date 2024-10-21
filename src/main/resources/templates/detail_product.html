@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <link th:href="@{/css/upload_product.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <title>상품 상세 정보</title>
+</head>
+<body class="product-registration-body">
+<header>
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+<main>
+    <form id="productForm" method="POST">
+        <h2>상품 상세 정보</h2>
+        <div class="product-row">
+            <div class="product-col-md-4">
+                <div class="product-image-upload">
+                    <div class="product-image-placeholder">
+                        <img th:src="@{'/uploads/' + ${#strings.replace(product.mainPicture, '\\', '/')}}" alt="상품 이미지" style="max-width: 300px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="product-col-md-8">
+                <label class="product-label" for="season">시즌:</label>
+                <select id="season" name="season" class="product-select" disabled>
+                    <option th:selected="${product.season == 1}" value="1">봄</option>
+                    <option th:selected="${product.season == 2}" value="2">여름</option>
+                    <option th:selected="${product.season == 3}" value="3">가을</option>
+                    <option th:selected="${product.season == 4}" value="4">겨울</option>
+                </select>
+
+                <label class="product-label product-mt-2" for="temperature">온도:</label>
+                <select id="temperature" name="temperature" class="product-select" disabled>
+                    <option th:selected="${product.temperature == 1}" value="1">28℃ 이상</option>
+                    <option th:selected="${product.temperature == 2}" value="2">27~23℃</option>
+                    <option th:selected="${product.temperature == 3}" value="3">22~20℃</option>
+                    <option th:selected="${product.temperature == 4}" value="4">19~17℃</option>
+                    <option th:selected="${product.temperature == 5}" value="5">16~12℃</option>
+                    <option th:selected="${product.temperature == 6}" value="6">11~9℃</option>
+                    <option th:selected="${product.temperature == 7}" value="7">8~5℃</option>
+                    <option th:selected="${product.temperature == 8}" value="8">4℃ 이하</option>
+                </select>
+
+                <label class="product-label product-mt-2" for="category">카테고리:</label>
+                <select id="category" name="category" class="product-select" disabled>
+                    <option th:selected="${product.category == 'jk'}" value="jk">자켓</option>
+                    <option th:selected="${product.category == 'sk'}" value="sk">스커트</option>
+                </select>
+
+                <label class="product-label product-mt-2" for="name">상품명:</label>
+                <input type="text" id="name" name="name" class="product-input" th:value="${product.name}" readonly>
+
+                <label class="product-label product-mt-2" for="price">가격:</label>
+                <input type="number" id="price" name="price" class="product-input" th:value="${product.price}" readonly>
+
+                <label class="product-label product-mt-2" for="quantity">재고 수량:</label>
+                <input type="number" id="quantity" name="quantity" class="product-input" th:value="${product.quantity}" readonly>
+            </div>
+        </div>
+        <div class="product-detail-page product-mt-3">
+            <label class="product-label" for="description">설명:</label>
+            <div id="description" class="ql-editor" th:utext="${product.description}"></div>
+        </div>
+        <a class="product-button" th:href="@{/admin/product/edit/{id}(id=${product.id})}">수정</a>
+    </form>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>

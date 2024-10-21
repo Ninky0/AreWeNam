@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +66,37 @@ public class AdminApiController {
                             .url("/admin/product/upload") // Error handling URL
                             .build()
             );
+        }
+    }
+    @PostMapping("/admin/product/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateProduct(@PathVariable Long id, @ModelAttribute ProdUploadRequestDTO dto) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // 상품 정보 업데이트
+            adminService.updateProduct(id, dto);
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    @PostMapping("/uploadImage")
+    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String standardizedFilename = "image_" + System.currentTimeMillis() + ".png"; // Unique name
+            Path filePath = Paths.get("path/to/save/location", standardizedFilename);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Construct the URL that will be used in the Quill editor
+            String imageUrl = "/" + standardizedFilename;
+            Map<String, String> response = new HashMap<>();
+            response.put("imageUrl", imageUrl);
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
