@@ -58,12 +58,4 @@ public class MypageViewController {
         return "history";
     }
 
-    @GetMapping("/cart")
-    public String cart(HttpSession session, Model model) {
-        model.addAttribute("customer", customerService.findBySession(session));
-
-        // 장바구니
-        return "shoppingcart";
-    }
-
 }

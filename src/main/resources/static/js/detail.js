@@ -33,30 +33,37 @@ $(document).ready(function () {
         // 제품 ID와 수량 가져오기
         const productId = $('#productId').val();
         const quantity = $('#quantityInput').val();
+        const customerId = $('#customerId').val();
 
         // JSON 데이터 생성
         const jsonData = JSON.stringify({
             "productId": productId,
-            "quantity": quantity
+            "quantity": quantity,
+            "customerId": customerId
         });
 
         // AJAX 요청을 보내기 전에 콘솔에 데이터 출력
         console.log("보낼 제품 ID:", productId);
         console.log("보낼 수량:", quantity);
+        console.log("사용자 db ID:", customerId);
         console.log("보낼 JSON 데이터:", jsonData);
 
         // 실제로 서버로 전송 (이 부분은 데이터 확인 후 실행)
         $.ajax({
             type: "POST",
-            url: "/cart/add",
+            url: "/user/shoppingcart",
             contentType: "application/json",
             data: jsonData,
             success: function (response) {
-                console.log("장바구니 추가 성공:", response);
-                alert("상품이 장바구니에 추가되었습니다!");
+                if (response.message) {
+                    if (confirm(response.message)) {
+                        window.location.href = '/user/shoppingcart'; // 사용자가 확인 버튼을 클릭하면 장바구니 페이지로 이동
+                    }
+                }
             },
             error: function (xhr, status, error) {
                 console.error("장바구니 추가 실패:", error);
+                alert(response.message);
                 alert("상품 추가에 실패했습니다. 다시 시도해 주세요.");
             }
         });
