@@ -63,7 +63,7 @@ public class MypageViewController {
         model.addAttribute("customer", customerService.findBySession(session));
 
         // 장바구니
-        return "cart";
+        return "shoppingcart";
     }
 
 }

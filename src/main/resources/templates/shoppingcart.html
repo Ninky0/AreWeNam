@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/shoppingcart.js}"></script>
+    <link th:href="@{/css/shoppingcart.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+
+
+    <title>상품 목록 페이지</title>
+</head>
+<body>
+<header>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
+
+<main>
+
+
+    <div class="container">
+
+        <h3 class="progress-title">
+            <span class="step">SHOPPING BAG</span>
+            <span class="separator">></span>
+            <span class="step2">ORDER</span>
+            <span class="separator">></span>
+            <span class="step3">ORDER COMPLETE</span>
+        </h3>
+        <table>
+            <thead>
+            <tr>
+                <th class="th_1"><input type="checkbox" id="selectAll" class="checkbox"/>전체선택</th>
+                <th class="th_1">번호</th>
+                <th class="th_3">상품정보</th>
+                <th class="th_2">주문수량</th>
+                <th class="th_2">주문금액</th>
+                <th class="th_2">배송비</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="th_1">
+                    <input type="checkbox" class="checkbox">
+                </td>
+                <td class="th_1">1</td>
+                <td class="product-info">
+<!--                    <img src="" alt="Barbour Wax Jacket">-->
+                    <div class="product-details">
+                        <p>옵션: <span class="seasonDisplay"></span></p>
+                    </div>
+                </td>
+                <td>
+                    <button class="decreaseBtn">-</button>
+                    <span class="number" id="number">0</span>
+                    <button class="increaseBtn">+</button>
+                </td>
+                <td class="th_2">268,920원</td>
+                <td class="th_2">100,000원</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="cart-actions">
+            <button class="option-change-btn">옵션변경</button>
+            <button class="delete-btn">선택상품삭제</button>
+        </div>
+
+        <div class="summary">
+            <div class="total-info">
+                <p> 총 주문금액:<span id="totalAmount">0</span> +
+                    총 배송비:<span id="totalShipping">0</span> =
+                    총 결제금액: <span id="grandTotal">0</span></p>
+            </div>
+            <button class="order-btn">주문하기</button>
+        </div>
+    </div>
+    <!-- 모달 -->
+    <div id="optionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>옵션 변경</h2>
+            <div class="product-col-md-8">
+                <select id="season" name="season" class="product-select" required>
+                    <option value="">시즌선택</option>
+                    <option value="1">봄</option>
+                    <option value="2">여름</option>
+                    <option value="3">가을</option>
+                    <option value="4">겨울</option>
+                </select>
+
+                <select id="temperature" name="temperature" class="product-select product-mt-2" required>
+                    <option value="">온도선택</option>
+                    <option value="1">28℃</option>
+                    <option value="2">27~23℃</option>
+                    <option value="3">22~20℃</option>
+                    <option value="4">19~17℃</option>
+                    <option value="5">16~12℃</option>
+                    <option value="6">11~9℃</option>
+                    <option value="7">8~5℃</option>
+                    <option value="8">4℃이하</option>
+                </select>
+
+                <select id="category" name="category" class="product-select product-mt-2" required>
+                    <option value="">카테고리선택</option>
+                    <option value="jk">자켓</option>
+                    <option value="sk">스커트</option>
+                </select>
+
+<!--                <input type="text" id="name" name="name" placeholder="상품명을 입력하세요" class="product-input product-mt-2" required>-->
+<!--                <input type="number" id="price" name="price" placeholder="가격을 입력하세요" class="product-input product-mt-2" required>-->
+<!--                <input type="number" id="quantity" name="quantity" placeholder="재고 수량 입력하세요" class="product-input product-mt-2" required>-->
+            </div>
+            <button id="saveChanges">변경 저장</button>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>
