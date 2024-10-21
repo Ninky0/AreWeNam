@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/main_bn1.css}" rel="stylesheet">
+    <script th:src="@{/js/main_bn1.js}"></script>
+</head>
+<section th:fragment="main_bn1" class="slider-container">
+        <button class="arrow left-arrow" id="prevButton">&#10094;</button>
+        <div class="product-slider" id="productSlider">
+            <!-- Product Items -->
+            <div class="product-item">
+                <img src="/images/main_img01.jpg" class = "banner-slide">
+            </div>
+
+            <div class="product-item">
+                <img src="/images/main_img02.jpg" class = "banner-slide">
+            </div>
+        </div>
+        <button class="arrow right-arrow" id="nextButton">&#10095;</button>
+    </section>
+</html>

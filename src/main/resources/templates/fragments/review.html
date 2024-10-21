@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 후기 게시판</title>
+    <link th:href="@{/css/review.css}" rel="stylesheet">
+</head>
+<body>
+<nav th:fragment="review">
+<section class="review-board">
+    <h1>REVIEW</h1>
+    <p class="review-notice">
+        상품에 대해 다양한 후기를 들려주세요
+
+    </p>
+    <div class="review-actions">
+        <button class="btn review-btn">후기 작성</button>
+            </div>
+    <hr class="divider">
+    <table class="review-table">
+        <thead>
+        <tr>
+            <th>NO</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>너무 맘에 들어요 재구매각입니다.</td>
+            <td>gdfww*****</td>
+            <td>2024.10.21.</td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+            <td>재질이 너무 좋고 따뜻합니다.  </td>
+            <td>asdf*****</td>
+            <td>2024.10.21.</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>색깔별로 구매하고 싶어요 </td>
+            <td>gasdf*****</td>
+            <td>2024.10.21.</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>너무 맘에 들어요 재구매각입니다. </td>
+            <td>gqwer*****</td>
+            <td>2024.10.21.</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>추천합니다. </td>
+            <td>gerty*****</td>
+            <td>2024.10.21.</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

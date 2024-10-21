@@ -1,63 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/main_bn1.js}"></script>
+    <script th:src="@{/js/main_bn2.js}"></script>
+    <link th:href="@{/css/main_bn1.css}" rel="stylesheet">
+    <link th:href="@{/css/main_bn2.css}" rel="stylesheet">
     <script th:src="@{/js/weather_search.js}"></script>
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
-    <title>Slider with Infinite Loop</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
-    <section class="banner-slider">
-        <div class="banner-slide fade">
-            <img src="/images/main_img01.jpg" alt="Fall & Winter Items">
-            <div class="banner-text">
-                <h2 class="sub_title">오늘, 이 옷 어때?</h2>
-                <p>지금 계절에 함께하기 좋은 아이템</p>
-            </div>
-        </div>
 
-        <div class="banner-slide fade">
-            <img src="/images/main_img02.jpg" alt="Spring Collection">
-            <div class="banner-text">
-                <h2 class="sub_title">따뜻한 봄을 준비하세요!</h2>
-                <p>봄 컬렉션 특가 세일</p>
-            </div>
-        </div>
+<!--    <div th:replace="fragments/main_bn1 :: main_bn1"></div>-->
 
-        <div class="banner-slide fade">
-            <iframe width="100%" height="500px"
-                    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-                    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-        </div>
+    <img src="/images/main_img01.jpg" >
+    <h2 class="sub_title">오늘, 이 옷 어때?</h2>
+    <p>날씨에 따라서 추천해드리는 핫 아이템</p>
 
-        <div class="banner-slide fade">
-            <img src="/images/main_img03.jpg" alt="Summer Essentials">
-            <div class="banner-text">
-                <h2 class="sub_title">여름 필수 아이템</h2>
-                <p>뜨거운 여름을 위한 가벼운 옷</p>
-            </div>
-        </div>
-
-        <!-- 이전/다음 버튼 -->
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-    </section>
-    <!-- Recommendation Section -->
     <section class="recommendation">
         <form class="recommendation-container" id="searchForm">
             <div class="dropdown-container">
-                <!-- Dropdown Containers -->
                 <label for="region">시/도</label>
                 <select class="dropdown" id="region" name="region" onchange="populateSubRegions()"
                         autocomplete="region">
@@ -77,52 +47,8 @@
             </div>
         </form>
     </section>
+    <div th:replace="fragments/main_bn2 :: main_bn2"></div>
 
-    <section class="slider-container">
-        <button class="arrow left-arrow" id="prevButton">&#10094;</button>
-        <div class="product-slider" id="productSlider">
-            <!-- Product Items -->
-            <div class="product-item">
-                <img src="/images/sample_img_01.jpg" alt="Product 5">
-                <h4>PIASTUDIO</h4>
-                <p class="title">BA_Lapel color-blocked coat_2color</p>
-                <p class="price">188,100원</p>
-            </div>
-
-            <div class="product-item">
-                <img src="/images/sample_img_02.jpg" alt="Product 1">
-                <h4>PIASTUDIO</h4>
-                <p class="title">BA_Shiny leather jacket_BROWN</p>
-                <p class="price">151,050원</p>
-            </div>
-            <div class="product-item">
-                <img src="/images/sample_img_03.jpg" alt="Product 2">
-                <h4>MONGDOL</h4>
-                <p class="title">울 숏 구름 더블 코트 라이트그레이</p>
-                <p class="price">220,500원</p>
-            </div>
-            <div class="product-item">
-                <img src="/images/sample_img_04.jpg" alt="Product 3">
-                <h4>MONGDOL</h4>
-                <p class="title">리버서블 숏헤어 무스탕 베이지</p>
-                <p class="price">223,200원</p>
-            </div>
-            <div class="product-item">
-                <img src="/images/sample_img_05.jpg" alt="Product 4">
-                <h4>PIASTUDIO</h4>
-                <p class="title">BA_Knitted zipper hooded jacket_3color</p>
-                <p class="price">226,100원</p>
-            </div>
-            <div class="product-item">
-                <img src="/images/sample_img_06.jpg" alt="Product 5">
-                <h4>PIASTUDIO</h4>
-                <p class="title">BA_Lapel color-blocked coat_2color</p>
-                <p class="price">188,100원</p>
-            </div>
-
-        </div>
-        <button class="arrow right-arrow" id="nextButton">&#10095;</button>
-    </section>
     <section class="special-items">
         <h2 class="sub_title">다음 시즌 마련, 다·시·마</h2>
         <img src="/resources/static/images/seaweed.png">
