@@ -43,13 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(this);
             const description = document.querySelector('#editor .ql-editor').innerHTML;
+            const productId = document.getElementById('productId');
 
             // Create a temporary div to modify the HTML
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = description;
             const images = tempDiv.querySelectorAll('img');
             images.forEach((img, index) => {
-                const localImagePath = `/uploads/image_${index}.png`;
+                const localImagePath = `src/main/resources/static/uploads/image_${productId.value}${index}.png`;
                 img.src = localImagePath;
             });
 

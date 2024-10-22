@@ -17,6 +17,8 @@
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </header>
 <main>
+    <input type="hidden" id="productId" name="productId" th:value="${newId}" />
+
     <form id="productForm" method="POST" enctype="multipart/form-data">
         <h2>상품등록</h2>
         <div class="product-row">

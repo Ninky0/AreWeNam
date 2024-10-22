@@ -21,8 +21,7 @@
             <input type="hidden" id="productId" th:value="${product.id}">
             <input type="hidden" id="customerId" th:value="${customer.id}">
             <div class="product-col-md-4">
-<!--                <img src="/images/sample_img_02.jpg" alt="상세 이미지">-->
-                <img th:src="@{/uploads/{file}(file=${product.mainPicture})}" alt="상세 이미지">
+                <img th:src="@{${#strings.replace(product.mainPicture,'src/main/resources/static', '')}}" alt="상세 이미지">
             </div>
 
             <div class="product-col-md-8">
@@ -63,7 +62,7 @@
         <div class="product-description">
             <h2>상세정보</h2>
             <div class="description-image">
-                <img src="/images/sample_img_02.jpg" alt="상세 이미지">
+                <div th:utext="${#strings.replace(product.description.substring(1),'src/main/resources/static', '')}" class="product-description-content"></div>
             </div>
         </div>
     </div>

@@ -39,6 +39,10 @@ public class AdminApiController {
         );
 
         MultipartFile mainPicture = dto.getMainPicture();
+        String description = dto.getDescription();
+
+        //설명에 있는 사진 태그에 대해서만 사진 이름을 변경해야됨
+
         System.out.println("메인 이미지: " + (mainPicture != null ? mainPicture.getOriginalFilename() : "없음"));
 
         String mainPicturePath = null;
