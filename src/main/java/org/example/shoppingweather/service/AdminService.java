@@ -6,8 +6,11 @@ import org.example.shoppingweather.dto.product.ProdUploadRequestDTO;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +35,11 @@ public class AdminService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
         return product.toProdReadResponseDTO();
     }
+
+    public Long findMaxId(){
+        return productRepository.findMaxId();
+    }
+
     public Long save(ProdUploadRequestDTO dto) throws IOException {
         // Save main picture and get its path
         String mainPicturePath = saveFile(dto.getMainPicture());
@@ -65,38 +73,33 @@ public class AdminService {
         // 수정된 상품을 저장합니다
         productRepository.save(existingProduct);
     }
-    public String saveFile(MultipartFile file) throws IOException {
-        String uploadDir = "uploads/";
-        String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir + fileName);
 
-        // Ensure the upload directory exists
+    public String saveFile(MultipartFile file) throws IOException {
+        String uploadDir = "src/main/resources/static/uploads/"; //저장위치는 이게 맞는듯
+        BufferedImage image = ImageIO.read(file.getInputStream());
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        fileName = fileName.substring(0, fileName.lastIndexOf(".")) + ".jpg";
+        Path filePath = Paths.get(uploadDir, fileName);
         if (!Files.exists(Paths.get(uploadDir))) {
             Files.createDirectories(Paths.get(uploadDir));
         }
-
-        // Check for file existence and generate a unique file name if needed
         filePath = generateUniqueFilePath(filePath);
+        ImageIO.write(image, "jpg", filePath.toFile());
 
-        // Save the file
-        Files.copy(file.getInputStream(), filePath);
-
-        return filePath.toString(); // Return the saved file path
+        return filePath.toString();
     }
 
     private Path generateUniqueFilePath(Path filePath) {
-        String fileName = filePath.getFileName().toString();
         Path uniquePath = filePath;
+        String baseName = StringUtils.stripFilenameExtension(filePath.getFileName().toString());
+        String extension = ".jpg";
         int counter = 1;
 
         while (Files.exists(uniquePath)) {
-            String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-            String fileExtension = fileName.substring(fileName.lastIndexOf('.'));
-            String newFileName = fileNameWithoutExt + "_" + counter + fileExtension;
+            String newFileName = baseName + "_" + counter + extension;
             uniquePath = filePath.getParent().resolve(newFileName);
             counter++;
         }
-
         return uniquePath;
     }
 

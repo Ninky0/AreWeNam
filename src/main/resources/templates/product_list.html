@@ -9,7 +9,6 @@
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
 
-
     <title>상품 목록 페이지</title>
 </head>
 <body>
@@ -17,10 +16,7 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
-
-
     <div class="container">
-
         <h2>상품 목록</h2>
         <div class="button-group">
             <button id="button_red" type="button">상품삭제</button>
@@ -34,7 +30,6 @@
                 <th class="th_2">이미지</th>
                 <th class="th_3">상품명</th>
                 <th class="th_2">가격</th>
-                <!--                <th class="th_2">판매자명</th>-->
                 <th class="th_1">추천계절</th>
                 <th class="th_1">추천온도</th>
             </tr>
@@ -43,24 +38,28 @@
             <tr th:each="product, iterStat : ${products}">
                 <td><input type="checkbox" class="checkbox" th:value="${product.id}"/></td>
                 <td th:text="${iterStat.count}"></td>
-                <td><img th:src="@{${product.mainPicture}}" th:alt="${product.name}"/></td>
-                <td th:text="${product.name}"></td>
+                <td>
+                    <a th:href="@{/admin/product/detail/{id}(id=${product.id})}">
+                        <img th:src="@{${#strings.replace(product.mainPicture,'src/main/resources/static', '')}}" th:alt="${product.name}"/>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/product/detail/{id}(id=${product.id})}" th:text="${product.name}"></a>
+                </td>
                 <td th:text="${#numbers.formatDecimal(product.price, 1, 0)}"></td>
-                <!--                <td th:text="${product.seller}"></td>-->
                 <td th:text="${product.season == 1 ? '봄' : (product.season == 2 ? '여름' : (product.season == 3 ? '가을' : '겨울'))}"></td>
                 <td th:text="${product.temperature == 1 ? '≥28°C' :
-                              (product.temperature == 2 ? '27~23°C' :
-                              (product.temperature == 3 ? '22~20°C' :
-                              (product.temperature == 4 ? '19~17°C' :
-                              (product.temperature == 5 ? '16~12°C' :
-                              (product.temperature == 6 ? '11~9°C' :
-                              (product.temperature == 7 ? '8~5°C' :
-                              '≤4°C'))))))}">
+                          (product.temperature == 2 ? '27~23°C' :
+                          (product.temperature == 3 ? '22~20°C' :
+                          (product.temperature == 4 ? '19~17°C' :
+                          (product.temperature == 5 ? '16~12°C' :
+                          (product.temperature == 6 ? '11~9°C' :
+                          (product.temperature == 7 ? '8~5°C' :
+                          '≤4°C'))))))}">
                 </td>
             </tr>
             </tbody>
         </table>
-
     </div>
 </main>
 <footer>

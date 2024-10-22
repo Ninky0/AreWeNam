@@ -20,7 +20,7 @@
             <div class="product-col-md-4">
                 <div class="product-image-upload">
                     <div class="product-image-placeholder">
-                        <img th:src="@{'/uploads/' + ${#strings.replace(product.mainPicture, '\\', '/')}}" alt="상품 이미지" style="max-width: 300px;" />
+                        <img th:src="@{${#strings.replace(product.mainPicture,'src/main/resources/static', '')}}" alt="상품 이미지" style="max-width: 300px;" />
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="product-detail-page product-mt-3">
             <label class="product-label" for="description">설명:</label>
-            <div id="description" class="ql-editor" th:utext="${product.description}"></div>
+            <div id="description" class="ql-editor" th:utext="${#strings.replace(product.description,'src/main/resources/static', '')}"></div>
         </div>
         <a class="product-button" th:href="@{/admin/product/edit/{id}(id=${product.id})}">수정</a>
     </form>

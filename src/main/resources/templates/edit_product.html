@@ -24,7 +24,7 @@
                 <div class="product-image-upload">
                     <div class="product-image-placeholder">
                         <img id="imagePreview"
-                             th:src="@{'/uploads/' + ${#strings.replace(product.mainPicture, '\\', '/')}}"
+                             th:src="@{'src/main/resources/static/uploads/' + ${#strings.replace(product.mainPicture, '\\', '/')}}"
                              alt="상품 이미지"
                              style="max-width: 300px;"
                              th:style="${product.mainPicture != null} ? 'display: block;' : 'display: none;'" />

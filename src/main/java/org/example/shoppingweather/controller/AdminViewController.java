@@ -30,7 +30,14 @@ public class AdminViewController {
     }
 
     @GetMapping("/product/upload")
-    public String uploadProduct() {
+    public String uploadProduct(Model model) {
+        Long maxId = adminService.findMaxId();
+        if(maxId == null){
+            maxId = 0L;
+        }
+        model.addAttribute("newId", maxId+1);
+        System.out.println(maxId);
+
         //상품 등록 폼으로 이동
         return "upload_product";
 

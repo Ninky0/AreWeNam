@@ -17,7 +17,10 @@ public class Product {
     private String name;
     private Integer price;
     private String mainPicture;
+
+    @Column(columnDefinition = "TEXT") // MySQL의 TEXT 유형 사용
     private String description;
+
     private String quantity;
     private String category;
     private Integer season;
