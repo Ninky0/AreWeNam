@@ -1,0 +1,33 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column; /* 세로 방향으로 배치 */
+    margin: 0; /* 기본 마진 제거 */
+    background: linear-gradient(135deg, #a1c4fd 25%, #c2e9fb 25%, #c2e9fb 50%, #a1c4fd 50%, #a1c4fd 75%, #c2e9fb 75%, #c2e9fb) repeat;
+    background-size: 200% 200%; /* 배경 크기 설정 */
+    animation: wave 10s ease-in-out infinite; /* 애니메이션 추가 */
+}
+
+wave {
+    0% {
+        background-position: 0% 0%; /* 시작 위치 */
+    }
+    100% {
+        background-position: 100% 100%; /* 끝 위치 */
+    }
+}
+
+h1 {
+    font-size: 70px; /* 원하는 글자 크기로 설정 */
+}
+a {
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    color: blue; /* 글자 색상 설정 */
+    font-size: 30px; /* 원하는 글자 크기로 설정 */
+    text-decoration: underline; /* 밑줄 추가 */
+    cursor: pointer; /* 커서 모양 변경 */
+}

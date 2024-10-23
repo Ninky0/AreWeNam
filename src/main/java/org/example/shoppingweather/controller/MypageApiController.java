@@ -2,8 +2,8 @@ package org.example.shoppingweather.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
-import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
+import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
+import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.service.CustomerService;
 import org.springframework.http.ResponseEntity;

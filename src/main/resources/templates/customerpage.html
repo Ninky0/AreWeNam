@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+  <script th:src="@{/js/mypage.js}"></script>
+  <link th:href="@{/css/mypage.css}" rel="stylesheet">
+  <link th:href="@{/css/heather.css}" rel="stylesheet">
+  <link th:href="@{/css/footer.css}" rel="stylesheet">
+
+  <title>고객 페이지</title>
+</head>
+<body>
+<header>
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
+
+<div class="container">
+  <aside class="sidebar">
+    <h2>마이페이지</h2>
+    <ul>
+      <li><a th:href="@{/user/history}" class="sidebar-button">구매목록</a></li>
+      <li><a href="" class="sidebar-button">구매취소</a></li>
+      <li><a th:href="@{/user/shoppingcart}" class="sidebar-button">장바구니</a></li>
+      <li><a href="" class="sidebar-button">게시글</a></li>
+      <li><a th:href="@{/mypage/edit}" class="sidebar-button">회원정보수정</a></li>
+      <li><a th:href="@{/mypage/quitout}" class="sidebar-button">회원탈퇴</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <button class="button" id="logout">로그아웃</button>
+    <div class="welcome-section">
+      <h1 th:text="|${customer.name}님 반갑습니다.|"></h1>
+      <div class="divider"></div> <!-- 굵은 선 추가 -->
+    </div>
+
+    <div class="order-status">
+      <h2>주문현황</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>주문일</th>
+          <th>상품이미지</th>
+          <th>상품명</th>
+          <th>상품번호</th>
+          <th>금액</th>
+        </tr>
+        </thead>
+        <tbody id="order-tbody">
+        <!-- 주문 내역이 JavaScript로 동적으로 추가될 부분 -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+    <ul>
+      <li><a href="#">개인정보 처리방침</a></li>
+      <li><a href="#">이용 약관</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
