@@ -169,6 +169,13 @@ button {
     margin-top: 20px;
 }
 
+a {
+    color: ghostwhite; /* 글자 색상 설정 */
+    font-size: 30px; /* 원하는 글자 크기로 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+    cursor: pointer; /* 커서 모양 변경 */
+}
+
 /* 모달 스타일 */
 .modal {
     display: none; /* 숨김 */
