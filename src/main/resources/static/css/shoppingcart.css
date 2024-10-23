@@ -10,6 +10,12 @@ body {
     padding: 0;
 }
 
+td {
+    vertical-align: middle; /* 세로 정렬을 가운데로 */
+    text-align: center; /* 가로 정렬을 가운데로 */
+    white-space: nowrap; /* 텍스트가 셀 안에서 한 줄로 표시되도록 */
+}
+
 
 .container {
     max-width: 1200px;
@@ -36,11 +42,6 @@ body {
     color: gray;
 }
 
-.step3 {
-    font-weight: bold; /* 단계 제목을 두껍게 */
-    color: gray;
-}
-
 .separator {
     margin: 0 10px; /* 구분자 양쪽에 간격 추가 */
 }
@@ -56,6 +57,7 @@ table {
     border-collapse: collapse; /* 테이블 셀 간 경계선을 이어지게 함 */
     width: 100%;
     margin: 20px 0;
+    table-layout: fixed;
 }
 
 thead th {
@@ -63,14 +65,16 @@ thead th {
     border-top: 2px solid #333; /* 상단 두꺼운 선 */
     border-bottom: 1px solid #333; /* 아래 얇은 선 */
     text-align: center;
-    border-left: none; /* 세로선 제거 */
-    border-right: none; /* 세로선 제거 */
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }
 
 tbody td {
     padding: 10px;
     border-bottom: 1px solid #ddd; /* 나머지 줄 얇은 선 */
     text-align: center;
+    border-left: none;
+    border-right: none;
 }
 
 tbody tr:last-child td {
@@ -81,19 +85,19 @@ tbody tr:last-child td {
 /* 첫 번째, 두 번째 칸 좁게 설정 */
 table th.th_1, table td:nth-child(1),
 table th.th_1, table td:nth-child(2) {
-    width: 2%;
+    width: 10%;
 }
 
 /* 상품 정보 칸 넓게 설정 */
 table th.th_3, table td:nth-child(3) {
-    width: 30%;
+    width: 96%;
 }
 
 /* 주문수량, 주문금액, 배송비 칸 넓이 설정 */
 table th.th_2, table td:nth-child(4),
 table th.th_2, table td:nth-child(5),
-table th.th_2, table td:nth-child(6) {
-    width: 10%;
+table th.th_4, table td:nth-child(6) {
+    width: 15%;
 }
 
 
@@ -103,13 +107,17 @@ input[type="checkbox"] {
     transform: scale(1.2); /* 체크박스 크기 조절 */
 }
 
-/*img {*/
-/*    width: 50px; !* 이미지 크기 조정 *!*/
-/*}*/
-
-.product-info {
+td.product-info {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    white-space: nowrap;
+}
+
+td img {
+    max-width: 50px; /* 이미지 크기 조절 */
+    margin-bottom: 10px; /* 이미지와 텍스트 사이 간격 */
 }
 
 .product-info img {
@@ -118,7 +126,7 @@ input[type="checkbox"] {
 }
 
 .product-details {
-    text-align: left;
+    text-align: center;
 }
 
 .cart-actions {
@@ -129,9 +137,6 @@ input[type="checkbox"] {
 button {
     padding: 10px;
     font-size: 18px;
-}
-.number {
-    font-size: 24px;
 }
 
 .delete-btn {
