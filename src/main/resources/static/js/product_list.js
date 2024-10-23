@@ -97,7 +97,7 @@ let loadBoard = (page, size) => {
                         `
                     <tr>
                                 <td>${product.id}</td>
-                                <td><img src="${product.picture}" alt="${product.name}"></td>
+                                <td><img src="${product.mainPicture}" alt="${product.name}"></td>
                                 <td>${product.name}</td>
                                 <td>${product.price.toLocaleString()} 원</td>
                                 <td>${product.season === 1 ? 'Winter' : 'Summer'}</td>
