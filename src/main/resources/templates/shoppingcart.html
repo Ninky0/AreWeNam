@@ -18,16 +18,14 @@
 </header>
 
 <main>
-
+    <input type="hidden" id="customerId" th:value="${cart.customer.id}" />
 
     <div class="container">
 
         <h3 class="progress-title">
             <span class="step">SHOPPING BAG</span>
             <span class="separator">></span>
-            <span class="step2">ORDER</span>
-            <span class="separator">></span>
-            <span class="step3">ORDER COMPLETE</span>
+            <span class="step2">ORDER COMPLETE</span>
         </h3>
         <table>
             <thead>
@@ -37,28 +35,29 @@
                 <th class="th_3">상품정보</th>
                 <th class="th_2">주문수량</th>
                 <th class="th_2">주문금액</th>
-                <th class="th_2">배송비</th>
+                <th class="th_4">배송비</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr th:each="product, iterStat : ${products}">
                 <td class="th_1">
-                    <input type="checkbox" class="checkbox">
+                    <input type="checkbox" class="checkbox" th:value="${product.id}">
                 </td>
-                <td class="th_1">1</td>
-                <td class="product-info">
-<!--                    <img src="" alt="Barbour Wax Jacket">-->
-                    <div class="product-details">
-                        <p>옵션: <span class="seasonDisplay"></span></p>
+                <td class="th_1" th:text="${iterStat.count}"></td>
+                <td class="product-info" >
+                    <img th:src="@{${product.mainPicture}}" th:alt="${product.name}">
+                    <div class="product-details" th:text="${product.name}">
+                        <p th:text="${product.season + ' ' + product.temperature + ' ' + product.category}">
+                            <span class="seasonDisplay"></span></p>
                     </div>
                 </td>
                 <td>
                     <button class="decreaseBtn">-</button>
-                    <span class="number" id="number">0</span>
+                    <span class="number quantity" th:text="${product.quantity}"></span>
                     <button class="increaseBtn">+</button>
                 </td>
-                <td class="th_2">268,920원</td>
-                <td class="th_2">100,000원</td>
+                <td class="th_2" th:text="${product.price} + ' 원'" th:attr="data-price=${product.price}"></td>
+                <td class="th_4">100,000원</td>
             </tr>
             </tbody>
         </table>
@@ -69,9 +68,9 @@
 
         <div class="summary">
             <div class="total-info">
-                <p> 총 주문금액:<span id="totalAmount">0</span> +
-                    총 배송비:<span id="totalShipping">0</span> =
-                    총 결제금액: <span id="grandTotal">0</span></p>
+                <p> 총 주문금액:<span id="totalAmount"></span> +
+                    총 배송비:<span id="totalShipping"></span> =
+                    총 결제금액: <span id="grandTotal"></span></p>
             </div>
             <button class="order-btn">주문하기</button>
         </div>

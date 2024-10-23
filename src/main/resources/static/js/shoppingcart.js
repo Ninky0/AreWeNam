@@ -70,86 +70,110 @@ $(document).ready(function() {
         modal.style.display = 'none';
     });
 
-    // 총합 업데이트 함수
-    function updateTotals() {
-        const rows = document.querySelectorAll('tbody tr');
-        let totalAmount = 0;
-        let totalShipping = 0;
+    // 페이지 로드 시 총합 및 초기 가격 업데이트
+    document.querySelectorAll('tbody tr').forEach(row => {
+        const priceElement = row.querySelector('.th_2');
+        const quantityElement = row.querySelector('.quantity');
+        const price = parseInt(priceElement.getAttribute('data-price'));
+        const quantity = parseInt(quantityElement.textContent);
 
-        rows.forEach(row => {
-            const amountCell = row.querySelector('td:nth-child(5)'); // 주문금액
-            const shippingCell = row.querySelector('td:nth-child(6)'); // 배송비
-
-            const amount = parseInt(amountCell.textContent.replace(/[^0-9]/g, ''));
-            const shipping = parseInt(shippingCell.textContent.replace(/[^0-9]/g, ''));
-
-            totalAmount += amount;
-            // 배송비는 고정값인 100,000원으로 설정
-            const fixedShipping = 100000;
-            totalShipping += fixedShipping; // 추가: 고정 배송비를 더함
-        });
-
-        const grandTotal = totalAmount + totalShipping;
-
-        document.getElementById('totalAmount').textContent = totalAmount.toLocaleString() + '원';
-        document.getElementById('totalShipping').textContent = totalShipping.toLocaleString() + '원';
-        document.getElementById('grandTotal').textContent = grandTotal.toLocaleString() + '원';
-    }
-
-    // 페이지 로드 시 총합을 업데이트
-    updateTotals();
+        // 주문 금액 업데이트
+        const orderAmount = price * quantity;
+        priceElement.textContent = orderAmount.toLocaleString() + ' 원';
+    });
 
     // 수량 변경 버튼 클릭 시 총합 및 주문금액 업데이트
     document.querySelectorAll('.increaseBtn, .decreaseBtn').forEach(button => {
         button.addEventListener('click', (event) => {
             const row = event.target.closest('tr'); // 클릭한 버튼의 부모 행을 찾음
-            const quantityElement = row.querySelector('#number');
-            const priceElement = row.querySelector('td:nth-child(5)'); // 주문금액 열
-            const shippingElement = row.querySelector('td:nth-child(6)'); // 배송비 열
+            const quantityElement = row.querySelector('.quantity'); // 주문 수량 요소
+            const priceElement = row.querySelector('.th_2'); // 가격 요소
+            const price = parseInt(priceElement.getAttribute('data-price')); // 가격 가져오기
+            let quantity = parseInt(quantityElement.textContent); // 현재 수량 가져오기
 
-            // 현재 수량 가져오기
-            let quantity = parseInt(quantityElement.textContent);
-
+            // 수량 증가 또는 감소
             if (event.target.classList.contains('increaseBtn')) {
                 quantity += 1; // 수량 증가
             } else {
-                quantity = Math.max(0, quantity - 1); // 수량 감소 (0 미만으로는 안됨)
+                quantity = Math.max(1, quantity - 1); // 수량 감소 (1 미만으로는 안됨)
             }
 
             // 수량 업데이트
-            quantityElement.textContent = quantity;
+            quantityElement.textContent = quantity; // 수량 업데이트
 
-            // 주문금액 계산 (예시로 가격을 단순화하여 사용)
-            const pricePerItem = 268920; // 예시 가격, 실제로는 상품 가격에 따라 다르게 설정
-            const newAmount = pricePerItem * quantity;
-
-            // 주문금액 업데이트
-            priceElement.textContent = newAmount.toLocaleString() + '원';
+            // 주문 금액 업데이트
+            const orderAmount = price * quantity;
+            priceElement.textContent = orderAmount.toLocaleString() + ' 원'; // 총 주문 금액 업데이트
 
             // 총합 업데이트
             updateTotals();
         });
     });
 
-    // 선택상품삭제 버튼 클릭 시
-    const deleteBtns = document.querySelectorAll('.delete-btn');
+    // 총합 업데이트 함수
+    function updateTotals() {
+        let totalAmount = 0;
+        const totalShipping = 100000; // 각 상품에 대한 고정 배송비 설정
+        let shippingCost = 0;
 
-    deleteBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const selectedRows = document.querySelectorAll('.checkbox:checked'); // 체크된 행 선택
+        document.querySelectorAll('tbody tr').forEach(row => {
+            const priceElement = row.querySelector('.th_2');
+            const quantityElement = row.querySelector('.quantity');
 
-            if (selectedRows.length === 0) {
-                alert('삭제할 상품을 선택해 주세요.');
-                return;
-            }
+            const priceText = priceElement.getAttribute('data-price');
+            const price = parseInt(priceText);
+            const quantity = parseInt(quantityElement.textContent);
 
-            selectedRows.forEach((checkbox) => {
-                const row = checkbox.closest('tr'); // 체크된 행 선택
-                row.remove(); // 해당 행 삭제
-            });
-
-            updateTotals(); // 총액 업데이트 함수 호출
+            totalAmount += price * quantity;
         });
+
+        const itemCount = document.querySelectorAll('tbody tr').length;
+        shippingCost = itemCount * totalShipping;
+        const grandTotal = totalAmount + shippingCost;
+
+        document.getElementById('totalAmount').textContent = totalAmount.toLocaleString() + ' 원';
+        document.getElementById('totalShipping').textContent = shippingCost.toLocaleString() + ' 원';
+        document.getElementById('grandTotal').textContent = grandTotal.toLocaleString() + ' 원';
+    }
+
+// 페이지 로드 시 총합을 업데이트
+    updateTotals();
+
+
+    $('.delete-btn').click(function() {
+        const customerId = $('#customerId').val(); // customerId 가져오기
+        const selectedRows = $('.checkbox:checked').map(function() {
+            return {
+                productId: $(this).closest('tr').data('product-id') // data 속성에서 제품 ID 가져오기
+            };
+        }).get(); // jQuery 객체를 배열로 변환
+
+        if (selectedRows.length === 0) {
+            alert('삭제할 제품을 선택해주세요.');
+            return;
+        }
+
+        if (confirm('선택한 제품을 삭제하시겠습니까?')) {
+            deleteSelectedProducts(customerId, selectedRows);
+        }
     });
+
+    function deleteSelectedProducts(customerId, selectedRows) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/user/shoppingcart', // 템플릿 리터럴 사용
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(selectedRows), // 선택된 상품 ID JSON 형식으로 변환
+            dataType: 'json',
+            success: function(response) {
+                alert('선택된 제품이 삭제되었습니다.');
+                location.reload();
+            },
+            error: function(error) {
+                console.error('오류 발생:', error);
+                alert('제품 삭제 중 오류가 발생했습니다.');
+            }
+        });
+    }
 
 });
