@@ -26,12 +26,25 @@
 
             <div class="product-col-md-8">
                 <div class="breadcrumb">
-                    <span>겨울 &gt; 11도씨 &gt; 자켓</span>
+                    <span th:text="${product.season == 1 ? '봄' : (product.season == 2 ? '여름' : (product.season == 3 ? '가을' : '겨울'))}
+                                   + '>' +
+                                   ${product.temperature == 1 ? '28°C 이상' :
+                          (product.temperature == 2 ? '27~23°C' :
+                          (product.temperature == 3 ? '22~20°C' :
+                          (product.temperature == 4 ? '19~17°C' :
+                          (product.temperature == 5 ? '16~12°C' :
+                          (product.temperature == 6 ? '11~9°C' :
+                          (product.temperature == 7 ? '8~5°C' :
+                          '4°C 이하'))))))}
+                           + ' > '
+                           + ${product.category}">
+                    </span>
                 </div>
                 <input type="text" id="name" name="name" class="product-title" th:value="${product.name}" readonly>
                 <div class="price-container">
-                    <label for="price">판매가  </label>
-                    <input type="number" id="price" name="price" class="product-price" th:value="${product.price}" readonly>
+                    <label for="price">판매가 </label>
+                    <input type="number" id="price" name="price" class="product-price" th:value="${product.price}"
+                           readonly>
 
                 </div>
                 <div class="product-quantity">
@@ -62,7 +75,8 @@
         <div class="product-description">
             <h2>상세정보</h2>
             <div class="description-image">
-                <div th:utext="${#strings.replace(product.description.substring(1),'src/main/resources/static', '')}" class="product-description-content"></div>
+                <div th:utext="${#strings.replace(product.description.substring(1),'src/main/resources/static', '')}"
+                     class="product-description-content"></div>
             </div>
         </div>
     </div>
