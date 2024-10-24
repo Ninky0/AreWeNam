@@ -19,13 +19,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    // quill에 이미지 등록하는거
     const handleImageUpload = (file) => {
-        const reader = new FileReader();
-        reader.onload = () => insertImage(reader.result);
-        if (file) {
-            reader.readAsDataURL(file);
-            console.log('File selected:', file.name);
-        }
+        let formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            type: 'POST',
+            url: '/admin/product/uploadImage',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Server response:', response);
+                if (response.imageUrl) {
+                    insertImage(response.imageUrl); // 이미지 URL을 에디터에 삽입
+                    console.log('Image uploaded and inserted:', response.imageUrl);
+                } else {
+                    alert('이미지 URL을 받지 못했습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('상품 등록 중 오류가 발생했습니다.');
+            }
+        });
     };
 
     quill.getModule('toolbar').addHandler('image', function() {
@@ -33,9 +51,12 @@ document.addEventListener('DOMContentLoaded', function() {
         input.setAttribute('type', 'file');
         input.setAttribute('accept', 'image/*');
         input.click();
-
-        input.onchange = () => handleImageUpload(input.files[0]);
+        input.onchange = () => {
+            const file = input.files[0];
+            handleImageUpload(file);
+        };
     });
+
 
     const productForm = document.getElementById('productForm');
     if (productForm) {
@@ -43,18 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(this);
             const description = document.querySelector('#editor .ql-editor').innerHTML;
-            const productId = document.getElementById('productId');
+            formData.append('description', description); // 이미지 URL이 포함된 에디터 내용 추가
 
-            // Create a temporary div to modify the HTML
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = description;
-            const images = tempDiv.querySelectorAll('img');
-            images.forEach((img, index) => {
-                const localImagePath = `src/main/resources/static/uploads/image_${productId.value}${index}.png`;
-                img.src = localImagePath;
-            });
-
-            formData.append('description', tempDiv.innerHTML);
             console.log('Form data prepared:');
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}: ${value}`);
@@ -67,10 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Server response:', data);
-                    console.log('Redirecting to:', data.url); // Log the redirect URL
-                    // Show alert and redirect to product list
-                    alert('상품이 성공적으로 등록되었습니다!');
-                    window.location.href = data.url; // Use the URL from the response
+                    if (data.url) {
+                        alert('상품이 성공적으로 등록되었습니다!');
+                        window.location.href = data.url;
+                    } else {
+                        alert('응답 URL이 없습니다.');
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -78,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         };
     }
+
 
     const mainPictureInput = document.getElementById('mainPicture');
     if (mainPictureInput) {

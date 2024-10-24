@@ -2,13 +2,13 @@ $(document).ready(() => {
     //checkSession();
     getBoards();
 
-    $('body').on('click', '#check_all', function() {
+    $('body').on('click', '#check_all', function () {
         $('input[type="checkbox"].checkbox').prop('checked', $(this).is(':checked'));
     });
 
     // 동적 이벤트 바인딩: 페이지의 어느 시점에서든지 요소가 존재하면 이벤트가 실행됩니다.
-    $('body').on('click', '#button_red', function() {
-        let selectedProducts = $('.checkbox:checked').map(function() {
+    $('body').on('click', '#button_red', function () {
+        let selectedProducts = $('.checkbox:checked').map(function () {
             return $(this).val();
         }).get();
 
@@ -29,7 +29,7 @@ function deleteProducts(productIds) {
         url: '/admin/product',
         contentType: 'application/json',
         data: JSON.stringify(productIds),
-        success: function(response) {
+        success: function (response) {
             if (response.success) {
                 alert(response.message); // 서버에서 보낸 메시지를 표시
                 location.reload(); // 페이지를 다시 로드하여 업데이트된 목록을 표시
@@ -37,7 +37,7 @@ function deleteProducts(productIds) {
                 alert(response.message); // 서버에서 보낸 실패 메시지를 표시
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error('오류 발생:', error);
             alert('상품 삭제 중 오류가 발생했습니다.');
         }
@@ -65,7 +65,7 @@ let getBoards = () => {
     });
 
     // 이전 페이지 버튼 클릭 이벤트
-    $('#prevPage').on('click', function() {
+    $('#prevPage').on('click', function () {
         if (currentPage > 1) {
             currentPage--;
             loadBoard(currentPage, pageSize);
@@ -96,14 +96,13 @@ let loadBoard = (page, size) => {
                     $('#boardContent').append(
                         `
                     <tr>
-                                <td>${product.id}</td>
-                                <td><img src="${product.mainPicture}" alt="${product.name}"></td>
-                                <td>${product.name}</td>
-                                <td>${product.price.toLocaleString()} 원</td>
-                                <td>${product.season === 1 ? 'Winter' : 'Summer'}</td>
-                                <td>${product.temperature}°C</td>
-                            </tr>
-
+                        <td>${product.id}</td>
+                        <td><img src="${product.mainPicture}" alt="${product.name}"></td>
+                        <td>${product.name}</td>
+                        <td>${product.price.toLocaleString()} 원</td>
+                        <td>${product.season === 1 ? 'Winter' : 'Summer'}</td>
+                        <td>${product.temperature}°C</td>
+                    </tr>
                     `
                     );
                 });

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.CustomerDeleteRequestDTO;
-import org.example.shoppingweather.dto.CustomerUpdateRequestDTO;
+import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
+import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
