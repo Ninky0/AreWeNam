@@ -11,6 +11,30 @@ body {
     animation: wave 10s ease-in-out infinite; /* 애니메이션 추가 */
 }
 
+.progress-title {
+    align-items: center; /* 수직 정렬을 중앙으로 */
+}
+
+.step {
+    font-weight: bold; /* 단계 제목을 두껍게 */
+    color: black;
+}
+
+.step2 {
+    font-weight: bold; /* 단계 제목을 두껍게 */
+    color: gray;
+}
+
+.separator {
+    margin: 0 10px; /* 구분자 양쪽에 간격 추가 */
+}
+
+h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
 wave {
     0% {
         background-position: 0% 0%; /* 시작 위치 */
