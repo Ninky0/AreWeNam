@@ -1,10 +1,50 @@
 $(document).ready(() => {
+    const start = performance.now();
+
     //checkSession();
     getBoards();
 
     $('body').on('click', '#check_all', function () {
         $('input[type="checkbox"].checkbox').prop('checked', $(this).is(':checked'));
     });
+
+    let currentPage = 1;
+    const pageSize = 10;  // 한 페이지에 보여줄 게시글 수
+    loadBoard(currentPage, pageSize);
+
+    $('#nextPage').on('click', function () {
+        currentPage++;
+        loadBoard(currentPage, pageSize);
+    });
+
+    $('#prevPage').on('click', function () {
+        if (currentPage > 1) {
+            currentPage--;
+            loadBoard(currentPage, pageSize);
+        }
+    });
+
+    function loadBoard(page, size) {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/product/list',
+            data: { page, size },
+            success: (response) => {
+                updateBoard(response);
+            },
+            complete: () => {
+                const end = performance.now();
+                console.log(`Page loaded in ${end - start} milliseconds`);
+            }
+        });
+    }
+
+    function updateBoard(data) {
+        // 게시판 업데이트
+        // 이전 및 다음 버튼 상태 업데이트
+        $('#prevPage').prop('disabled', currentPage === 1);
+        $('#nextPage').prop('disabled', currentPage >= data.totalPages);
+    }
 
     // 동적 이벤트 바인딩: 페이지의 어느 시점에서든지 요소가 존재하면 이벤트가 실행됩니다.
     $('body').on('click', '#button_red', function () {

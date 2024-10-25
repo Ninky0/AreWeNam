@@ -4,13 +4,16 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Customer;
+import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.service.AdminService;
 import org.example.shoppingweather.service.CustomerService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,21 +26,23 @@ public class AdminViewController {
     private final CustomerService customerService;
 
     @GetMapping("/product/list")
-    public String productList(Model model){
+    public String productList(Model model, @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "5") int size){
         List<ProdReadResponseDTO> products = adminService.findAll();
         model.addAttribute("products", products);
+
+        Page<Product> productPage = adminService.getProducts(page, size);
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+
+
+
         return "product_list";
     }
 
     @GetMapping("/product/upload")
-    public String uploadProduct(Model model) {
-        Long maxId = adminService.findMaxId();
-        if(maxId == null){
-            maxId = 0L;
-        }
-        model.addAttribute("newId", maxId+1);
-        System.out.println(maxId);
-
+    public String uploadProduct() {
         //상품 등록 폼으로 이동
         return "upload_product";
 

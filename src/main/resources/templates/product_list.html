@@ -60,6 +60,15 @@
             </tr>
             </tbody>
         </table>
+        <div>
+            <ul class="pagination">
+                <li><button id="prevPage" disabled>이전</button></li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a th:href="@{/admin/product/list(page=${i}, size=${size})}" th:text="${i + 1}"></a>
+                </li>
+                <li><button id="nextPage" disabled>다음</button></li>
+            </ul>
+        </div>
     </div>
 </main>
 <footer>

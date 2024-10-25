@@ -17,8 +17,6 @@
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </header>
 <main>
-    <input type="hidden" id="productId" name="productId" th:value="${newId}" />
-
     <form id="productForm" method="POST" enctype="multipart/form-data">
         <h2>상품등록</h2>
         <div class="product-row">
@@ -54,8 +52,11 @@
 
                 <select id="category" name="category" class="product-select product-mt-2" required>
                     <option value="">카테고리선택</option>
+                    <option value="tp">상의</option>
                     <option value="jk">자켓</option>
                     <option value="sk">스커트</option>
+                    <option value="pt">바지</option>
+                    <option value="et">잡화</option>
                 </select>
 
                 <input type="text" id="name" name="name" placeholder="상품명을 입력하세요" class="product-input product-mt-2" required>

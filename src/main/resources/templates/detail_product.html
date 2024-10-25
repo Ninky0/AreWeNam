@@ -47,8 +47,11 @@
 
                 <label class="product-label product-mt-2" for="category">카테고리:</label>
                 <select id="category" name="category" class="product-select" disabled>
+                    <option th:selected="${product.category == 'tp'}" value="tp">상의</option>
                     <option th:selected="${product.category == 'jk'}" value="jk">자켓</option>
                     <option th:selected="${product.category == 'sk'}" value="sk">스커트</option>
+                    <option th:selected="${product.category == 'pt'}" value="pt">바지</option>
+                    <option th:selected="${product.category == 'et'}" value="pt">잡화</option>
                 </select>
 
                 <label class="product-label product-mt-2" for="name">상품명:</label>
