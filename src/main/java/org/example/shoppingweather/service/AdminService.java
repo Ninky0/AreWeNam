@@ -5,6 +5,9 @@ import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.product.ProdUploadRequestDTO;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.StringUtils;
@@ -44,10 +47,6 @@ public class AdminService {
         Product savedProduct = productRepository.save(product);
         LOGGER.info("Product saved with ID: " + savedProduct.getId());
         return savedProduct.getId();
-    }
-
-    public Long findMaxId(){
-        return productRepository.findMaxId();
     }
 
     public void updateProduct(Long id, ProdUploadRequestDTO dto) throws IOException {
@@ -113,5 +112,10 @@ public class AdminService {
     public void deleteProductsByIds(List<Long> productIds) {
         productRepository.deleteAllById(productIds);
         LOGGER.info("Deleted products with IDs: " + productIds);
+    }
+
+    public Page<Product> getProducts(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return productRepository.findAll(pageable);
     }
 }

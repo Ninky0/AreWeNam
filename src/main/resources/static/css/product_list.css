@@ -12,13 +12,12 @@ body {
     background-color: #f9f9f9;
 }
 
-
-
 main {
+    padding-top: 115px; /* 헤더 높이에 맞추어 조정 */
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    height: 100vh;
+    height: auto; /* 높이가 고정되어 있으면 내용이 많을 때 문제가 될 수 있으므로 auto로 설정 */
 }
 
 .container {
@@ -140,4 +139,35 @@ img {
 table{
     border-collapse: collapse; border-spacing: 0;
     margin: 0 auto;
+}
+
+.pagination-container {
+    width: 100%; /* 전체 너비를 차지 */
+    text-align: center; /* 중앙 정렬 */
+    margin-top: 20px; /* 테이블과의 여백 */
+    margin-bottom: 20px; /* 페이지 하단 여백 */
+}
+
+.pagination {
+    display: inline-block; /* 네비게이션을 한 줄로 표시 */
+    padding-left: 0; /* 왼쪽 패딩 제거 */
+}
+
+.pagination li {
+    display: inline; /* 항목들을 인라인으로 표시 */
+}
+
+.pagination li a {
+    margin-right: 8px; /* 링크 간 간격 */
+    text-decoration: none; /* 밑줄 제거 */
+    color: #000; /* 글자 색상 */
+}
+
+.pagination li a:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
+}
+
+.pagination li a.active {
+    font-weight: bold;
+    color: cornflowerblue; /* 활성 페이지 색상 */
 }
