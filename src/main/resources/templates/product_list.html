@@ -62,15 +62,30 @@
         </table>
         <div>
             <ul class="pagination">
+                <!-- 첫 페이지로 이동 -->
+                <li th:if="${productPage.number > 0}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/product/list(page=0)}">처음</a>
+                </li>
+
+                <!-- 이전 페이지 블록으로 이동 -->
                 <li th:if="${showPrevious}" class="page-item">
                     <a class="page-link" th:href="@{/admin/product/list(page=${startPage - 1})}">이전</a>
                 </li>
+
+                <!-- 페이지 번호 -->
                 <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
                     th:class="${productPage.number == i} ? 'active page-item' : 'page-item'">
                     <a class="page-link" th:href="@{/admin/product/list(page=${i})}" th:text="${i + 1}">1</a>
                 </li>
+
+                <!-- 다음 페이지 블록으로 이동 -->
                 <li th:if="${showNext}" class="page-item">
                     <a class="page-link" th:href="@{/admin/product/list(page=${endPage + 1})}">다음</a>
+                </li>
+
+                <!-- 마지막 페이지로 이동 -->
+                <li th:if="${productPage.number < productPage.totalPages - 1}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/product/list(page=${productPage.totalPages - 1})}">마지막</a>
                 </li>
             </ul>
         </div>

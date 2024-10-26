@@ -148,31 +148,30 @@ table{
     margin-bottom: 20px; /* 페이지 하단 여백 */
 }
 
-.pagination {
-    display: inline-block; /* 네비게이션을 한 줄로 표시 */
-    padding-left: 0; /* 왼쪽 패딩 제거 */
-}
-
-.pagination li {
-    display: inline; /* 항목들을 인라인으로 표시 */
-}
-
 .pagination li a {
-    margin-right: 8px; /* 링크 간 간격 */
+    margin-right: 4px; /* 링크 간 간격 */
     text-decoration: none; /* 밑줄 제거 */
-    color: #000; /* 글자 색상 */
 }
 
 .pagination li a:hover {
     text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
 }
 
-.page-item .page-link {
-    color: black; /* 기본 텍스트 색상 */
-    background-color: white; /* 기본 배경 색상 */
+.pagination .page-item {
+    display: inline-block;
 }
 
-.active .page-link {
+.pagination .page-link {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 15%
+}
+
+.pagination .page-item.active .page-link {
     font-weight: bold;
     color: cornflowerblue;
 }
