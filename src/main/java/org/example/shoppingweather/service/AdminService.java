@@ -28,10 +28,9 @@ public class AdminService {
     private static final Logger LOGGER = Logger.getLogger(AdminService.class.getName());
     private final ProductRepository productRepository;
 
-    public List<ProdReadResponseDTO> findAll(){
-        return productRepository.findAll().stream()
-                .map(Product::toProdReadResponseDTO)
-                .collect(Collectors.toList());
+    public Page<ProdReadResponseDTO> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(Product::toProdReadResponseDTO);
     }
 
     public ProdReadResponseDTO findById(Long id) {

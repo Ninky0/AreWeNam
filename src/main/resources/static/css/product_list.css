@@ -167,7 +167,12 @@ table{
     text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
 }
 
-.pagination li a.active {
+.page-item .page-link {
+    color: black; /* 기본 텍스트 색상 */
+    background-color: white; /* 기본 배경 색상 */
+}
+
+.active .page-link {
     font-weight: bold;
-    color: cornflowerblue; /* 활성 페이지 색상 */
+    color: cornflowerblue;
 }

@@ -62,11 +62,16 @@
         </table>
         <div>
             <ul class="pagination">
-                <li><button id="prevPage" disabled>이전</button></li>
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="@{/admin/product/list(page=${i}, size=${size})}" th:text="${i + 1}"></a>
+                <li th:if="${showPrevious}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/product/list(page=${startPage - 1})}">이전</a>
                 </li>
-                <li><button id="nextPage" disabled>다음</button></li>
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                    th:class="${productPage.number == i} ? 'active page-item' : 'page-item'">
+                    <a class="page-link" th:href="@{/admin/product/list(page=${i})}" th:text="${i + 1}">1</a>
+                </li>
+                <li th:if="${showNext}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/product/list(page=${endPage + 1})}">다음</a>
+                </li>
             </ul>
         </div>
     </div>
