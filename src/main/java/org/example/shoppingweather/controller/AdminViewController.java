@@ -8,6 +8,9 @@ import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.service.AdminService;
 import org.example.shoppingweather.service.CustomerService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +29,24 @@ public class AdminViewController {
     private final CustomerService customerService;
 
     @GetMapping("/product/list")
-    public String productList(Model model, @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "5") int size){
-        List<ProdReadResponseDTO> products = adminService.findAll();
+    public String productList(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
+
+        Page<ProdReadResponseDTO> productPage = adminService.findAll(pageable);
+        List<ProdReadResponseDTO> products = productPage.getContent();
+
+        int totalPages = productPage.getTotalPages();
+        int pageBlock = 10; // 페이지 블록 크기
+        int startPage = (page / pageBlock) * pageBlock;
+        int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
+
         model.addAttribute("products", products);
-
-        Page<Product> productPage = adminService.getProducts(page, size);
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productPage.getTotalPages());
-
-
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("showPrevious", startPage > 0);
+        model.addAttribute("showNext", endPage < totalPages - 1);
 
         return "product_list";
     }
