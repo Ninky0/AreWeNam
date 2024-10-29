@@ -9,7 +9,6 @@ public class ProdReadResponseDTO {
     private Long id;
     private String name;
     private Integer price;
-    private String mainPicture;
     private String mainPicturePath; // mainPicturePath 필드 추가
     private String description;
     private String quantity;

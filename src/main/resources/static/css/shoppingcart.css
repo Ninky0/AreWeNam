@@ -158,22 +158,13 @@ button {
     margin: 10px 0;
 }
 
-.order-btn {
-    display: inline-block;
-    padding: 15px 30px;
-    background-color: black;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    margin-top: 20px;
+.order-btn a {
+    color: white; /* 링크 글자색 변경 */
+    text-decoration: none; /* 밑줄 제거 */
 }
 
-a {
-    color: ghostwhite; /* 글자 색상 설정 */
-    font-size: 30px; /* 원하는 글자 크기로 설정 */
-    text-decoration: none; /* 밑줄 제거 */
-    cursor: pointer; /* 커서 모양 변경 */
+.order-btn {
+    background-color: #000;
 }
 
 /* 모달 스타일 */
@@ -210,4 +201,26 @@ a {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.product-info {
+    display: flex;
+    justify-content: flex-start; /* 좌측 정렬 */
+    flex-direction: row; /* 가로 배치 */
+}
+
+.product-info img {
+    width: 100px; /* 이미지 크기 조정 */
+    height: auto;
+    margin-right: 20px; /* 이미지와 이름 사이 간격 추가 */
+}
+
+.product-details {
+    display: block;
+}
+
+/* 상품 이름과 세부 정보의 텍스트 정렬 */
+.product-details, .product-details a {
+    margin-left: 10px; /* 왼쪽에 간격 추가 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
 }
