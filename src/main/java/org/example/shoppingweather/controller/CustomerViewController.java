@@ -4,15 +4,18 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerCartResponseDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.CartRepository;
+import org.example.shoppingweather.service.AdminService;
 import org.example.shoppingweather.service.CartService;
 import org.example.shoppingweather.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -27,7 +30,6 @@ public class CustomerViewController {
     private final CustomerService customerService;
     private final CartRepository cartRepository;
     private final CartService cartService;
-
 
     @GetMapping("/join")
     public String signUp() {
@@ -67,4 +69,25 @@ public class CustomerViewController {
         return "ordercomplete";
     }
 
+    // customer 상품 상세 정보 매핑 추가
+    @GetMapping("/product/detail/{id}")
+    public String detail(HttpSession session, @PathVariable Long id, Model model) {
+        // id로 상품 정보 찾기
+        ProdReadResponseDTO product = customerService.findById(id);
+
+        // mainPicture 경로에서 역슬래시(`\`)를 슬래시(`/`)로 변경
+        if (product.getMainPicture() != null) {
+            String mainPicturePath = product.getMainPicture().replace("\\", "/");
+            product.setMainPicture(mainPicturePath); // 경로 수정 후 다시 설정
+        }
+
+        Customer customer = customerService.findBySession(session);
+
+        // 수정된 product 객체를 모델에 추가
+        model.addAttribute("product", product);
+        model.addAttribute("customer",customer);
+
+        // 상세 페이지 HTML 파일로 반환
+        return "detail";
+    }
 }

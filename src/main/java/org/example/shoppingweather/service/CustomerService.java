@@ -6,11 +6,13 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.repository.CartRepository;
 import org.example.shoppingweather.repository.CustomerRepository;
+import org.example.shoppingweather.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class CustomerService {
     private final CartRepository cartRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ObjectMapper objectMapper;
+    private final ProductRepository productRepository;
 
     public void save(SignUpRequestDTO dto) {
         Customer customer = dto.toCustomer(bCryptPasswordEncoder);
@@ -41,7 +44,11 @@ public class CustomerService {
         String loginId = (String) session.getAttribute("loginId");
         return customerRepository.findByLoginId(loginId);
     }
-
+    public ProdReadResponseDTO findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id))
+                .toProdReadResponseDTO();
+    }
     public void updateUser(Long id, CustomerUpdateRequestDTO dto) {
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
@@ -99,6 +106,7 @@ public class CustomerService {
         cart.setProductList(updatedProductList);
         cartRepository.save(cart);
     }
+
 }
 
 // 비밀번호 검증 (입력된 비밀번호와 저장된 비밀번호 비교)

@@ -63,32 +63,11 @@ public class AdminViewController {
     // admin 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail_product/{id}")
     public String productDetail(@PathVariable Long id, Model model) {
-        ProdReadResponseDTO product = adminService.findById(id); // id로 상품 정보 찾기
-        model.addAttribute("product", product);
-        return "detail_product"; // 상세 페이지 HTML 파일 이름
+        ProdReadResponseDTO product = adminService.findById(id); // id를 사용하여 상품 정보 조회
+        model.addAttribute("product", product); // 조회된 상품 정보를 모델에 추가하여 템플릿으로 전달
+        return "detail_product"; // 상세 페이지 HTML 파일 이름 반환
     }
 
-    // customer 상품 상세 정보 매핑 추가
-    @GetMapping("/product/detail/{id}")
-    public String detail(HttpSession session, @PathVariable Long id, Model model) {
-        // id로 상품 정보 찾기
-        ProdReadResponseDTO product = adminService.findById(id);
-
-        // mainPicture 경로에서 역슬래시(`\`)를 슬래시(`/`)로 변경
-        if (product.getMainPicture() != null) {
-            String mainPicturePath = product.getMainPicture().replace("\\", "/");
-            product.setMainPicture(mainPicturePath); // 경로 수정 후 다시 설정
-        }
-
-        Customer customer = customerService.findBySession(session);
-
-        // 수정된 product 객체를 모델에 추가
-        model.addAttribute("product", product);
-        model.addAttribute("customer",customer);
-
-        // 상세 페이지 HTML 파일로 반환
-        return "detail";
-    }
 
     @GetMapping("/product/edit/{id}")
     public String editProduct(@PathVariable Long id, Model model) {

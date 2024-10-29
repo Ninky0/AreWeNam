@@ -42,7 +42,7 @@ public class AdminService {
     public Long save(ProdUploadRequestDTO dto) throws IOException {
         String mainPicturePath = saveFile(dto.getMainPicture());
         Product product = dto.toProduct();
-        product.setMainPicture(mainPicturePath);
+        product.setMainPicturePath(mainPicturePath); // 경로를 mainPicturePath에 저장
         Product savedProduct = productRepository.save(product);
         LOGGER.info("Product saved with ID: " + savedProduct.getId());
         return savedProduct.getId();
@@ -57,6 +57,7 @@ public class AdminService {
     }
 
     private void updateProductDetails(Product product, ProdUploadRequestDTO dto) throws IOException {
+        // 기본 필드 업데이트
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
         product.setQuantity(dto.getQuantity());
@@ -64,48 +65,53 @@ public class AdminService {
         product.setSeason(dto.getSeason());
         product.setTemperature(dto.getTemperature());
         product.setDescription(dto.getDescription());
+
+        // 새 메인 이미지가 있는 경우 처리
         if (dto.getMainPicture() != null && !dto.getMainPicture().isEmpty()) {
+            // 기존 이미지가 있다면 삭제
+            if (product.getMainPicturePath() != null) {
+                Path previousImagePath = Paths.get("src/main/resources/static" + product.getMainPicturePath());
+                Files.deleteIfExists(previousImagePath);
+            }
+
+            // 새로운 이미지 저장 후 경로 설정
             String mainPicturePath = saveFile(dto.getMainPicture());
-            product.setMainPicture(mainPicturePath);
+            product.setMainPicturePath(mainPicturePath); // 새 이미지 경로를 mainPicturePath에 저장
         }
     }
 
     public String saveFile(MultipartFile file) throws IOException {
         String uploadDir = "src/main/resources/static/uploads/";
-        String fileName = file.getOriginalFilename();
-        return getString(file, fileName, uploadDir);
+        String fileName = generateUniqueFileName(file.getOriginalFilename());
+        Path filePath = Paths.get(uploadDir + fileName);
+
+        if (!Files.exists(filePath.getParent())) {
+            Files.createDirectories(filePath.getParent());
+        }
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        // 클라이언트에서 접근할 수 있는 상대 경로를 반환
+        return "/uploads/" + fileName;
     }
 
     public String saveDetail(MultipartFile file, String name) throws IOException {
         String uploadDir = "src/main/resources/static/uploads/";
-        return getString(file, name, uploadDir);
-    }
+        String fileName = generateUniqueFileName(name);
+        Path filePath = Paths.get(uploadDir + fileName);
 
-    private String getString(MultipartFile file, String name, String uploadDir) throws IOException {
-        Path filePath = Paths.get(uploadDir + name);
-
-        if (!Files.exists(Paths.get(uploadDir))) {
-            Files.createDirectories(Paths.get(uploadDir));
+        if (!Files.exists(filePath.getParent())) {
+            Files.createDirectories(filePath.getParent());
         }
-        filePath = generateUniqueFilePath(filePath);
-
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-
-        return filePath.toString(); // Return the saved file path
+        return "/uploads/" + fileName;
     }
 
-    private Path generateUniqueFilePath(Path filePath) {
-        Path uniquePath = filePath;
-        int counter = 1;
-        while (Files.exists(uniquePath)) {
-            String baseName = StringUtils.stripFilenameExtension(filePath.getFileName().toString());
-            String extension = ".jpg";
-            String newFileName = baseName + "_" + counter + extension;
-            uniquePath = filePath.getParent().resolve(newFileName);
-            counter++;
-        }
-        return uniquePath;
+    private String generateUniqueFileName(String originalName) {
+        String baseName = StringUtils.stripFilenameExtension(originalName);
+        String extension = StringUtils.getFilenameExtension(originalName);
+        String fileName = baseName + "_" + System.currentTimeMillis() + "." + extension;
+        return fileName;
     }
 
     public void deleteProductsByIds(List<Long> productIds) {

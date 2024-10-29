@@ -16,9 +16,9 @@ public class Product {
 
     private String name;
     private Integer price;
-    private String mainPicture;
+    private String mainPicture; // 기존 mainPicture 필드
 
-    @Column(columnDefinition = "TEXT") // MySQL의 TEXT 유형 사용
+    @Column(columnDefinition = "MEDIUMTEXT") // MySQL의 TEXT 유형 사용
     private String description;
 
     private String quantity;
@@ -26,12 +26,16 @@ public class Product {
     private Integer season;
     private Integer temperature;
 
+    // 추가된 필드: mainPicturePath
+    private String mainPicturePath;
+
     @Builder
-    public Product(Long id, String name, Integer price, String mainPicture, String description, String quantity, String category, Integer season, Integer temperature) {
+    public Product(Long id, String name, Integer price, String mainPicture, String mainPicturePath, String description, String quantity, String category, Integer season, Integer temperature) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.mainPicture = mainPicture;
+        this.mainPicturePath = mainPicturePath; // mainPicturePath 추가
         this.description = description;
         this.quantity = quantity;
         this.category = category;
@@ -45,6 +49,7 @@ public class Product {
                 .name(name)
                 .price(price)
                 .mainPicture(mainPicture)
+                .mainPicturePath(mainPicturePath) // mainPicturePath 추가
                 .description(description)
                 .quantity(quantity)
                 .category(category)

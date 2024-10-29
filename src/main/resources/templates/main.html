@@ -18,10 +18,9 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
+<!--메인슬라이드-->
+    <div th:insert="~{fragments/main_bn1 :: main_bn1}"></div>
 
-<!--    <div th:replace="fragments/main_bn1 :: main_bn1"></div>-->
-
-    <img src="/images/main_img01.jpg" >
     <h2 class="sub_title">오늘, 이 옷 어때?</h2>
     <p>날씨에 따라서 추천해드리는 핫 아이템</p>
 
@@ -47,6 +46,7 @@
             </div>
         </form>
     </section>
+    <!--날씨별 상품목록 슬라이드-->
     <div th:insert="~{fragments/main_bn2 :: main_bn2}"></div>
 
     <section class="special-items">

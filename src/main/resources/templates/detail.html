@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
     <link th:href="@{/css/detail.css}" rel="stylesheet">
+    <link th:href="@{/css/review.css}" rel="stylesheet">
     <script th:src="@{/js/detail.js}"></script>
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
@@ -21,7 +22,7 @@
             <input type="hidden" id="productId" th:value="${product.id}">
             <input type="hidden" id="customerId" th:value="${customer.id}">
             <div class="product-col-md-4">
-                <img th:src="@{${#strings.replace(product.mainPicture,'src/main/resources/static', '')}}" alt="상세 이미지">
+                <img th:src="@{${#strings.replace(product.mainPicturePath,'src/main/resources/static', '')}}" alt="상세 이미지">
             </div>
 
             <div class="product-col-md-8">
@@ -50,7 +51,7 @@
                     <input type="number" id="quantityInput" class="quantity-input" name="quantity" value="1" min="1"
                            max="100">
                 </div>
-
+                <!--이벤트 배너 임의등록-->
                 <img class="product-detail-image" src="/images/detail_event_bn1.png" alt="상품 이미지">
 
                 <div class="product-detail-info">
@@ -76,6 +77,7 @@
                 <div th:utext="${#strings.replace(product.description.substring(1),'src/main/resources/static', '')}"
                      class="product-description-content"></div>
             </div>
+            <div th:replace="~{fragments/review_list::review_list}"></div>
         </div>
     </div>
 </main>

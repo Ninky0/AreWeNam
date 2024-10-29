@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-    <link th:href="@{/css/upload_product.css}" rel="stylesheet">
+    <link th:href="@{/css/detail_product.css}" rel="stylesheet">
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
     <title>상품 상세 정보</title>
@@ -18,9 +18,10 @@
         <h2>상품 상세 정보</h2>
         <div class="product-row">
             <div class="product-col-md-4">
+                <!-- 메인이미지가 image-placeholder 내부에 위치하도록 설정 -->
                 <div class="product-image-upload">
                     <div class="product-image-placeholder">
-                        <img th:src="@{${#strings.replace(product.mainPicture,'src/main/resources/static', '')}}" alt="상품 이미지" style="max-width: 300px;" />
+                        <img th:src="${product.mainPicturePath}" alt="Main Picture" class="product-image"/>
                     </div>
                 </div>
             </div>
@@ -51,7 +52,7 @@
                     <option th:selected="${product.category == 'jk'}" value="jk">자켓</option>
                     <option th:selected="${product.category == 'sk'}" value="sk">스커트</option>
                     <option th:selected="${product.category == 'pt'}" value="pt">바지</option>
-                    <option th:selected="${product.category == 'et'}" value="pt">잡화</option>
+                    <option th:selected="${product.category == 'et'}" value="et">잡화</option>
                 </select>
 
                 <label class="product-label product-mt-2" for="name">상품명:</label>
@@ -65,8 +66,9 @@
             </div>
         </div>
         <div class="product-detail-page product-mt-3">
+            <!-- 설명 내용이 product-label 내부에 위치하도록 설정 -->
             <label class="product-label" for="description">설명:</label>
-            <div id="description" class="ql-editor" th:utext="${#strings.replace(product.description,'src/main/resources/static', '')}"></div>
+            <div id="description" class="ql-editor product-label" th:utext="${product.description}"></div>
         </div>
         <a class="product-button" th:href="@{/admin/product/edit/{id}(id=${product.id})}">수정</a>
     </form>
