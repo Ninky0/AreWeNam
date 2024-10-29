@@ -21,7 +21,11 @@
                 <!-- 메인이미지가 image-placeholder 내부에 위치하도록 설정 -->
                 <div class="product-image-upload">
                     <div class="product-image-placeholder">
-                        <img th:src="${product.mainPicturePath}" alt="Main Picture" class="product-image"/>
+                        <img th:src="@{${product.mainPicturePath?.replace('src/main/resources/static', '')}}"
+                             alt="상품 이미지"
+                             style="max-width: 300px;"
+                             class="product-image"
+                             th:style="${product.mainPicturePath != null} ? 'display: block;' : 'display: none;'" />
                     </div>
                 </div>
             </div>

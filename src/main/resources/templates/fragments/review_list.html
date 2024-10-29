@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+  <script th:src="@{/js/boardList.js}"></script>
+  <script th:src="@{/js/boardWrite.js}"></script>
+  <link th:href="@{/css/board.css}" rel="stylesheet">
+  <title>게시판</title>
+</head>
+<body>
+<nav th:fragment="review_list">
+  <div class="container">
+    <h1 th:text="|${customer.id}님 환영합니다.|"></h1>
+    <input id="hiddenUserId" type="hidden" th:value="${userId}">
+    <input type="hidden" th:value="${userName}">
+    <a th:href="@{/write}" class="btn" id="writeBtn">글쓰기</a>
+    <!-- 게시판 영역 -->
+    <div id="board">
+      <table>
+        <thead>
+        <tr>
+          <th>글 번호</th><!--id -->
+          <th>작성자</th><!--customerId -->
+          <th>상품코드</th><!--productId -->
+          <th>내용</th><!--content-->
+          <th>이미지</th><!--picture-->
+        </tr>
+        </thead>
+        <tbody id="boardContent">
+        <!-- Ajax를 통해 게시글 데이터가 여기에 동적으로 추가됨 -->
+
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 페이징 영역 -->
+    <div id="pagination">
+      <button id="prevPage" class="btn" disabled>이전</button>
+      <span id="pageInfo">1</span>
+      <button id="nextPage" class="btn">다음</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.service.AdminService;
 import org.example.shoppingweather.service.CustomerService;
+import org.example.shoppingweather.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +27,14 @@ import java.util.List;
 public class AdminViewController {
 
     private final AdminService adminService;
-    private final CustomerService customerService;
+    private final ProductService productService;
 
     @GetMapping("/product/list")
     public String productList(@RequestParam(defaultValue = "0") int page, Model model) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
 
-        Page<ProdReadResponseDTO> productPage = adminService.findAll(pageable);
+        Page<ProdReadResponseDTO> productPage = productService.findAll(pageable);
         List<ProdReadResponseDTO> products = productPage.getContent();
 
         int totalPages = productPage.getTotalPages();
@@ -63,7 +64,7 @@ public class AdminViewController {
     // admin 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail_product/{id}")
     public String productDetail(@PathVariable Long id, Model model) {
-        ProdReadResponseDTO product = adminService.findById(id); // id를 사용하여 상품 정보 조회
+        ProdReadResponseDTO product = productService.findById(id); // id를 사용하여 상품 정보 조회
         model.addAttribute("product", product); // 조회된 상품 정보를 모델에 추가하여 템플릿으로 전달
         return "detail_product"; // 상세 페이지 HTML 파일 이름 반환
     }
@@ -72,7 +73,7 @@ public class AdminViewController {
     @GetMapping("/product/edit/{id}")
     public String editProduct(@PathVariable Long id, Model model) {
         // 상품의 상세 정보를 조회하여 수정 폼에 표시할 수 있도록 모델에 추가
-        ProdReadResponseDTO product = adminService.findById(id);
+        ProdReadResponseDTO product = productService.findById(id);
         model.addAttribute("product", product);
         return "edit_product"; // 수정 페이지 HTML 파일 이름
     }
