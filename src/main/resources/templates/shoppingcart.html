@@ -45,7 +45,7 @@
                 </td>
                 <td class="th_1" th:text="${iterStat.count}"></td>
                 <td class="product-info" >
-                    <img th:src="@{${product.mainPicture}}" th:alt="${product.name}">
+                    <img th:src="@{${product.mainPicturePath}}" th:alt="${product.name}">
                     <div class="product-details" th:text="${product.name}">
                         <p th:text="${product.season + ' ' + product.temperature + ' ' + product.category}">
                             <span class="seasonDisplay"></span></p>

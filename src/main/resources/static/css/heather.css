@@ -8,14 +8,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.8); /* 반투명 배경 */
+    padding: 0 4rem;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    transition: padding 0.3s ease, background-color 0.3s ease; /* 부드러운 전환 효과 */
+    transition: padding 0.3s ease, background-color 0.3s ease;
 }
 
 .logo h1 a {
@@ -68,8 +67,9 @@ body {
 
 /* 스크롤 시 크기 조절 */
 body.scrolled .header {
-    padding: 5px 20px; /* 위 아래 패딩 감소 */
-    background-color: rgba(255, 255, 255, 0.9); /* 배경을 조금 더 불투명하게 */
+    padding: 0 4rem;
+    background-color: rgba(255, 255, 255, 0.68); /* 배경을 조금 더 불투명하게 */
+    backdrop-filter: blur(10px); /* 배경 흐림 정도 조정 */
 }
 
 body.scrolled .header h1 {

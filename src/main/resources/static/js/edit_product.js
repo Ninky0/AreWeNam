@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // 최대 파일 크기 설정 (2MB)
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
     // 에디터 초기화 시 기존 설명 로드
     quill.root.innerHTML = document.getElementById('description').textContent;
 
@@ -20,20 +23,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(document.getElementById('productForm'));
 
-        // FormData 출력하여 값 확인 (디버깅용)
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
         fetch(document.getElementById('productForm').action, {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     alert('상품이 성공적으로 수정되었습니다!');
-                    window.location.href = '/admin/product/list'; // 상품 리스트로 이동
+                    window.location.href = '/admin/product/list';
                 } else {
                     alert('상품 수정 중 오류가 발생했습니다.');
                 }
@@ -44,30 +47,76 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // 이미지 미리보기 처리
+    // 이미지 압축 및 미리보기 처리 함수
     window.previewMainImage = function(event) {
         const input = event.target;
         const imagePreview = document.getElementById('imagePreview');
         const placeholderText = document.getElementById('placeholderText');
 
-        // Clear the existing preview image
-        imagePreview.src = ''; // Reset the src attribute to an empty string
-        imagePreview.style.display = 'none'; // Hide the image element
-        placeholderText.style.display = 'block'; // Show the placeholder text
-
         if (input.files && input.files[0]) {
+            const file = input.files[0];
+
+            // 파일 크기 확인
+            if (file.size > MAX_FILE_SIZE) {
+                alert('이미지 파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해 주세요.');
+                return;
+            }
+
+            // FileReader로 이미지 로드
             const reader = new FileReader();
             reader.onload = function(e) {
-                imagePreview.src = e.target.result; // Set the new image src from FileReader
-                imagePreview.style.display = 'block'; // Show the image element
-                placeholderText.style.display = 'none'; // Hide the placeholder text
+                const img = new Image();
+                img.src = e.target.result;
+
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxSize = 800; // 최대 가로/세로 크기 설정
+                    let width = img.width;
+                    let height = img.height;
+
+                    // 이미지 크기 조정
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Canvas에 이미지 그리기
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // 압축된 이미지 데이터 URL 생성 (JPEG 형식, 80% 품질)
+                    canvas.toBlob((blob) => {
+                        const compressedFile = new File([blob], file.name, { type: "image/jpeg", lastModified: Date.now() });
+
+                        // 압축된 이미지 미리보기
+                        imagePreview.src = URL.createObjectURL(blob);
+                        imagePreview.style.display = 'block';
+                        placeholderText.style.display = 'none';
+
+                        // 압축된 파일을 formData에 설정
+                        const formData = new FormData(document.getElementById('productForm'));
+                        formData.set('mainPicture', compressedFile);
+                    }, "image/jpeg", 0.8);
+                };
             };
-
-            // Read the selected file and update the preview
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(file);
+        } else {
+            // 파일이 선택되지 않은 경우 미리보기를 초기화
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+            placeholderText.style.display = 'block';
         }
-    }
+    };
 
-    // 폼 제출 함수 연결
+    // 전역에서 submitForm 함수 접근 가능하도록 설정
     window.submitForm = submitForm;
 });

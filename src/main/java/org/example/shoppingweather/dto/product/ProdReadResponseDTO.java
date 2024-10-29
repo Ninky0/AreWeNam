@@ -1,19 +1,16 @@
 package org.example.shoppingweather.dto.product;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
+@Data
 @Builder
-@Setter
-@AllArgsConstructor
 public class ProdReadResponseDTO {
     private Long id;
     private String name;
     private Integer price;
     private String mainPicture;
+    private String mainPicturePath; // mainPicturePath 필드 추가
     private String description;
     private String quantity;
     private String category;

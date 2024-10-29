@@ -33,7 +33,7 @@ main {
 
 h2 {
     margin-bottom: 20px;
-    font-size: 18px;
+    font-size: 30px;
     font-weight: 600;
 }
 
@@ -98,24 +98,28 @@ table th.th_1, table td:nth-child(8) {
 input[type="checkbox"] {
     transform: scale(1.2); /* 체크박스 크기 조절 */
 }
-
-img {
-    width: 50px; /* 이미지 크기 조정 */
+a {
+    text-decoration: none;
+    color: black;
 }
-
+img {
+    width: 50px;
+    border-radius: 10px;
+}
 .button-group {
     margin: 20px;
     text-align: right;
 }
 
 #button_red {
-    padding: 10px 20px;
+    padding: 7px 20px;
     margin-right: 10px;
-    background-color: #ff0049;
+    background-color: #d50000;
     color: white;
-    border: none;
+    border: 1px solid #d50000;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
 }
 #button_black {
     padding: 10px 20px;
@@ -125,6 +129,7 @@ img {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size : 14px;
 }
 
 #button_red:hover,
@@ -173,5 +178,5 @@ table{
 
 .pagination .page-item.active .page-link {
     font-weight: bold;
-    color: cornflowerblue;
+    color: #000000;
 }

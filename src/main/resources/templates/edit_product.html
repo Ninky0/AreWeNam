@@ -23,18 +23,20 @@
             <div class="product-col-md-4">
                 <div class="product-image-upload">
                     <div class="product-image-placeholder">
+                        <!-- 이미지 경로 처리: src 경로에서 'src/main/resources/static'을 제거하여 상대 경로로 설정 -->
                         <img id="imagePreview"
-                             th:src="@{${#strings.replace(product.mainPicture,'src/main/resources/static', '')}}"
+                             th:src="@{${product.mainPicturePath?.replace('src/main/resources/static', '')}}"
                              alt="상품 이미지"
                              style="max-width: 300px;"
-                             th:style="${product.mainPicture != null} ? 'display: block;' : 'display: none;'" />
-                        <span id="placeholderText" th:if="${product.mainPicture == null}">권장 이미지 크기 <br>700 × 1040 픽셀</span>
+                             th:style="${product.mainPicturePath != null} ? 'display: block;' : 'display: none;'" />
+                        <span id="placeholderText" th:if="${product.mainPicturePath == null}">권장 이미지 크기 <br>700 × 1040 픽셀</span>
                     </div>
 
                     <input type="file" id="mainPicture" name="mainPicture" accept="image/*" class="product-file-input" onchange="previewMainImage(event)">
                 </div>
             </div>
             <div class="product-col-md-8">
+                <!-- 시즌 선택 드롭다운 -->
                 <select id="season" name="season" class="product-select" required>
                     <option value="1" th:selected="${product.season == 1}">봄</option>
                     <option value="2" th:selected="${product.season == 2}">여름</option>
@@ -42,6 +44,7 @@
                     <option value="4" th:selected="${product.season == 4}">겨울</option>
                 </select>
 
+                <!-- 온도 선택 드롭다운 -->
                 <select id="temperature" name="temperature" class="product-select product-mt-2" required>
                     <option value="1" th:selected="${product.temperature == 1}">28℃ 이상</option>
                     <option value="2" th:selected="${product.temperature == 2}">27~23℃</option>
@@ -53,21 +56,30 @@
                     <option value="8" th:selected="${product.temperature == 8}">4℃ 이하</option>
                 </select>
 
+                <!-- 카테고리 선택 드롭다운 -->
                 <select id="category" name="category" class="product-select product-mt-2" required>
                     <option th:selected="${product.category == 'tp'}" value="tp">상의</option>
                     <option th:selected="${product.category == 'jk'}" value="jk">자켓</option>
                     <option th:selected="${product.category == 'sk'}" value="sk">스커트</option>
                     <option th:selected="${product.category == 'pt'}" value="pt">바지</option>
-                    <option th:selected="${product.category == 'et'}" value="pt">잡화</option>
+                    <option th:selected="${product.category == 'et'}" value="et">잡화</option>
                 </select>
+
+                <!-- 상품 정보 입력 필드 -->
                 <input type="hidden" id="id" name="id" th:value="${product.id}" />
                 <input type="text" id="name" name="name" class="product-input product-mt-2" th:value="${product.name}" placeholder="상품명을 입력하세요" required>
                 <input type="number" id="price" name="price" class="product-input product-mt-2" th:value="${product.price}" placeholder="가격을 입력하세요" required>
                 <input type="number" id="quantity" name="quantity" class="product-input product-mt-2" th:value="${product.quantity}" placeholder="재고 수량 입력하세요" required>
             </div>
         </div>
+
+        <!-- Quill 에디터 영역 -->
         <div id="editor" style="height: 400px;"></div>
-        <textarea id="description" name="description" th:utext="${#strings.replace(product.description.substring(1),'src/main/resources/static', '')}" style="display:none;"></textarea>
+
+        <!-- 숨겨진 설명 필드, 경로에서 'src/main/resources/static' 제거 -->
+        <textarea id="description" name="description" th:utext="${product.description?.replace('src/main/resources/static', '')}" style="display:none;"></textarea>
+
+        <!-- 폼 제출 버튼 -->
         <button class="product-button" type="button" onclick="submitForm()">상품 수정</button>
     </form>
 </main>
