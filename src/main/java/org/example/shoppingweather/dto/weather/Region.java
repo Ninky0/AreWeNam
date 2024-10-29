@@ -1,14 +1,12 @@
 package org.example.shoppingweather.dto.weather;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
+@ToString
 public class Region {
     private String regionParent;
     private String regionChild;

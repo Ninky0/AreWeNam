@@ -1,4 +1,5 @@
 spring:
+
   application:
     name: shop_we
   datasource:
@@ -11,20 +12,24 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
-  web:
-    resources:
-      static-locations: classpath:/static/, classpath:/public/, classpath:/META-INF/resources/, file:./uploads/
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
+
+
 server:
   port: 8080
-
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-
 
 weather:
   api:
     url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"
-    key: "GJknCo2+o53WsSBM4W0ttkLBvCtF+kvm/3KuMDytZg5vXJqK5HoFxAY5mhAKV1k1uolapSgbLfGTmfWoNrEC2g=="
+    key: "f3EBxGArPSLcuA/hMpozbP7r5qSMPfyto+DPhoG6O3pCeMhvbje4mmGdHyDBhg3nqSaESnS3Lf44giG5C1qekw=="
+
+
+schedule:
+  cron: 0 * 9 * * ?  # 매일 실행
+  use: true           # 사용 여부
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
