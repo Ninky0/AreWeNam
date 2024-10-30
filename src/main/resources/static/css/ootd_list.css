@@ -1,0 +1,52 @@
+.ootd-list {
+    display: grid;
+    grid-template-columns: repeat(3, 600px); /* Three columns each 600px wide */
+    grid-template-rows: repeat(2, 800px); /* Two rows each 800px high */
+    gap: 0; /* Removes gaps between items */
+}
+
+.ootd-item {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.ootd-item img {
+    width: 33%;
+    height: 100%;
+    object-fit: cover;
+    display: inline;
+    /* margin: 0; */
+    /* padding: 0; */
+}
+h2.sub_title {
+    padding: 130px 0 0 0;
+    margin: 0 auto;
+    text-align: center;
+    /* display: block; */
+}
+p {
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 0 25px 0;
+}
+button#load-more {
+    width: 300px;
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    margin: 15px auto;
+    display: block;
+    padding: 6px;
+}
+
+a#button_black {
+    margin: 12px auto;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 10px 80px 10px;
+    text-decoration: none;
+    color: black;
+    display: block;
+    width: 300px;
+    text-align: center;
+}

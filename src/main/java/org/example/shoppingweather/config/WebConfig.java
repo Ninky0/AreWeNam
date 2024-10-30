@@ -13,4 +13,5 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
             registry.addResourceHandler("/uploads/**")
                     .addResourceLocations("file:src/main/resources/static/uploads/");
         }
+
     }

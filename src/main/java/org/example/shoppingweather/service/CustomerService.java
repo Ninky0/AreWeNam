@@ -7,16 +7,22 @@ import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO; // OOTD 이미지 응답 DTO 임포트
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
+import org.example.shoppingweather.entity.Ootd;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.CartRepository;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.example.shoppingweather.repository.ProductRepository;
+import org.example.shoppingweather.repository.OotdRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.example.shoppingweather.entity.Product;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,16 +36,14 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final OotdRepository ootdRepository;  // OOTD 저장을 위한 리포지토리 추가
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ObjectMapper objectMapper;
-    private final ProductRepository productRepository;
 
     public void save(SignUpRequestDTO dto) {
         Customer customer = dto.toCustomer(bCryptPasswordEncoder);
-
-        // 여기서 권한 조정하기 ROLE_ADMIN 또는 ROLE_CUSTOMER
-        customer.setRole("ROLE_CUSTOMER");
-
+        customer.setRole("ROLE_CUSTOMER");  // 권한 설정
         customerRepository.save(customer);
     }
 
@@ -47,44 +51,47 @@ public class CustomerService {
         String loginId = (String) session.getAttribute("loginId");
         return customerRepository.findByLoginId(loginId);
     }
+
     public ProdReadResponseDTO findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id))
                 .toProdReadResponseDTO();
     }
+
+    public Page<ProdReadResponseDTO> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).map(Product::toProdReadResponseDTO);
+    }
+
+    // 상품 이름으로 검색하는 메서드 추가
+    public Page<ProdReadResponseDTO> searchProductsByName(String name, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(name, pageable)
+                .map(Product::toProdReadResponseDTO);
+    }
+
     public void updateUser(Long id, CustomerUpdateRequestDTO dto) {
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
-
-        // DTO의 정보를 기존 고객 정보에 적용
         existingCustomer.setName(dto.getName());
         existingCustomer.setEmail(dto.getEmail());
         existingCustomer.setPhone(dto.getPhone());
         existingCustomer.setAddress(dto.getAddress());
 
-        // 비밀번호 업데이트가 필요한 경우
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             existingCustomer.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         }
 
-        // 업데이트된 고객 정보 저장
         customerRepository.save(existingCustomer);
     }
 
     public void deleteUser(Long id, CustomerDeleteRequestDTO dto) {
-        // 기존 고객 정보 조회
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
 
-        // 비밀번호 검증 (입력된 비밀번호와 저장된 비밀번호 비교)
         if (bCryptPasswordEncoder.matches(dto.getPassword(), existingCustomer.getPassword())) {
-
-            // 비밀번호가 일치할 경우 고객 삭제
             customerRepository.delete(existingCustomer);
         } else {
             throw new RuntimeException("Incorrect password.");
         }
-
     }
 
     // 장바구니 추가
@@ -104,11 +111,24 @@ public class CustomerService {
             });
         }
 
-        products.merge(productId, quantity, Integer::sum); // 기존 수량에 추가
-
+        products.merge(productId, quantity, Integer::sum);
         String updatedProductList = objectMapper.writeValueAsString(products);
         cart.setProductList(updatedProductList);
         cartRepository.save(cart);
+    }
+
+    // OOTD 게시글 저장 기능 추가
+    public void saveOotdPost(Long customerId, String tag, String picturePath, Long productId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID: " + customerId));
+
+        Ootd ootd = new Ootd();
+        ootd.setCustomer(customer); // 고객 정보 설정
+        ootd.setPicture(picturePath); // 이미지 경로 설정
+        ootd.setTag(tag); // 태그 설정
+        ootd.setProductId(productId); // 선택된 상품 ID 설정
+
+        ootdRepository.save(ootd); // OOTD 데이터 저장
     }
 
     // 장바구니 목록 불러오기
@@ -133,6 +153,7 @@ public class CustomerService {
             }
         }
 
+
         // 제품 ID로 제품을 조회하고 리스트에 추가
         for (Long productId : productMap.keySet()) {
             Product product = productRepository.findById(productId).orElse(null);
@@ -146,4 +167,12 @@ public class CustomerService {
         return products;
     }
 
+    // OOTD 게시글의 이미지 목록을 DTO로 가져오는 메서드
+    public Page<CustomerOotdImageResponseDTO> getOotdImages(Pageable pageable) {
+        Page<Ootd> ootdPage = ootdRepository.findAll(pageable); // OOTD 엔티티 페이지 가져오기
+
+        // OOTD 엔티티를 DTO로 변환
+        return ootdPage.map(ootd -> new CustomerOotdImageResponseDTO(ootd.getPicture()));
+    }
 }
+
