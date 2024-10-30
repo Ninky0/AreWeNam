@@ -4,51 +4,16 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/main_bn2.css}" rel="stylesheet">
     <script th:src="@{/js/main_bn2.js}"></script>
+    <script th:src="@{/js/weather_search.js}"></script>
 </head>
 <body>
 <section th:fragment="main_bn2" class="bn2-slider-container">
     <button class="bn2-arrow bn2-left-arrow" id="bn2PrevButton">&#10094;</button>
     <div class="bn2-product-slider" id="productSlider">
-        <!-- Product Items -->
-        <div class="bn2-product-item">
-            <img src="/images/sample_img_01.jpg" alt="Product 5">
-            <h4>PIASTUDIO</h4>
-            <p class="bn2-title">BA_Lapel color-blocked coat_2color</p>
-            <p class="bn2-price">188,100원</p>
-        </div>
-
-        <div class="bn2-product-item">
-            <img src="/images/sample_img_02.jpg" alt="Product 1">
-            <h4>PIASTUDIO</h4>
-            <p class="bn2-title">BA_Shiny leather jacket_BROWN</p>
-            <p class="bn2-price">151,050원</p>
-        </div>
-        <div class="bn2-product-item">
-            <img src="/images/sample_img_03.jpg" alt="Product 2">
-            <h4>MONGDOL</h4>
-            <p class="bn2-title">울 숏 구름 더블 코트 라이트그레이</p>
-            <p class="bn2-price">220,500원</p>
-        </div>
-        <div class="bn2-product-item">
-            <img src="/images/sample_img_04.jpg" alt="Product 3">
-            <h4>MONGDOL</h4>
-            <p class="bn2-title">리버서블 숏헤어 무스탕 베이지</p>
-            <p class="bn2-price">223,200원</p>
-        </div>
-        <div class="bn2-product-item">
-            <img src="/images/sample_img_05.jpg" alt="Product 4">
-            <h4>PIASTUDIO</h4>
-            <p class="bn2-title">BA_Knitted zipper hooded jacket_3color</p>
-            <p class="bn2-price">226,100원</p>
-        </div>
-        <div class="bn2-product-item">
-            <img src="/images/sample_img_06.jpg" alt="Product 5">
-            <h4>PIASTUDIO</h4>
-            <p class="bn2-title">BA_Lapel color-blocked coat_2color</p>
-            <p class="bn2-price">188,100원</p>
-        </div>
+        <!-- 상품 자동 추가됨 -->
     </div>
     <button class="bn2-arrow bn2-right-arrow" id="bn2NextButton">&#10095;</button>
 </section>
+
 </body>
 </html>

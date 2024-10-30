@@ -77,18 +77,6 @@ public class CustomerViewController {
         return "ordercomplete";
     }
 
-//    // 상품 상세 정보 JSON 형식으로 제공
-//    @GetMapping("/product/detail/{id}")
-//    @ResponseBody
-//    public ResponseEntity<ProdReadResponseDTO> getProductDetail(@PathVariable Long id) {
-//        ProdReadResponseDTO product = customerService.findById(id);
-//        if (product.getMainPicture() != null) {
-//            String mainPicturePath = product.getMainPicture().replace("\\", "/");
-//            product.setMainPicture(mainPicturePath);
-//        }
-//        return ResponseEntity.ok(product);
-//    }
-
     // customer 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail/{id}")
     public String detail(HttpSession session, @PathVariable Long id, Model model) {
@@ -110,7 +98,6 @@ public class CustomerViewController {
         // 상세 페이지 HTML 파일로 반환
         return "detail";
     }
-
 
     @GetMapping("/product_list")
     public String productList(@RequestParam(defaultValue = "0") int page, Model model) {

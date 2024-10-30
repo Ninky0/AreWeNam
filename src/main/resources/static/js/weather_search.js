@@ -3,19 +3,52 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 let regions = [];
+let temperature=0.0;
 
 // 페이지 로드 시 CSV 데이터를 서버에서 받아옴
 window.onload = function () {
-    // 지역 데이터 로드
     fetch('/home/weather/regions')
         .then(response => response.json())
         .then(data => {
             regions = data;
             populateRegions();
-            submitSearchForm(); // 페이지 로딩 시 날씨 정보 로드
+            return submitSearchForm(); // Promise 반환을 위해 submitSearchForm 수정 필요
         })
-        .catch(error => console.error('Error fetching regions:', error));
+        .then(() => {
+            fetchRecommendedProducts(); // 온도 설정 후 추천 상품 정보 로드
+        })
+        .catch(error => console.error('Error:', error));
 };
+
+function fetchRecommendedProducts() {
+    fetch('/home/recommend/temp?temperature=' + getCurrentTemperature())
+        .then(response => response.json()) // JSON 응답 수신
+        .then(products => {
+            const slider = document.getElementById('productSlider');
+            slider.innerHTML = ''; // 기존 내용 초기화
+            products.forEach(product => {
+                slider.innerHTML += `
+                    <div class="bn2-product-item">
+                        <a href="/user/product/detail/${product.id}">
+                            <img src="${product.mainPicturePath}" alt="${product.name}">
+                        </a>
+                        <p class="bn2-title">${product.name}</p>
+                        <p class="bn2-price">${product.price}</p>
+                    </div>
+                `;
+            });
+        })
+        .catch(error => console.error('Error fetching recommended products:', error));
+}
+
+
+function getCurrentTemperature() {
+    return temperature;
+}
+function setTemperature(temperatureP){
+    temperature = temperatureP;
+}
+
 
 // 대범위 지역을 <select> 태그에 추가하고 기본값 설정
 function populateRegions() {
@@ -62,47 +95,11 @@ function submitSearchForm() {
     const selectedRegion = document.getElementById('region').value;
     const selectedSubRegion = document.getElementById('region2').value;
 
-    fetch(`/home/weather/search?parent=${selectedRegion}&child=${selectedSubRegion}`)
+    return fetch(`/home/weather/search?parent=${selectedRegion}&child=${selectedSubRegion}`) // fetch의 Promise 반환
         .then(response => response.json())
         .then(data => {
-            const weatherTextDiv = document.getElementById('weather-text');
-            const weatherIconImg = document.querySelector('.weather-icon-container img');
-            weatherTextDiv.innerHTML = ''; // 기존 내용 제거
-
-            if (data && data.description && data.temperature) {
-                const temperatureText = `${data.temperature}°C`;
-                const weatherDescription = data.description;
-
-                // 온도 표시
-                const temperatureP = document.createElement('p');
-                temperatureP.textContent = temperatureText;
-                weatherTextDiv.appendChild(temperatureP);
-
-                // 날씨 상태에 따른 아이콘 이미지 변경
-                switch (weatherDescription) {
-                    case '맑음':
-                        weatherIconImg.src = '/images/sunny.png';
-                        break;
-                    case '구름 많음':
-                        weatherIconImg.src = '/images/cloudy.png';
-                        break;
-                    case '비':
-                        weatherIconImg.src = '/images/rainy.png';
-                        break;
-                    case '눈':
-                        weatherIconImg.src = '/images/snowy.png';
-                        break;
-                    case '흐림':
-                        weatherIconImg.src = '/images/overcast.png';
-                        break;
-                    default:
-                        weatherIconImg.src = '/images/cloudy.png'; // 기본 아이콘
-                }
-
-                weatherIconImg.alt = "Weather Icon: " + weatherDescription; // alt 속성 업데이트
-            } else {
-                weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
-            }
+            updateWeatherUI(data); // UI 업데이트 및 온도 설정 함수
+            setTemperature(data.temperature); // 온도 설정
         })
         .catch(error => {
             console.error('Error fetching weather:', error);
@@ -110,6 +107,46 @@ function submitSearchForm() {
         });
 }
 
+function updateWeatherUI(data) {
+    const weatherTextDiv = document.getElementById('weather-text');
+    const weatherIconImg = document.querySelector('.weather-icon-container img');
+    weatherTextDiv.innerHTML = ''; // 기존 내용 제거
+
+    if (data && data.description && data.temperature) {
+        const temperatureText = `${data.temperature}°C`;
+        const weatherDescription = data.description;
+
+        // 온도 표시
+        const temperatureP = document.createElement('p');
+        temperatureP.textContent = temperatureText;
+        weatherTextDiv.appendChild(temperatureP);
+
+        // 날씨 상태에 따른 아이콘 이미지 변경
+        switch (weatherDescription) {
+            case '맑음':
+                weatherIconImg.src = '/images/sunny.png';
+                break;
+            case '구름 많음':
+                weatherIconImg.src = '/images/cloudy.png';
+                break;
+            case '비':
+                weatherIconImg.src = '/images/rainy.png';
+                break;
+            case '눈':
+                weatherIconImg.src = '/images/snowy.png';
+                break;
+            case '흐림':
+                weatherIconImg.src = '/images/overcast.png';
+                break;
+            default:
+                weatherIconImg.src = '/images/cloudy.png'; // 기본 아이콘
+        }
+
+        weatherIconImg.alt = "Weather Icon: " + weatherDescription; // alt 속성 업데이트
+    } else {
+        weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
+    }
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~아래 코드는 안쓰는데 값 보려고 넣어둔거에요~~~~~~~~~~~~~~~~~~~~~~~
 
