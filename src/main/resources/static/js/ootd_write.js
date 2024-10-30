@@ -105,7 +105,7 @@ function updatePagination(data) {
 function selectProduct(productId) {
     document.getElementById('product_id').value = productId;
 
-    fetch(`/user/product/detail/${productId}`)
+    fetch(`/user/product/ootd_detail/${productId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('네트워크 응답에 문제가 있습니다.');

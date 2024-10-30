@@ -26,7 +26,7 @@ public class WebSecurityConfig {
                                 ).permitAll() // 정적 리소스 접근 허용
                                 .requestMatchers(
                                         "/user/login", "/user/join", "/join", "/home/**", "/user/ootd_list",
-                                        "/user/product/search", "/user/api/ootd-images" // OOTD 목록 및 이미지 API 접근 허용
+                                        "/user/product/search","/user/product/detail/**","/user/product_list", "/user/api/ootd-images" // OOTD 목록 및 이미지 API 접근 허용
                                 ).permitAll()
                                 .requestMatchers(
                                         "/admin/product/list", "/admin/product/upload", "/admin/**"

@@ -23,9 +23,11 @@ public class Product {
     private String quantity;
     private String category;
     private Integer season;
+
+    @Getter
     private Integer temperature;
 
-    // 추가된 필드: mainPicturePath
+    @Getter
     private String mainPicturePath;
 
     @Builder
@@ -53,5 +55,20 @@ public class Product {
                 .season(season)
                 .temperature(temperature)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", mainPicturePath='" + mainPicturePath + '\'' +
+                ", description='" + description + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", category='" + category + '\'' +
+                ", season=" + season +
+                ", temperature=" + temperature +
+                '}';
     }
 }

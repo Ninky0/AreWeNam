@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.config.security.CustomUserDetails;
 import org.example.shoppingweather.dto.UrlResponseDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.service.CustomerService;
@@ -161,5 +162,17 @@ public class CustomerApiController {
             response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    // 상품 상세 정보 JSON 형식으로 제공
+    @GetMapping("/product/ootd_detail/{id}")
+    @ResponseBody
+    public ResponseEntity<ProdReadResponseDTO> getProductDetail(@PathVariable Long id) {
+        ProdReadResponseDTO product = customerService.findById(id);
+        if (product.getMainPicture() != null) {
+            String mainPicturePath = product.getMainPicture().replace("\\", "/");
+            product.setMainPicture(mainPicturePath);
+        }
+        return ResponseEntity.ok(product);
     }
 }

@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -22,5 +25,10 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id))
                 .toProdReadResponseDTO();
+    }
+
+    public List<Product> findByTemperatureIndex(int tempIndex) {
+        List<Product> products = productRepository.findByTemperature(tempIndex);
+        return products;
     }
 }
