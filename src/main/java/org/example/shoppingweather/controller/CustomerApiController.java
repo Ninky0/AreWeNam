@@ -2,6 +2,7 @@ package org.example.shoppingweather.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.config.security.CustomUserDetails;
 import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
@@ -9,6 +10,8 @@ import org.example.shoppingweather.service.CustomerService;
 import org.example.shoppingweather.service.WeatherService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +20,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -64,6 +69,52 @@ public class CustomerApiController {
             );
         }
     }
+
+    @DeleteMapping("/shoppingcart")
+    public ResponseEntity<String> deleteFromCart(@RequestBody List<Map<String, Object>> selectedProducts) {
+
+        try {
+            Long customerId = getCurrentCustomerId();
+
+            if (selectedProducts.isEmpty()) {
+                return ResponseEntity.badRequest().body("선택된 제품이 없습니다.");
+            }
+
+            if (selectedProducts.isEmpty() || selectedProducts.stream().anyMatch(product -> product.get("productId") == null)) {
+                return ResponseEntity.badRequest().body("유효하지 않은 제품 ID가 포함되어 있습니다.");
+            }
+
+            List<Long> productIds = selectedProducts.stream()
+                    .map(product -> Long.parseLong(product.get("productId").toString()))
+                    .toList();
+            customerService.removeFromCart(customerId, productIds);
+            return ResponseEntity.ok("선택한 제품이 삭제되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace(); // 예외 로그 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        }
+    }
+
+
+    private Long getCurrentCustomerId() {
+        // SecurityContext에서 현재 인증 정보를 가져옵니다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증된 사용자가 있는지 확인합니다.
+        if (authentication != null && authentication.isAuthenticated()) {
+            // 사용자 정보를 가져옵니다. (예: UserDetails 객체에서 ID를 가져오는 방식)
+            // 여기서는 UserDetails 인터페이스를 구현한 CustomUserDetails를 가정합니다.
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+            // 사용자 ID를 반환합니다.
+            // Customer 객체에서 ID를 가져옴
+            return userDetails.getCustomer().getId();
+        }
+
+        // 인증되지 않은 경우, 예외를 던지거나 null을 반환합니다.
+        throw new RuntimeException("사용자가 인증되지 않았습니다");
+    }
+
 
     @PostMapping("/ootd_write")
     public ResponseEntity<Map<String, String>> createPost(
