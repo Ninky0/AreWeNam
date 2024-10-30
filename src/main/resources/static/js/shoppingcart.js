@@ -7,68 +7,68 @@ $(document).ready(function() {
         });
     });
 
-    // 각 체크박스 클릭 시 전체 선택 체크박스 상태 업데이트
-    const checkboxes = document.querySelectorAll('.checkbox:not(#selectAll)');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            document.getElementById('selectAll').checked = allChecked;
-        });
-    });
+    // // 각 체크박스 클릭 시 전체 선택 체크박스 상태 업데이트
+    // const checkboxes = document.querySelectorAll('.checkbox:not(#selectAll)');
+    // checkboxes.forEach(checkbox => {
+    //     checkbox.addEventListener('change', function() {
+    //         const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    //         document.getElementById('selectAll').checked = allChecked;
+    //     });
+    // });
 
-    // 모달 열기 및 닫기 기능
-    const optionChangeBtns = document.querySelectorAll('.option-change-btn');
-    const modal = document.getElementById('optionModal');
-    const closeModal = document.querySelector('.close');
-    const saveChangesBtn = document.getElementById('saveChanges');
-
-    optionChangeBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const selectedRows = Array.from(document.querySelectorAll('tbody tr'))
-                .filter(row => row.querySelector('.checkbox').checked);
-
-            if (selectedRows.length === 0) {
-                alert('옵션을 변경할 상품을 선택해 주세요.');
-                return;
-            }
-
-            // 선택된 행의 첫 번째 행에서 현재 옵션 정보를 불러오기
-            const firstRow = selectedRows[0];
-            const seasonDisplay = firstRow.querySelector('.seasonDisplay').textContent;
-
-            // 모달에 현재 옵션 설정
-            document.getElementById('season').value = seasonDisplay;
-
-            // 모달 표시
-            modal.style.display = 'block';
-        });
-    });
-
-    closeModal.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    }
-
-    saveChangesBtn.addEventListener('click', () => {
-        const season = document.getElementById('season').value;
-
-        // 모든 선택된 행의 상품 정보를 업데이트
-        const selectedRows = Array.from(document.querySelectorAll('tbody tr'))
-            .filter(row => row.querySelector('.checkbox').checked);
-
-        selectedRows.forEach(row => {
-            const seasonDisplay = row.querySelector('.seasonDisplay');
-            seasonDisplay.textContent = season;
-        });
-
-        // 모달 닫기
-        modal.style.display = 'none';
-    });
+    // // 모달 열기 및 닫기 기능
+    // const optionChangeBtns = document.querySelectorAll('.option-change-btn');
+    // const modal = document.getElementById('optionModal');
+    // const closeModal = document.querySelector('.close');
+    // const saveChangesBtn = document.getElementById('saveChanges');
+    //
+    // optionChangeBtns.forEach((btn) => {
+    //     btn.addEventListener('click', () => {
+    //         const selectedRows = Array.from(document.querySelectorAll('tbody tr'))
+    //             .filter(row => row.querySelector('.checkbox').checked);
+    //
+    //         if (selectedRows.length === 0) {
+    //             alert('옵션을 변경할 상품을 선택해 주세요.');
+    //             return;
+    //         }
+    //
+    //         // 선택된 행의 첫 번째 행에서 현재 옵션 정보를 불러오기
+    //         const firstRow = selectedRows[0];
+    //         const seasonDisplay = firstRow.querySelector('.seasonDisplay').textContent;
+    //
+    //         // 모달에 현재 옵션 설정
+    //         document.getElementById('season').value = seasonDisplay;
+    //
+    //         // 모달 표시
+    //         modal.style.display = 'block';
+    //     });
+    // });
+    //
+    // closeModal.addEventListener('click', () => {
+    //     modal.style.display = 'none';
+    // });
+    //
+    // window.onclick = function(event) {
+    //     if (event.target == modal) {
+    //         modal.style.display = 'none';
+    //     }
+    // }
+    //
+    // saveChangesBtn.addEventListener('click', () => {
+    //     const season = document.getElementById('season').value;
+    //
+    //     // 모든 선택된 행의 상품 정보를 업데이트
+    //     const selectedRows = Array.from(document.querySelectorAll('tbody tr'))
+    //         .filter(row => row.querySelector('.checkbox').checked);
+    //
+    //     selectedRows.forEach(row => {
+    //         const seasonDisplay = row.querySelector('.seasonDisplay');
+    //         seasonDisplay.textContent = season;
+    //     });
+    //
+    //     // 모달 닫기
+    //     modal.style.display = 'none';
+    // });
 
     // 페이지 로드 시 총합 및 초기 가격 업데이트
     document.querySelectorAll('tbody tr').forEach(row => {
@@ -141,10 +141,11 @@ $(document).ready(function() {
 
 
     $('.delete-btn').click(function() {
-        const customerId = $('#customerId').val(); // customerId 가져오기
         const selectedRows = $('.checkbox:checked').map(function() {
+            const productId = $(this).val(); // value 속성에서 제품 ID 가져오기
+            console.log("productId 값:", productId); // 제품 ID 출력
             return {
-                productId: $(this).closest('tr').data('product-id') // data 속성에서 제품 ID 가져오기
+                productId: productId // 가져온 productId를 객체에 저장
             };
         }).get(); // jQuery 객체를 배열로 변환
 
@@ -159,9 +160,18 @@ $(document).ready(function() {
     });
 
     function deleteSelectedProducts(customerId, selectedRows) {
+        // 전송할 데이터 확인
+        console.log("전송되는 데이터:", JSON.stringify(selectedRows));
+        console.log("선택된 행:", selectedRows);
+
+        // 각 행의 productId 로그 출력
+        selectedRows.forEach(row => {
+            console.log("productId 값:", row.productId);
+        });
+
         $.ajax({
             type: 'DELETE',
-            url: '/user/shoppingcart', // 템플릿 리터럴 사용
+            url: '/user/shoppingcart',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(selectedRows), // 선택된 상품 ID JSON 형식으로 변환
             dataType: 'json',
@@ -169,11 +179,12 @@ $(document).ready(function() {
                 alert('선택된 제품이 삭제되었습니다.');
                 location.reload();
             },
-            error: function(error) {
-                console.error('오류 발생:', error);
+            error: function(xhr, status, error) {
+                console.error('오류 발생:', xhr.status, xhr.responseText);
                 alert('제품 삭제 중 오류가 발생했습니다.');
             }
         });
     }
+
 
 });

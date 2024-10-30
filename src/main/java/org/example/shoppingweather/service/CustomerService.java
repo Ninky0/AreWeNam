@@ -1,5 +1,6 @@
 package org.example.shoppingweather.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
@@ -165,6 +166,45 @@ public class CustomerService {
         }
 
         return products;
+    }
+
+    public void removeFromCart(Long customerId, List<Long> productIds) {
+        // 고객 ID로 장바구니 찾기
+        Cart cart = cartRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
+
+        // JSON 형식의 productList를 Map으로 변환
+        Map<Long, Integer> productMap = parseProductList(cart.getProductList());
+
+        // 제품 삭제 로직
+        for (Long productId : productIds) {
+            productMap.remove(productId);
+        }
+
+        // 업데이트된 제품 목록을 다시 JSON 문자열로 변환
+        String updatedProductList = convertMaptoJson(productMap);
+        cart.setProductList(updatedProductList);
+
+        // 업데이트된 장바구니를 저장
+        cartRepository.save(cart);
+    }
+
+    // JSON 문자열을 Map으로 변환하는 메서드
+    private Map<Long, Integer> parseProductList(String productList) {
+        try {
+            return objectMapper.readValue(productList, objectMapper.getTypeFactory().constructMapType(HashMap.class, Long.class, Integer.class));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("제품 목록을 파싱하는 중 오류가 발생했습니다.", e);
+        }
+    }
+
+    // 위에꺼 반대
+    private String convertMaptoJson(Map<Long, Integer> productMap) {
+        try {
+            return objectMapper.writeValueAsString(productMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("제품 목록을 JSON으로 변환하는 중 오류가 발생했습니다.", e);
+        }
     }
 
     // OOTD 게시글의 이미지 목록을 DTO로 가져오는 메서드

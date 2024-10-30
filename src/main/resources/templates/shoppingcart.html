@@ -41,7 +41,7 @@
             <tbody>
             <tr th:each="product, iterStat : ${products}">
                 <td class="th_1">
-                    <input type="checkbox" class="checkbox" th:value="${product.id}">
+                    <input type="checkbox" class="checkbox" th:value="${product.id}" th:data-product-id="${product.id}">
                 </td>
                 <td class="th_1" th:text="${iterStat.count}"></td>
                 <td class="product-info">
