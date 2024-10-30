@@ -1,6 +1,7 @@
 package org.example.shoppingweather.repository;
 
 import org.example.shoppingweather.dto.weather.WeatherId;
+import org.example.shoppingweather.dto.weather.WeatherResponse;
 import org.example.shoppingweather.entity.Weather;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

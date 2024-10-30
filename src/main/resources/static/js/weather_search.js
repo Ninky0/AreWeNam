@@ -62,44 +62,56 @@ function submitSearchForm() {
     const selectedRegion = document.getElementById('region').value;
     const selectedSubRegion = document.getElementById('region2').value;
 
-    const selectedRegionData = regions.find(item => item.regionParent === selectedRegion && item.regionChild === selectedSubRegion);
+    fetch(`/home/weather/search?parent=${selectedRegion}&child=${selectedSubRegion}`)
+        .then(response => response.json())
+        .then(data => {
+            const weatherTextDiv = document.getElementById('weather-text');
+            const weatherIconImg = document.querySelector('.weather-icon-container img');
+            weatherTextDiv.innerHTML = ''; // 기존 내용 제거
 
-    if (selectedRegionData) {
-        const nx = selectedRegionData.nx;
-        const ny = selectedRegionData.ny;
+            if (data && data.description && data.temperature) {
+                const temperatureText = `${data.temperature}°C`;
+                const weatherDescription = data.description;
 
-        // 날씨 API 요청
-        fetch(`/home/weather/search?nx=${nx}&ny=${ny}`)
-            .then(response => response.json())
-            .then(data => {
-                // weather-text 요소를 비움
-                const weatherTextDiv = document.getElementById('weather-text');
-                weatherTextDiv.innerHTML = ''; // 기존 내용 제거
+                // 온도 표시
+                const temperatureP = document.createElement('p');
+                temperatureP.textContent = temperatureText;
+                weatherTextDiv.appendChild(temperatureP);
 
-                // 날씨 데이터가 존재하는지 확인
-                if (data && data.response && data.response.body && data.response.body.items && data.response.body.items.item) {
-                    const weatherItems = data.response.body.items.item;
-
-                    // 각 날씨 항목을 사용자 친화적인 텍스트로 변환하여 출력
-                    weatherItems.forEach(item => {
-                        const friendlyText = convertCategoryName(item.category, item.obsrValue);
-                        const p = document.createElement('p');
-                        p.textContent = friendlyText;
-                        if(item.category==='TMP'||item.category==='T1H'){
-                            weatherTextDiv.appendChild(p);
-                        }
-                    });
-
-                } else {
-                    weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
+                // 날씨 상태에 따른 아이콘 이미지 변경
+                switch (weatherDescription) {
+                    case '맑음':
+                        weatherIconImg.src = '/images/sunny.png';
+                        break;
+                    case '구름 많음':
+                        weatherIconImg.src = '/images/cloudy.png';
+                        break;
+                    case '비':
+                        weatherIconImg.src = '/images/rainy.png';
+                        break;
+                    case '눈':
+                        weatherIconImg.src = '/images/snowy.png';
+                        break;
+                    case '흐림':
+                        weatherIconImg.src = '/images/overcast.png';
+                        break;
+                    default:
+                        weatherIconImg.src = '/images/cloudy.png'; // 기본 아이콘
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching weather:', error);
-                document.getElementById('weather-text').textContent = '날씨 정보를 불러오는 중 오류가 발생했습니다.';
-            });
-    }
+
+                weatherIconImg.alt = "Weather Icon: " + weatherDescription; // alt 속성 업데이트
+            } else {
+                weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching weather:', error);
+            document.getElementById('weather-text').textContent = '날씨 정보를 불러오는 중 오류가 발생했습니다.';
+        });
 }
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~아래 코드는 안쓰는데 값 보려고 넣어둔거에요~~~~~~~~~~~~~~~~~~~~~~~
 
 // 각 category 값을 사용자 친화적인 텍스트로 변환하는 함수
 function convertCategoryName(category, value) {

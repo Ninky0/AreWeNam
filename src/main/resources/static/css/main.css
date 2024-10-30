@@ -195,7 +195,7 @@ h2.sub_title {
     position: absolute;
     top: 6%;
     left: 100%;
-    transform: translate(-33%, -50%);
+    transform: translate(-20%, -20%);
     font-size: 50px;
     font-weight: bold;
     margin-left: 20px;

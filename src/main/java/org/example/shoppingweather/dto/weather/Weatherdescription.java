@@ -2,7 +2,8 @@ package org.example.shoppingweather.dto.weather;
 
 public enum Weatherdescription {
     CLEAR("맑음"),
-    CLOUDY("흐림"),
+    CLOUDY("구름많음"),
+    OVERCAST("흐림"),
     RAIN("비"),
     SNOW("눈"),
     SHOWER("소나기");
@@ -22,16 +23,18 @@ public enum Weatherdescription {
             case "1":
                 return CLEAR; // 맑음
             case "3":
-                return CLOUDY; // 흐림
+                return CLOUDY;  //구름 많음
+            case "4":
+                return OVERCAST; // 흐림
             default:
-                return CLOUDY; // 기본값으로 흐림
+                return CLOUDY; // 기본값으로 구름 많음
         }
     }
 
     public static Weatherdescription fromPtyValue(String ptyValue) {
         switch (ptyValue) {
             case "0":
-                return CLOUDY; // 흐림
+                return CLOUDY; // 구름 많음
             case "1":
                 return RAIN;   // 비
             case "3":

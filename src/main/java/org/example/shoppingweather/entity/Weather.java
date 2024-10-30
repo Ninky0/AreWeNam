@@ -44,8 +44,6 @@ public class Weather {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul") // 서울 시간으로 연월일시분초
     private LocalDateTime fetchedAt;  // 데이터 수집 시각
 
-
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -57,9 +55,6 @@ public class Weather {
     public void setFetchedAt(LocalDateTime fetchedAt) {
         this.fetchedAt = fetchedAt;
     }
-
-
-
 
 
     @Builder
@@ -78,7 +73,8 @@ public class Weather {
                 .regionChild(id.getRegionChild())
                 .nx(nx)
                 .ny(ny)
-                .temperature(temperature)
+                .description(this.description)
+                .temperature(this.temperature)
                 .fetchedAt(fetchedAt)
                 .build();
     }
