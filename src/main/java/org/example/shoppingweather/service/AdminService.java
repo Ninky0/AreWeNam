@@ -32,11 +32,6 @@ public class AdminService {
                 .map(Product::toProdReadResponseDTO);
     }
 
-    public ProdReadResponseDTO findById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id))
-                .toProdReadResponseDTO();
-    }
     public Long save(ProdUploadRequestDTO dto) throws IOException {
         String mainPicturePath = saveFile(dto.getMainPicture());
         Product product = dto.toProduct();

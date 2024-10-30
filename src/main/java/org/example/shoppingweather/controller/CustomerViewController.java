@@ -9,11 +9,12 @@ import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.CartRepository;
 import org.example.shoppingweather.service.AdminService;
-import org.example.shoppingweather.service.CartService;
 import org.example.shoppingweather.service.CustomerService;
+import org.example.shoppingweather.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +33,9 @@ import java.util.*;
 public class CustomerViewController {
 
     private final CustomerService customerService;
-    private final CartRepository cartRepository;
-    private final CartService cartService;
     private final AdminService adminService;
+    private final CartRepository cartRepository;
+    private final ProductService productService;
 
     @GetMapping("/join")
     public String signUp() {
@@ -48,17 +49,24 @@ public class CustomerViewController {
 
     @GetMapping("/shoppingcart")
     public String cart(HttpSession session, Model model) {
+        // 세션에서 고객 정보 가져오기
         Customer customer = customerService.findBySession(session);
-        model.addAttribute("customer", customer);
+        if (customer == null) {
+            // 고객 정보가 없는 경우, 로그인 페이지로 리다이렉트
+            return "redirect:/login";
+        }
 
         Optional<Cart> optionalCart = cartRepository.findByCustomerId(customer.getId());
         if (optionalCart.isPresent()) {
             Cart cart = optionalCart.get();
-            List<Product> products = cartService.getProductsFromCart(cart);
+            List<Product> products = customerService.getProductsFromCart(cart);
             model.addAttribute("products", products);
             model.addAttribute("cart", cart);
         } else {
-            model.addAttribute("products", new ArrayList<>());
+            // 장바구니가 비어있는 경우, 빈 카트 객체 생성
+            Cart emptyCart = Cart.createEmptyCartForCustomer(customer);
+            model.addAttribute("cart", emptyCart); // 빈 카트 객체를 모델에 추가
+            model.addAttribute("products", new ArrayList<Product>()); // 빈 제품 목록 추가
         }
 
         return "shoppingcart";
@@ -69,17 +77,64 @@ public class CustomerViewController {
         return "ordercomplete";
     }
 
-    // 상품 상세 정보 JSON 형식으로 제공
+//    // 상품 상세 정보 JSON 형식으로 제공
+//    @GetMapping("/product/detail/{id}")
+//    @ResponseBody
+//    public ResponseEntity<ProdReadResponseDTO> getProductDetail(@PathVariable Long id) {
+//        ProdReadResponseDTO product = customerService.findById(id);
+//        if (product.getMainPicture() != null) {
+//            String mainPicturePath = product.getMainPicture().replace("\\", "/");
+//            product.setMainPicture(mainPicturePath);
+//        }
+//        return ResponseEntity.ok(product);
+//    }
+
+    // customer 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail/{id}")
-    @ResponseBody
-    public ResponseEntity<ProdReadResponseDTO> getProductDetail(@PathVariable Long id) {
-        ProdReadResponseDTO product = customerService.findById(id);
-        if (product.getMainPicture() != null) {
-            String mainPicturePath = product.getMainPicture().replace("\\", "/");
-            product.setMainPicture(mainPicturePath);
+    public String detail(HttpSession session, @PathVariable Long id, Model model) {
+        // id로 상품 정보 찾기
+        ProdReadResponseDTO product = productService.findById(id);
+
+        // mainPicture 경로에서 역슬래시(`\`)를 슬래시(`/`)로 변경
+        if (product.getMainPicturePath() != null) {
+            String mainPicturePath = product.getMainPicturePath().replace("\\", "/");
+            product.setMainPicturePath(mainPicturePath); // 경로 수정 후 다시 설정
         }
-        return ResponseEntity.ok(product);
+
+        Customer customer = customerService.findBySession(session);
+
+        // 수정된 product 객체를 모델에 추가
+        model.addAttribute("product", product);
+        model.addAttribute("customer",customer);
+
+        // 상세 페이지 HTML 파일로 반환
+        return "detail";
     }
+
+
+    @GetMapping("/product_list")
+    public String productList(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
+
+        Page<ProdReadResponseDTO> productPage = productService.findAll(pageable);
+        List<ProdReadResponseDTO> products = productPage.getContent();
+
+        int totalPages = productPage.getTotalPages();
+        int pageBlock = 10; // 페이지 블록 크기
+        int startPage = (page / pageBlock) * pageBlock;
+        int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
+
+        model.addAttribute("products", products);
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("showPrevious", startPage > 0);
+        model.addAttribute("showNext", endPage < totalPages - 1);
+
+        return "total_list";
+    }
+
 
     @GetMapping("/ootd_list")
     public String ootdList(Model model, Pageable pageable) {

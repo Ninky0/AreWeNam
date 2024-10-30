@@ -27,9 +27,7 @@ weather:
 
 
 schedule:
-  cron: 0 * 9 * * ?  # 매일 실행
+  cron: 0 30 0/3 * * ?  # 매일 3시간마다, 30분에 진행
   use: true           # 사용 여부
 
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
 
