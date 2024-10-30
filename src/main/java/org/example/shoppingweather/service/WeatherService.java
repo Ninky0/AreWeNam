@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Thread.sleep;
+
 @Service
 @RequiredArgsConstructor
 public class WeatherService {
@@ -43,8 +45,9 @@ public class WeatherService {
         int numOfRows = 10;
         int pageNo = 1;
         String dataType = "JSON";
-        String baseDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String baseTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HHmm"));
+        LocalDateTime now = LocalDateTime.now();
+        String baseDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String baseTime = calculateBaseTime(now.getHour());
 
         try {
             String weatherData = weatherClient.getWeatherData(
@@ -63,27 +66,34 @@ public class WeatherService {
                     String description = "정보 없음"; // 기본값 설정
 
                     for (WeatherResponse.Response.Body.Items.Item item : items) {
-                        if ("T1H".equals(item.getCategory())) {
+                        if ("T1H".equals(item.getCategory())||"TMP".equals(item.getCategory())) {
                             temperature = Double.parseDouble(item.getObsrValue());
                         } else if ("SKY".equals(item.getCategory())) {
                             String skyValue = item.getObsrValue();
-                            // 기본값으로 흐림을 설정
-                            description = "정보 없음";
+                            // 기본값으로 구름 많음을 설정
+                            description = "구름 많음";
 
                             if ("1".equals(skyValue)) {
                                 description = "맑음"; // 맑음
+                            }else if ("3".equals(skyValue)) {
+                                description = "구름 많음";
+                            }else if ("4".equals(skyValue)) {
+                                description = "흐림";
                             }
                         } else if ("PTY".equals(item.getCategory())) {
                             String ptyValue = item.getObsrValue();
                             // PTY 값에 따라 날씨 상태를 설정
                             if ("0".equals(ptyValue)) {
                                 // 비가 아닌 경우 (소나기 등)
-                                if (!description.equals("맑음")) {
-                                    description = "흐림"; // 기본적으로 흐림
+                                if (!(description.equals("맑음")||description.equals("흐림"))) {
+                                    description = "구름 많음"; // 기본적으로 구름 많음
                                 }
                             } else if ("1".equals(ptyValue)) {
                                 description = "비"; // 비
-                            } else if ("3".equals(ptyValue)) {
+                            } else if ("2".equals(ptyValue)) {
+                                description = "비/눈";
+                            }
+                            else if ("3".equals(ptyValue)) {
                                 description = "눈"; // 눈
                             } else if ("4".equals(ptyValue)) {
                                 description = "소나기"; // 소나기
@@ -98,6 +108,10 @@ public class WeatherService {
                     // 최종 설정:  null이 아닐 때 사용
                     response.setTemperature(temperature);
                     response.setDescription(description); // 이미 기본값이 설정되어 있으므로 이 줄만으로 충분함
+
+                    response.setNx(nx);
+                    response.setNy(ny);
+                    response.setFetchedAt(now);
                 }
             }
             return response;
@@ -106,6 +120,19 @@ public class WeatherService {
         }
     }
 
+    private String calculateBaseTime(int hour) {
+        if (hour >= 9 && hour<12) {
+            return "0900";
+        } else if(hour >= 12 && hour<15){
+            return "1200";
+        } else if(hour>=15 && hour<18){
+            return "1500";
+        }else if(hour>=18 && hour<21){
+            return "1800";
+        }else{
+            return "2100";
+        }
+    }
 
     public List<Region> getRegionsFromCSV() {
         List<Region> regionList = new ArrayList<>();
@@ -142,19 +169,13 @@ public class WeatherService {
         return regionList;
     }
 
-
     public void saveWeatherDataFromCSV() {
         List<Region> regions = getRegionsFromCSV();
         for (Region region : regions) {
             try {
                 WeatherResponse weatherResponse = getWeatherData(region.getNx(), region.getNy());
-                System.out.println("Fetched At from WeatherResponse: " + weatherResponse.getFetchedAt());
-
-                LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-                LocalDateTime fetchedAt = now.plusHours(9).truncatedTo(ChronoUnit.SECONDS);
-//                ZonedDateTime zonedFetchedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-//                LocalDateTime fetchedAt = zonedFetchedAt.plusHours(9).truncatedTo(ChronoUnit.SECONDS).toLocalDateTime(); // 초 단위로 잘라냄
-
+                System.out.println("날씨 응답 : "+weatherResponse);
+                System.out.println("Fetched At Time: " + weatherResponse.getFetchedAt());
 
                 // 복합 키를 생성
                 WeatherId weatherId = new WeatherId(region.getRegionParent(), region.getRegionChild());
@@ -168,9 +189,10 @@ public class WeatherService {
                     Weather weatherToUpdate = existingWeather.get();
                     weatherToUpdate.setTemperature(weatherResponse.getTemperature());
                     weatherToUpdate.setDescription(weatherResponse.getDescription() != null ? weatherResponse.getDescription() : "정보 없음");
-                    weatherToUpdate.setFetchedAt(fetchedAt);
+                    weatherToUpdate.setFetchedAt(LocalDateTime.now());
 
                     weatherRepository.save(weatherToUpdate);
+                    sleep(700);
                 } else {
                     // 데이터가 존재하지 않을 경우 새로 저장
                     Weather newWeather = Weather.builder()
@@ -179,22 +201,32 @@ public class WeatherService {
                             .ny(region.getNy())
                             .temperature(weatherResponse.getTemperature())
                             .description(weatherResponse.getDescription() != null ? weatherResponse.getDescription() : "정보 없음")
-                            .fetchedAt(fetchedAt) // 현재 시각 설정
+                            .fetchedAt(LocalDateTime.now()) // 현재 시각 설정
                             .build();
 
                     weatherRepository.save(newWeather); // 새로운 객체 저장
                 }
 
-
-                System.out.println("API Response: " + weatherResponse);
                 System.out.println("Fetched Temperature: " + weatherResponse.getTemperature());
                 System.out.println("Fetched Description: " + weatherResponse.getDescription());
-                System.out.println("Fetched At time: " +  weatherResponse.getFetchedAt());
-
 
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("API Response: " + e.getMessage());
             }
+        }
+    }
+
+    public WeatherResponse selectWeatherData(String parent, String child) {
+        WeatherId weatherId = new WeatherId(parent, child);
+        Optional<Weather> existingWeather = weatherRepository.findById(weatherId);
+
+        if (existingWeather.isPresent()) {
+            // System.out.println(existingWeather.get().getDescription()+" 그리고 "+existingWeather.get().getTemperature());
+            return existingWeather.get().toWeatherResponse();
+        } else {
+            // 적절한 예외 처리 또는 기본값 반환
+            throw new RuntimeException("No weather data available for the specified region.");
         }
     }
 }

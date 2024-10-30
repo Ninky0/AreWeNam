@@ -33,8 +33,8 @@ public class HomeViewController {
     }
 
     @GetMapping("/weather/search")
-    public ResponseEntity searchWeather(@RequestParam int nx, @RequestParam int ny) {
-        WeatherResponse weather = weatherService.getWeatherData(nx, ny);
+    public ResponseEntity searchWeather(@RequestParam String parent, @RequestParam String child) {
+        WeatherResponse weather = weatherService.selectWeatherData(parent, child);
         return ResponseEntity.ok(weather);
     }
 

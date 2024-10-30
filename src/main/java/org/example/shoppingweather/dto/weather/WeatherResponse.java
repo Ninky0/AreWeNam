@@ -29,6 +29,7 @@ public class WeatherResponse {
                 private List<Item> item;
 
                 @Getter
+                @Setter
                 public static class Item {
                     private String baseDate;
                     private String baseTime;

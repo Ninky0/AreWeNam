@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto;
+package org.example.shoppingweather.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,5 @@ public class SchedulerConfiguration {
             log.error("Error fetching weather data: ", e);
         }
     }
-
 
 }
