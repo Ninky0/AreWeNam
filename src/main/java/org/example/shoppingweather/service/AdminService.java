@@ -27,7 +27,16 @@ import java.util.stream.Collectors;
 public class AdminService {
     private static final Logger LOGGER = Logger.getLogger(AdminService.class.getName());
     private final ProductRepository productRepository;
+    public Page<ProdReadResponseDTO> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(Product::toProdReadResponseDTO);
+    }
 
+    public ProdReadResponseDTO findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id))
+                .toProdReadResponseDTO();
+    }
     public Long save(ProdUploadRequestDTO dto) throws IOException {
         String mainPicturePath = saveFile(dto.getMainPicture());
         Product product = dto.toProduct();

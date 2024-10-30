@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/ootd_write.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link th:href="@{/css/ootd_write.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <title>상품등록 페이지</title>
+</head>
+<body class="ootd-registration-body">
+<header>
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+<main>
+    <form id="ootdForm" method="POST" enctype="multipart/form-data" action="/user/ootd_write">
+        <h2>게시물 등록</h2>
+        <div class="ootd-row">
+            <div class="ootd-col-md-4">
+                <div class="ootd-image-upload">
+                    <div class="ootd-image-placeholder">
+                        <img id="imagePreview" src="" alt="미리보기" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" />
+                        <span id="placeholderText">권장 이미지 크기 <br>900 × 1000 픽셀</span>
+                    </div>
+                    <input type="file" id="picture" name="picture" accept="image/*" class="ootd-file-input" required onchange="previewMainImage(event)">
+                </div>
+            </div>
+            <div class="ootd-col-md-8">
+                <input type="hidden" id="customerId" name="customerId" th:value="${customerId}">
+                <input type="text" id="tag" name="tag" placeholder="태그입력 ex) #겨울패딩 #추천" class="tag-input" required>
+                <div class="tags-container" id="tagsContainer"></div>
+                <input type="hidden" id="product_id" name="productId" th:value="${productId}">
+                <button id="searchButton" type="button" onclick="openProductSearchModal()">연관 상품 검색<a id="search-product"><i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i></a></button>
+                <!-- 선택된 상품 정보 표시 영역 -->
+                <div id="selectedProductDetails">
+                    <div>
+                        <img id="selectedProductImage" src="">
+                    </div>
+                    <div>
+                        <h3>선택한 상품 정보</h3>
+                        <p>상품명: <span id="selectedProductName"></span></p>
+                        <p>가격: <span id="selectedProductPrice"></span></p>
+                        <p>카테고리: <span id="selectedProductCategory"></span></p>
+                        <p>추천 계절: <span id="selectedProductSeason"></span></p>
+                        <p>추천 온도: <span id="selectedProductTemperature"></span></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <button class="ootd-button" type="button" onclick="submitForm()">상품 등록</button>
+    </form>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+
+<!-- 상품 검색 모달 -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeProductSearchModal()">&times;</span>
+        <h2>상품 목록</h2>
+
+        <!-- Search Box and Button -->
+        <div class="search-container">
+            <input type="text" id="productSearchInput" placeholder="상품명을 입력하세요" />
+            <button onclick="searchProducts()">검색</button>
+        </div>
+
+        <!-- Product List Table -->
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>추천 계절</th>
+                <th>추천 온도</th>
+            </tr>
+            </thead>
+            <tbody id="productList"></tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <ul class="pagination">
+                <!-- 페이지네이션 버튼이 동적으로 추가됩니다 -->
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

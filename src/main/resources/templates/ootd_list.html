@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <link th:href="@{/css/ootd_list.css}" rel="stylesheet">
+    <script th:src="@{/js/ootd_list.js}"></script>
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
+<main>
+    <section class="ootd-items">
+        <h2 class="sub_title">OOTD</h2>
+        <p>코디별 상품 추천</p>
+        <a id="button_black" th:href="@{/user/ootd_write}" type="button">글 등록</a> <!-- 글 등록 버튼 추가 -->
+        <div class="ootd_list">
+            <div class="ootd-item" id="ootd-item-container">
+                <!-- 이미지는 여기에 동적으로 로드됩니다 -->
+            </div>
+        </div>
+        <button id="load-more" type="button">더보기</button>
+
+    </section>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>

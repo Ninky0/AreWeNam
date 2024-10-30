@@ -5,22 +5,12 @@ import org.example.shoppingweather.config.security.CustomAuthenticationSuccessHa
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 @Configuration
 public class WebSecurityConfig {
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(
-                        "/static/**", "/css/**", "/js/**" , "/images/**" ,"/home/index"
-                );
-    }
 
     @Bean
     public SecurityFilterChain filterChain(
@@ -32,14 +22,16 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(
-                                        new AntPathRequestMatcher("/user/login"),
-                                        new AntPathRequestMatcher("/user/join"),
-                                        new AntPathRequestMatcher("/join"),
-                                        new AntPathRequestMatcher("/home/**")
+                                        "/static/**", "/css/**", "/js/**", "/images/**", "/uploads/**"
+                                ).permitAll() // 정적 리소스 접근 허용
+                                .requestMatchers(
+                                        "/user/login", "/user/join", "/join", "/home/**", "/user/ootd_list",
+                                        "/user/product/search", "/user/api/ootd-images" // OOTD 목록 및 이미지 API 접근 허용
                                 ).permitAll()
-                                .requestMatchers("/admin/product/list", "/admin/product/upload", "/admin/**"
-                                ).hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                                .requestMatchers(
+                                        "/admin/product/list", "/admin/product/upload", "/admin/**"
+                                ).hasRole("ADMIN") // 관리자 접근 허용
+                                .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
                 .formLogin(
                         form -> form
@@ -53,7 +45,7 @@ public class WebSecurityConfig {
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/user/login")
                 )
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(AbstractHttpConfigurer::disable); // 테스트 용도에서만 CSRF 비활성화
 
         return http.build();
     }
@@ -62,5 +54,4 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
