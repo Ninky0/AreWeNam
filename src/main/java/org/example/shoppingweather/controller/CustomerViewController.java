@@ -8,9 +8,7 @@ import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.CartRepository;
-import org.example.shoppingweather.service.AdminService;
-import org.example.shoppingweather.service.CustomerService;
-import org.example.shoppingweather.service.ProductService;
+import org.example.shoppingweather.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +34,8 @@ public class CustomerViewController {
     private final AdminService adminService;
     private final CartRepository cartRepository;
     private final ProductService productService;
+    private final CartService cartService;
+    private final OotdService ootdService;
 
     @GetMapping("/join")
     public String signUp() {
@@ -59,7 +59,7 @@ public class CustomerViewController {
         Optional<Cart> optionalCart = cartRepository.findByCustomerId(customer.getId());
         if (optionalCart.isPresent()) {
             Cart cart = optionalCart.get();
-            List<Product> products = customerService.getProductsFromCart(cart);
+            List<Product> products = cartService.getProductsFromCart(cart);
             model.addAttribute("products", products);
             model.addAttribute("cart", cart);
         } else {
@@ -99,7 +99,7 @@ public class CustomerViewController {
         return "detail";
     }
 
-    @GetMapping("/product_list")
+    @GetMapping("/product/list")
     public String productList(@RequestParam(defaultValue = "0") int page, Model model) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
@@ -125,7 +125,7 @@ public class CustomerViewController {
 
     @GetMapping("/ootd_list")
     public String ootdList(Model model, Pageable pageable) {
-        Page<CustomerOotdImageResponseDTO> ootdImages = customerService.getOotdImages(pageable);
+        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
         model.addAttribute("ootdImages", ootdImages);
         return "ootd_list";
     }
@@ -165,7 +165,7 @@ public class CustomerViewController {
                 picturePath = "/uploads/" + fileName;
             }
 
-            customerService.saveOotdPost(customer.getId(), tag, picturePath, productId);
+            ootdService.saveOotdPost(customer.getId(), tag, picturePath, productId);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -179,7 +179,7 @@ public class CustomerViewController {
     @GetMapping("/api/ootd-images")
     public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
         Pageable pageable = PageRequest.of(offset / limit, limit);
-        Page<CustomerOotdImageResponseDTO> ootdImages = customerService.getOotdImages(pageable);
+        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
 
         Map<String, Object> response = new HashMap<>();
         response.put("images", ootdImages.getContent());
@@ -198,7 +198,7 @@ public class CustomerViewController {
         Pageable pageable = PageRequest.of(page, size);
 
         if (name != null && !name.isEmpty()) {
-            return customerService.searchProductsByName(name, pageable);
+            return productService.searchProductsByName(name, pageable);
         } else {
             return adminService.findAll(pageable);
         }
