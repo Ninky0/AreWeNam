@@ -31,4 +31,10 @@ public class ProductService {
         List<Product> products = productRepository.findByTemperature(tempIndex);
         return products;
     }
+
+    // 상품 이름으로 검색하는 메서드 추가
+    public Page<ProdReadResponseDTO> searchProductsByName(String name, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(name, pageable)
+                .map(Product::toProdReadResponseDTO);
+    }
 }

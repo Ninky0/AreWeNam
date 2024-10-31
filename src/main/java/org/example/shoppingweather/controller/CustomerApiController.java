@@ -7,8 +7,7 @@ import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
-import org.example.shoppingweather.service.CustomerService;
-import org.example.shoppingweather.service.WeatherService;
+import org.example.shoppingweather.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +22,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -31,7 +29,9 @@ import java.util.Objects;
 public class CustomerApiController {
 
     private final CustomerService customerService;
-    private final WeatherService weatherService;
+    private final CartService cartService;
+    private final ProductService productService;
+    private final OotdService ootdService;
 
     @PostMapping("/join")
     public ResponseEntity<UrlResponseDTO> signup(@RequestBody SignUpRequestDTO signUpRequestDTO) {
@@ -56,7 +56,7 @@ public class CustomerApiController {
             Long productId = Long.parseLong(payload.get("productId").toString());
             Integer quantity = Integer.parseInt(payload.get("quantity").toString());
 
-            customerService.addProductToCart(customerId, productId, quantity);
+            cartService.addProductToCart(customerId, productId, quantity);
             return ResponseEntity.ok(
                     UrlResponseDTO.builder().message("상품이 장바구니에 추가되었습니다. 장바구니를 확인하시겠습니까?").build()
             );
@@ -88,7 +88,7 @@ public class CustomerApiController {
             List<Long> productIds = selectedProducts.stream()
                     .map(product -> Long.parseLong(product.get("productId").toString()))
                     .toList();
-            customerService.removeFromCart(customerId, productIds);
+            cartService.removeFromCart(customerId, productIds);
             return ResponseEntity.ok("선택한 제품이 삭제되었습니다.");
         } catch (Exception e) {
             e.printStackTrace(); // 예외 로그 출력
@@ -151,7 +151,7 @@ public class CustomerApiController {
             }
 
             // OOTD 게시물 데이터와 이미지 경로를 저장
-            customerService.saveOotdPost(customerId, tag, picturePath, productId);
+            ootdService.saveOotdPost(customerId, tag, picturePath, productId);
 
             response.put("url", "/user/ootd_list");
             response.put("message", "상품 등록이 완료되었습니다.");
@@ -168,7 +168,7 @@ public class CustomerApiController {
     @GetMapping("/product/ootd_detail/{id}")
     @ResponseBody
     public ResponseEntity<ProdReadResponseDTO> getProductDetail(@PathVariable Long id) {
-        ProdReadResponseDTO product = customerService.findById(id);
+        ProdReadResponseDTO product = productService.findById(id);
         if (product.getMainPicture() != null) {
             String mainPicturePath = product.getMainPicture().replace("\\", "/");
             product.setMainPicture(mainPicturePath);
