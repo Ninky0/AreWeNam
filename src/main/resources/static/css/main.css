@@ -89,6 +89,16 @@ main img{
     animation-duration: 1.5s;
 }
 
+a {
+    color: black; /* 링크 색상을 검은색으로 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+a:hover {
+    color: black; /* 호버 시에도 검은색 유지 */
+    text-decoration: none; /* 호버 시에도 밑줄 제거 */
+}
+
 @keyframes fadeEffect {
     from {opacity: 0.4}
     to {opacity: 1}
