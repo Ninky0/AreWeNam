@@ -8,10 +8,18 @@ import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.service.*;
+import org.example.shoppingweather.entity.Product;
+import org.example.shoppingweather.service.CustomerService;
+import org.example.shoppingweather.service.ProductService;
+import org.example.shoppingweather.service.WeatherService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +40,7 @@ public class CustomerApiController {
     private final CartService cartService;
     private final ProductService productService;
     private final OotdService ootdService;
+    private String request;
 
     @PostMapping("/join")
     public ResponseEntity<UrlResponseDTO> signup(@RequestBody SignUpRequestDTO signUpRequestDTO) {
@@ -175,4 +184,13 @@ public class CustomerApiController {
         }
         return ResponseEntity.ok(product);
     }
+
+    // AJAX 요청에 대한 JSON 응답
+    @PostMapping("/seasonproduct_list")
+    @ResponseBody
+    public Page<ProdReadResponseDTO> filterProductsBySeason(@RequestParam String season, int page) {
+        Pageable pageable = PageRequest.of(page, 5); // 페이지당 5개
+        return productService.getProductsBySeason(season, pageable);
+    }
+
 }

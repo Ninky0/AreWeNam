@@ -18,7 +18,7 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
-<!--메인슬라이드-->
+    <!--메인슬라이드-->
     <div th:insert="~{fragments/main_bn1 :: main_bn1}"></div>
 
     <h2 class="sub_title">오늘, 이 옷 어때?</h2>
@@ -50,29 +50,37 @@
     <div th:insert="~{fragments/main_bn2 :: main_bn2}"></div>
 
     <section class="special-items">
-        <h2 class="sub_title">다음 시즌 마련, 다·시·마</h2>
+        <h2 class="sub_title"><a th:href="@{/user/seasonproduct_list}">다음 시즌 마련, 다·시·마</a></h2>
         <img src="/resources/static/images/seaweed.png">
         <p>미리미리 준비하는 아이템</p>
         <div class="special-slider">
             <div class="special-item">
-                <img src="/images/special_1.png" alt="Special Product 1">
-                <h3>SPRING</h3>
-                <p>봄과 어울리는 아이템</p>
+                <a href="#" class="season-link" data-season="1" onclick="goToSeasonProductList(this)">
+                    <img src="/images/special_1.png" alt="Special Product 1">
+                    <h3>SPRING</h3>
+                    <p>봄과 어울리는 아이템</p>
+                </a>
             </div>
             <div class="special-item">
-                <img src="/images/special_2.png" alt="Special Product 2">
-                <h3>SUMMER</h3>
-                <p>여름과 어울리는 아이템</p>
+                <a href="#" class="season-link" data-season="2" onclick="goToSeasonProductList(this)">
+                    <img src="/images/special_2.png" alt="Special Product 2">
+                    <h3>SUMMER</h3>
+                    <p>여름과 어울리는 아이템</p>
+                </a>
             </div>
             <div class="special-item">
-                <img src="/images/special_3.png" alt="Special Product 3">
-                <h3>FALL</h3>
-                <p>가을과 어울리는 아이템</p>
+                <a href="#" class="season-link" data-season="3" onclick="goToSeasonProductList(this)">
+                    <img src="/images/special_3.png" alt="Special Product 3">
+                    <h3>FALL</h3>
+                    <p>가을과 어울리는 아이템</p>
+                </a>
             </div>
             <div class="special-item">
-                <img src="/images/special_4.png" alt="Special Product 4">
-                <h3>WINTER</h3>
-                <p>겨울과 어울리는 아이템</p>
+                <a href="#" class="season-link" data-season="4" onclick="goToSeasonProductList(this)">
+                    <img src="/images/special_4.png" alt="Special Product 4">
+                    <h3>WINTER</h3>
+                    <p>겨울과 어울리는 아이템</p>
+                </a>
             </div>
         </div>
     </section>
@@ -89,3 +97,10 @@
 </footer>
 </body>
 </html>
+<script>
+    function goToSeasonProductList(element) {
+        const season = element.getAttribute('data-season');
+        const url = `/user/seasonproduct_list?season=${season}`;
+        window.location.href = url; // 페이지 이동
+    }
+</script>

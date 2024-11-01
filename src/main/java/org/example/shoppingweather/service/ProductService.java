@@ -1,5 +1,6 @@
 package org.example.shoppingweather.service;
 
+
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Product;
@@ -30,6 +31,10 @@ public class ProductService {
     public List<Product> findByTemperatureIndex(int tempIndex) {
         List<Product> products = productRepository.findByTemperature(tempIndex);
         return products;
+    }
+
+    public Page<ProdReadResponseDTO> getProductsBySeason(String season, Pageable pageable) {
+        return productRepository.findBySeason(season, pageable).map(Product::toProdReadResponseDTO);
     }
 
     // 상품 이름으로 검색하는 메서드 추가
