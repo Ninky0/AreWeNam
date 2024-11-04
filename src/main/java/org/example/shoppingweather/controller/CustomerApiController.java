@@ -3,6 +3,7 @@ package org.example.shoppingweather.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.config.security.CustomUserDetails;
+import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
 import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
@@ -125,6 +126,18 @@ public class CustomerApiController {
         throw new RuntimeException("사용자가 인증되지 않았습니다");
     }
 
+    // OOTD 이미지 API 엔드포인트
+    @GetMapping("/api/ootd-images")
+    public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
+        Pageable pageable = PageRequest.of(offset / limit, limit);
+        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("images", ootdImages.getContent());
+        response.put("totalElements", ootdImages.getTotalElements());
+
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/ootd_write")
     public ResponseEntity<Map<String, String>> createPost(

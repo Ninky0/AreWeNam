@@ -4,6 +4,8 @@ import lombok.*;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -15,4 +17,5 @@ public class CustomerReviewResponseDTO {
     private final String content;
     private final Product product;
     private final Customer customer;
+    private final LocalDateTime date;
 }

@@ -2,16 +2,30 @@ package org.example.shoppingweather.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
+import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
+import org.example.shoppingweather.entity.Customer;
+import org.example.shoppingweather.entity.Ootd;
+import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.entity.Review;
+import org.example.shoppingweather.repository.CustomerRepository;
+import org.example.shoppingweather.repository.ProductRepository;
 import org.example.shoppingweather.repository.ReviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
 
     public Page<CustomerReviewResponseDTO> findReviewsByProductId(Long productId, Pageable pageable) {
         // productId를 기반으로 리뷰를 찾는 리포지토리 메소드 호출
@@ -28,6 +42,30 @@ public class ReviewService {
                 .content(review.getContent())
                 .product(review.getProduct())
                 .customer(review.getCustomer())
+                .date(review.getDate())
                 .build();
     }
+
+    public String handleFileUpload(MultipartFile file) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            String fileExtension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            String fileName = "picture_" + System.currentTimeMillis() + fileExtension;
+            Path savePath = Paths.get("src/main/resources/static/uploads/", fileName);
+
+            Files.createDirectories(savePath.getParent());
+            Files.copy(file.getInputStream(), savePath);
+
+            return "/uploads/" + fileName;
+        }
+        return null;
+    }
+
+    public void saveReview(ReviewWriteRequestDTO requestDTO, String picturePath) {
+        Product product = productRepository.findById(requestDTO.getProductId()).orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
+        Customer customer = customerRepository.findById(Long.parseLong(requestDTO.getCustomerId())).orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
+
+        Review review = Review.fromDTO(requestDTO, picturePath, product, customer);
+        reviewRepository.save(review);
+    }
+
 }

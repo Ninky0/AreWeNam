@@ -175,19 +175,6 @@ public class CustomerViewController {
         return "redirect:/user/ootd_list";
     }
 
-    // OOTD 이미지 API 엔드포인트
-    @GetMapping("/api/ootd-images")
-    public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
-        Pageable pageable = PageRequest.of(offset / limit, limit);
-        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("images", ootdImages.getContent());
-        response.put("totalElements", ootdImages.getTotalElements());
-
-        return ResponseEntity.ok(response);
-    }
-
     // 상품 목록을 JSON 형태로 반환하는 API, 이름 필터 추가
     @GetMapping("/product/search")
     @ResponseBody

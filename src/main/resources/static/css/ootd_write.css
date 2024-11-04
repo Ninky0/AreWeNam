@@ -156,6 +156,17 @@ h2 {
     text-align: center;
 }
 
+.content-input {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 30px;
+    font-size: 12px;
+    margin: 30px 0;
+    text-align: center;
+    width: 550px;
+    height: 220px;
+}
+
 #searchButton {
     background-color: #ffffff;
     color: #000000;
