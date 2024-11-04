@@ -2,6 +2,7 @@ package org.example.shoppingweather.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.example.shoppingweather.dto.OotdWriteRequestDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
 import org.example.shoppingweather.entity.Cart;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,7 @@ public class CustomerViewController {
     private final ProductService productService;
     private final CartService cartService;
     private final OotdService ootdService;
+    private final ReviewService reviewService;
 
     @GetMapping("/join")
     public String signUp() {
@@ -142,38 +145,27 @@ public class CustomerViewController {
     }
 
     @PostMapping("/ootd_write/save") // URL을 고유하게 변경
-    public String saveOotdPost(
-            @RequestParam("tag") String tag,
-            @RequestParam("picture") MultipartFile pictureFile,
-            @RequestParam("productId") Long productId,
-            HttpSession session) {
+    public ResponseEntity<Map<String, String>> saveOotdPost(
+            @ModelAttribute OotdWriteRequestDTO requestDTO) {
 
-        Customer customer = customerService.findBySession(session);
-        if (customer == null) {
-            return "redirect:/user/login"; // 로그인하지 않은 경우 로그인 페이지로 리디렉션
-        }
+        Map<String, String> response = new HashMap<>();
 
         try {
-            String picturePath = null;
-            if (pictureFile != null && !pictureFile.isEmpty()) {
-                String fileExtension = pictureFile.getOriginalFilename().substring(pictureFile.getOriginalFilename().lastIndexOf("."));
-                String fileName = "picture_" + System.currentTimeMillis() + fileExtension;
-                Path savePath = Paths.get("src/main/resources/static/uploads/", fileName);
+            String picturePath = reviewService.handleFileUpload(requestDTO.getPicture());
+            ootdService.saveOotdPost(requestDTO, picturePath);
 
-                Files.createDirectories(savePath.getParent());
-                Files.copy(pictureFile.getInputStream(), savePath);
-                picturePath = "/uploads/" + fileName;
-            }
-
-            ootdService.saveOotdPost(customer.getId(), tag, picturePath, productId);
+            response.put("url", "/user/ootd_list");
+            response.put("message", "상품 등록이 완료되었습니다.");
+            return ResponseEntity.ok(response);
 
         } catch (IOException e) {
             e.printStackTrace();
-            return "error";
+            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        return "redirect:/user/ootd_list";
     }
+
+
 
     // 상품 목록을 JSON 형태로 반환하는 API, 이름 필터 추가
     @GetMapping("/product/search")

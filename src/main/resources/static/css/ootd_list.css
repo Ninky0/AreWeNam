@@ -1,34 +1,28 @@
-.ootd-list {
-    display: grid;
-    grid-template-columns: repeat(3, 600px); /* Three columns each 600px wide */
-    grid-template-rows: repeat(2, 800px); /* Two rows each 800px high */
-    gap: 0; /* Removes gaps between items */
-}
 
-.ootd-item {
-    position: relative;
-    max-width: 1200px;
+.ootd_list {
+    width: 1000px;
     margin: 0 auto;
 }
 .ootd-item img {
     width: 33%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
+    cursor: pointer;
+    border-radius: 10px;
     display: inline;
-    /* margin: 0; */
-    /* padding: 0; */
+}
+.ootd-item {
+    width: 100%;
+    display: inline;
 }
 h2.sub_title {
-    padding: 130px 0 0 0;
-    margin: 0 auto;
+    padding: 123px 0 0 0;
+    margin: 0px auto;
     text-align: center;
-    /* display: block; */
 }
-p {
-    margin: 0 auto;
-    text-align: center;
-    padding: 10px 0 25px 0;
-}
+
+
+/* 더보기 버튼 스타일 */
 button#load-more {
     width: 300px;
     background-color: black;
@@ -37,16 +31,189 @@ button#load-more {
     margin: 15px auto;
     display: block;
     padding: 6px;
+    cursor: pointer;
 }
 
+/* 글 등록 버튼 스타일 */
 a#button_black {
     margin: 12px auto;
     border: 1px solid black;
     border-radius: 20px;
-    padding: 10px 80px 10px;
+    padding: 10px 80px;
     text-decoration: none;
     color: black;
     display: block;
     width: 300px;
     text-align: center;
+}
+/* 모달 창 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8); /* 배경 어둡게 처리 */
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    max-width: 396px;
+    /* width: 105%; */
+    position: relative;
+    text-align: left;
+    border-radius: 10px;
+    height: 102%;
+    max-height: 564px;
+}
+
+/* 모달 닫기 버튼 */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 40px;
+    cursor: pointer;
+    color: #8c8c8c;
+}
+
+/* 슬라이더 버튼 스타일 */
+.prev-btn, .next-btn {
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #000;
+}
+
+
+.modal-slider {
+
+    text-align: center;
+}
+.modal-slider img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+span#ootdProductPrice {
+    float: left;
+    font-size: 12px;
+    margin-top: -6px;
+}
+
+span#ootdProductName {
+    float: left;
+    font-size: 14px;
+    font-weight: 900;
+}
+.modalInfo {
+    display: inline-flex;
+    font-size: 10px;
+    color: #9a9a9a;
+}
+
+.modalInfoAll {
+    display: inline-block;
+    margin: 0px 0px 0 20px;
+    float: left;
+
+}
+
+
+
+
+
+/* 모달 별도의 스타일링 추가 */
+#ootdModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevent scroll bar visibility but allow scrolling */
+    overscroll-behavior: contain;
+    background-color: rgba(0, 0, 0, 0.8);
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+#ootdModal::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+}
+#ootdModalContent {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    position: relative;
+}
+
+img#ootdProductMainImage {
+    width: 100%;
+    max-width: 50px;
+    float: left;
+    display: block;
+    margin-left: 30px;
+}
+
+div#ootdModal {
+    /* width: 80%; */
+    /* margin: 0 auto; */
+    padding: 30px;
+}
+div#ootdModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevent scroll bar visibility but allow scrolling */
+    overscroll-behavior: contain;
+    background-color: rgba(0, 0, 0, 0.8);
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    padding:30px;
+}
+div#ootdModal::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+}
+.modal-details {
+    cursor: pointer; /* 손바닥 커서 */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    padding: 10px; /* 안쪽 여백 추가 */
+}
+
+span#ootdProductTagName {
+    font-size: 12px;
+    color: brown;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+p {
+    margin: 0;
+    padding: 5px 0 0px 0;
+    display: flex;
+    /* padding: 0; */
+    /* margin: 0; */
+}
+
+span#ootdProductName {
+    float: left;
+    font-size: 14px;
+    font-weight: 900;
+    margin: -3px 0 7px 0;
 }

@@ -22,6 +22,7 @@ body {
     position: fixed; /* 사이드바 고정 */
     top: 60px; /* 헤더 아래에 위치하게 */
     bottom: 0;
+    left:0;
 }
 
 .sidebar h2 {

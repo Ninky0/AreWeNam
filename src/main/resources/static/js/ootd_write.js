@@ -1,3 +1,4 @@
+
 // 상품 검색 모달 열기
 function openProductSearchModal() {
     document.getElementById('productSearchInput').value = ''; // 검색어 초기화
@@ -54,9 +55,9 @@ function updateProductList(products) {
     });
 }
 
-// 검색 버튼 이벤트 리스너 추가
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('searchButton').addEventListener('click', searchProducts); // 검색 버튼 클릭 시 호출
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('ootdForm');
+    form.action = '/user/ootd_write/save';
 });
 // 계절 표시 함수
 function getSeasonLabel(season) {
@@ -113,7 +114,7 @@ function selectProduct(productId) {
             return response.json();
         })
         .then(data => {
-            // 선택한 상품 정보 표시 영역 업데이트
+            // 서버 응답 필드명이 정확한지 확인하여 아래 필드에 매핑합니다.
             document.getElementById('selectedProductName').textContent = data.name;
             document.getElementById('selectedProductPrice').textContent = data.price.toLocaleString() + ' 원';
             document.getElementById('selectedProductCategory').textContent = data.category;
@@ -132,15 +133,11 @@ function selectProduct(productId) {
     closeProductSearchModal();
 }
 
-// 페이지가 로드될 때 선택한 상품 정보가 보이지 않도록 설정
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('selectedProductDetails').style.display = 'none';
-});
-
 // 모달을 닫는 함수
 function closeProductSearchModal() {
     document.getElementById('productModal').style.display = 'none';
 }
+
 function previewMainImage(event) {
     const file = event.target.files[0];
     const imagePreview = document.getElementById("imagePreview");
@@ -159,10 +156,11 @@ function previewMainImage(event) {
         placeholderText.style.display = "block";
     }
 }
+
 function submitForm() {
     const formData = new FormData(document.getElementById("ootdForm"));
 
-    fetch('/user/ootd_write', { // URL 경로 확인 후 수정
+    fetch('/user/ootd_write/save', { // URL 수정
         method: 'POST',
         body: formData
     })
@@ -170,7 +168,7 @@ function submitForm() {
             if (!response.ok) {
                 throw new Error("서버 응답이 문제입니다.");
             }
-            return response.json();
+            return response.json(); // JSON으로 응답을 파싱
         })
         .then(data => {
             if (data.url) {
@@ -184,26 +182,4 @@ function submitForm() {
             console.error("Error:", error);
             alert("게시글 등록 중 오류가 발생했습니다.");
         });
-}
-function loadProducts(page) {
-    const searchTerm = document.getElementById('productSearchInput').value;
-    const url = `/user/product/search?page=${page}&size=10` + (searchTerm ? `&name=${encodeURIComponent(searchTerm)}` : '');
-
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('네트워크 응답에 문제가 있습니다.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Fetched data:', data); // API 응답 데이터 구조 확인
-            if (data.content) { // data.content가 존재하는 경우에만 처리
-                updateProductList(data.content); // 상품 목록 업데이트
-                updatePagination(data); // 페이지네이션 업데이트
-            } else {
-                console.error("데이터가 예상한 구조가 아닙니다:", data); // 데이터 구조 오류 출력
-            }
-        })
-        .catch(error => console.error('상품 목록을 가져오는 중 오류 발생:', error));
 }

@@ -16,6 +16,7 @@ import org.example.shoppingweather.service.WeatherService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -126,11 +127,29 @@ public class CustomerApiController {
         throw new RuntimeException("사용자가 인증되지 않았습니다");
     }
 
-    // OOTD 이미지 API 엔드포인트
+//    // OOTD 이미지 API 엔드포인트
+//    @GetMapping("/api/ootd-images")
+//    public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
+//        Pageable pageable = PageRequest.of(offset / limit, limit);
+//        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("images", ootdImages.getContent());
+//        response.put("totalElements", ootdImages.getTotalElements());
+//
+//        return ResponseEntity.ok(response);
+//    }
+
+    // ootd리스트에서 클릭하면 열리는 모달창안의 이미지
     @GetMapping("/api/ootd-images")
     public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
-        Pageable pageable = PageRequest.of(offset / limit, limit);
-        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
+        Pageable pageable = PageRequest.of(offset / limit, limit , Sort.by("date").descending());
+        Page<CustomerOotdImageResponseDTO> ootdImages = customerService.getOotdImages(pageable);
+
+        // OOTD 이미지의 id 필드가 존재하는지 확인
+        ootdImages.forEach(image -> {
+            System.out.println("Image ID: " + image.getId());
+        });
 
         Map<String, Object> response = new HashMap<>();
         response.put("images", ootdImages.getContent());
@@ -139,63 +158,101 @@ public class CustomerApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/ootd_write")
-    public ResponseEntity<Map<String, String>> createPost(
-            HttpSession session,
-            @RequestParam("tag") String tag,
-            @RequestParam("picture") MultipartFile pictureFile,
-            @RequestParam("productId") Long productId) {
+//    @PostMapping("/ootd_write")
+//    public ResponseEntity<Map<String, String>> createPost(
+//            HttpSession session,
+//            @RequestParam("tag") String tag,
+//            @RequestParam("picture") MultipartFile pictureFile,
+//            @RequestParam("productId") Long productId) {
+//
+//        Map<String, String> response = new HashMap<>();
+//
+//        try {
+//            // 로그인된 사용자 확인
+//            String loginId = (String) session.getAttribute("loginId");
+//            if (loginId == null) {
+//                response.put("message", "로그인이 필요합니다.");
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+//            }
+//
+//            // 세션에서 사용자 가져오기
+//            Customer customer = customerService.findBySession(session);
+//            Long customerId = customer.getId();
+//
+//            // 이미지 경로 설정
+//            String picturePath = null;
+//            if (pictureFile != null && !pictureFile.isEmpty()) {
+//                String fileExtension = pictureFile.getOriginalFilename().substring(pictureFile.getOriginalFilename().lastIndexOf("."));
+//                String fileName = "picture_" + System.currentTimeMillis() + fileExtension;
+//                Path savePath = Paths.get("src/main/resources/static/uploads/", fileName);
+//
+//                Files.createDirectories(savePath.getParent());
+//                Files.copy(pictureFile.getInputStream(), savePath);
+//                picturePath = "/uploads/" + fileName;
+//            }
+//
+//            // OOTD 게시물 데이터와 이미지 경로를 저장
+//            customerService.saveOotdPost(customerId, tag, picturePath, productId);
+//
+//            response.put("url", "/user/ootd_list");
+//            response.put("message", "상품 등록이 완료되었습니다.");
+//            return ResponseEntity.ok(response);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//        }
+//    }
 
-        Map<String, String> response = new HashMap<>();
-
-        try {
-            // 로그인된 사용자 확인
-            String loginId = (String) session.getAttribute("loginId");
-            if (loginId == null) {
-                response.put("message", "로그인이 필요합니다.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-            }
-
-            // 세션에서 사용자 가져오기
-            Customer customer = customerService.findBySession(session);
-            Long customerId = customer.getId();
-
-            // 이미지 경로 설정
-            String picturePath = null;
-            if (pictureFile != null && !pictureFile.isEmpty()) {
-                String fileExtension = pictureFile.getOriginalFilename().substring(pictureFile.getOriginalFilename().lastIndexOf("."));
-                String fileName = "picture_" + System.currentTimeMillis() + fileExtension;
-                Path savePath = Paths.get("src/main/resources/static/uploads/", fileName);
-
-                Files.createDirectories(savePath.getParent());
-                Files.copy(pictureFile.getInputStream(), savePath);
-                picturePath = "/uploads/" + fileName;
-            }
-
-            // OOTD 게시물 데이터와 이미지 경로를 저장
-            ootdService.saveOotdPost(customerId, tag, picturePath, productId);
-
-            response.put("url", "/user/ootd_list");
-            response.put("message", "상품 등록이 완료되었습니다.");
-            return ResponseEntity.ok(response);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    // 상품 상세 정보 JSON 형식으로 제공
+    // ootd등록페이지에서 상품검색시 보여지는 모달창 안의 상세페이지내용
     @GetMapping("/product/ootd_detail/{id}")
     @ResponseBody
-    public ResponseEntity<ProdReadResponseDTO> getProductDetail(@PathVariable Long id) {
-        ProdReadResponseDTO product = productService.findById(id);
+    public ResponseEntity<ProdReadResponseDTO> getOotdProductDetail(@PathVariable Long id) {
+        ProdReadResponseDTO product = productService.findById(id); // ProductService를 사용하여 상품 정보를 조회
+
+        if (product == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // 상품이 없는 경우 404 응답 반환
+        }
+
         if (product.getMainPicture() != null) {
             String mainPicturePath = product.getMainPicture().replace("\\", "/");
-            product.setMainPicture(mainPicturePath);
+            product.setMainPicture(mainPicturePath); // 경로 수정 후 다시 설정
         }
-        return ResponseEntity.ok(product);
+
+        return ResponseEntity.ok(product); // 상품 정보 반환
+    }
+
+
+    // ootd리스트에서 클릭하면 열리는 모달창안의 상세페이지
+    @GetMapping("/api/ootd/detail/{id}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getOotdDetail(@PathVariable Long id) {
+        // Retrieve OOTD entry by ID
+        CustomerOotdImageResponseDTO ootdDetail = customerService.findOotdById(id);
+
+        if (ootdDetail == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 if not found
+        }
+
+        // If there's a linked productId, retrieve the product details
+        ProdReadResponseDTO product = null;
+        if (ootdDetail.getProductId() != null) {
+            product = productService.findById(ootdDetail.getProductId());
+        }
+
+        // Modify the picture path for OOTD
+        if (ootdDetail.getPicture() != null) {
+            String picturePath = ootdDetail.getPicture().replace("\\", "/");
+            ootdDetail.setPicture(picturePath); // Correct the path format
+        }
+
+        // Prepare response data
+        Map<String, Object> response = new HashMap<>();
+        response.put("ootd", ootdDetail);
+        response.put("product", product); // This can be null if not linked
+
+        return ResponseEntity.ok(response);
     }
 
     // AJAX 요청에 대한 JSON 응답

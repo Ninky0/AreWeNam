@@ -30,6 +30,28 @@ public class Product {
     @Getter
     private String mainPicturePath;
 
+    private Double productPrice;
+    private String productCategory;
+    private String productSeason;
+    private String productTemperature;
+
+    // Getter 메서드들
+    public Double getProductPrice() {
+        return productPrice;
+    }
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public String getProductSeason() {
+        return productSeason;
+    }
+
+    public String getProductTemperature() {
+        return productTemperature;
+    }
+
     @Builder
     public Product(Long id, String name, Integer price, String mainPicturePath, String description, String quantity, String category, Integer season, Integer temperature) {
         this.id = id;

@@ -16,7 +16,7 @@
 <main>
     <section class="ootd-items">
         <h2 class="sub_title">OOTD</h2>
-        <p>코디별 상품 추천</p>
+
         <a id="button_black" th:href="@{/user/ootd_write}" type="button">글 등록</a> <!-- 글 등록 버튼 추가 -->
         <div class="ootd_list">
             <div class="ootd-item" id="ootd-item-container">
@@ -24,8 +24,32 @@
             </div>
         </div>
         <button id="load-more" type="button">더보기</button>
-
     </section>
+
+    <!-- 모달창을 위한 HTML 추가 -->
+    <div id="ootdModal" class="modal" style="display: none;">
+        <div class="modal-content" >
+            <span class="close-btn" onclick="closeOotdModal()">&times;</span>
+            <div class="modal-slider" >
+                <img id="ootdModalImage" src="" alt="OOTD Image">
+            </div>
+            <div class="modal-details" id="productDetailsLink">
+                <img id="ootdProductMainImage" src="" alt="상품 이미지" style="width: 100%; height: auto; border-radius: 10px;">
+                <div class="modalInfoAll">
+                    <p><span id="ootdProductTagName"></span></p>
+                    <p><span id="ootdProductName"></span></p>
+                    <p><span id="ootdProductPrice"></span></p>
+                    <div class="modalInfo">
+                        <p><span id="ootdProductCategory"></span> &nbsp;</p>
+                        <p><span id="ootdProductSeason"></span> &nbsp;</p>
+                        <p><span id="ootdProductTemperature"></span> &nbsp;</p>
+                        <p><span ></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 <footer>
     <div class="footer-container">
@@ -36,5 +60,4 @@
         </ul>
     </div>
 </footer>
-</body>
 </html>

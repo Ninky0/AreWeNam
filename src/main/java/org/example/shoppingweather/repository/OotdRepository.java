@@ -4,7 +4,9 @@ import org.example.shoppingweather.entity.Ootd;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OotdRepository extends JpaRepository<Ootd, Long> {
-    // 기본적인 CRUD 기능이 자동 제공됩니다.
+    List<Ootd> findByCustomerId(Long customerId);
 }
