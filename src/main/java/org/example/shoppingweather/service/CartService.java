@@ -7,17 +7,21 @@ import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
+import org.example.shoppingweather.entity.Purchase;
 import org.example.shoppingweather.repository.CartRepository;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.example.shoppingweather.repository.ProductRepository;
+import org.example.shoppingweather.repository.PurchaseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final PurchaseRepository purchaseRepository;
     private final ProductService productService;
     private final ObjectMapper objectMapper;
 
@@ -125,4 +130,116 @@ public class CartService {
             throw new RuntimeException("제품 목록을 JSON으로 변환하는 중 오류가 발생했습니다.", e);
         }
     }
+
+//    public void PurchaseCart(Long customerId, List<Long> productIds) {
+//        System.out.println("Customer ID Type: " + ((Object) customerId).getClass().getName());
+//        System.out.println("Customer ID Value: " + customerId);
+//        Cart cart = cartRepository.findByCustomerId(customerId)
+//                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
+//
+//        // 장바구니의 선택된 상품 목록에 대한 구매 처리
+//        for (Long productId : productIds) {
+//            // 상품 정보 가져오기
+//            Product product = productRepository.findById(productId)
+//                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+//
+//            // 장바구니 데이터를 Purchase로 옮기기기
+//            Purchase purchase = Purchase.createPurchase(cart.getCustomer(), cart.getProductList());
+//            purchase.setDate(LocalDateTime.now()); // 현재 시간 저장
+//
+//            // Purchase 엔티티 저장
+//            purchaseRepository.save(purchase);
+//
+//        }
+//
+//        // 장바구니 초기화
+//        cart.setProductList("{}"); // 비워두기
+//        cartRepository.save(cart);
+//
+//    }
+
+//    public void PurchaseCart(Long customerId, List<Long> selectedProductIds) {
+//        System.out.println("Customer ID Type: " + ((Object) customerId).getClass().getName());
+//        System.out.println("Customer ID Value: " + customerId);
+//        Cart cart = cartRepository.findByCustomerId(customerId)
+//                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
+//
+//        // 장바구니의 선택된 상품 목록에 대한 구매 처리
+//        for (Long productId : selectedProductIds) {
+//            // 상품 정보 가져오기
+//            Product product = productRepository.findById(productId)
+//                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+//
+//            // 장바구니 데이터를 Purchase로 옮기기
+//            Purchase purchase = Purchase.createPurchase(cart.getCustomer(), cart.getProductList());
+//            purchase.setDate(LocalDateTime.now()); // 현재 시간 저장
+//
+//            // Purchase 엔티티 저장
+//            purchaseRepository.save(purchase);
+//        }
+//
+//        // 선택되지 않은 상품들만 장바구니에 남기기
+//        List<Long> currentProductIds = getProductIdsFromCart(cart.getProductList());
+//        currentProductIds.removeAll(selectedProductIds); // 선택된 상품 제거
+//
+//        // 남겨진 상품들로 장바구니 업데이트
+//        cart.setProductList(convertIdsToProductList(currentProductIds));
+//        cartRepository.save(cart);
+//    }
+
+
+    public void PurchaseCart(Long customerId, List<Long> selectedProductIds) {
+        System.out.println("Customer ID Type: " + ((Object) customerId).getClass().getName());
+        System.out.println("Customer ID Value: " + customerId);
+        Cart cart = cartRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
+
+        // 장바구니에서 기존 상품 ID 가져오기
+        List<Long> existingProductIds = getProductIdsFromCart(cart.getProductList());
+
+        // 선택된 상품 ID를 제외한 남겨둘 상품 ID 리스트 작성
+        List<Long> remainingProductIds = existingProductIds.stream()
+                .filter(id -> !selectedProductIds.contains(id))
+                .collect(Collectors.toList());
+
+        // 구매 처리
+        for (Long productId : selectedProductIds) {
+            // 상품 정보 가져오기
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+
+            // Purchase 엔티티 생성 및 저장
+            Purchase purchase = Purchase.createPurchase(cart.getCustomer(), cart.getProductList());
+            purchase.setDate(LocalDateTime.now());
+            purchaseRepository.save(purchase);
+        }
+
+        // 장바구니 초기화 (남겨진 상품 ID로 업데이트)
+        String updatedProductList = convertIdsToProductList(remainingProductIds);
+        cart.setProductList(updatedProductList);
+        cartRepository.save(cart);
+    }
+
+    // 장바구니에서 상품 ID를 가져오는 메서드
+    private List<Long> getProductIdsFromCart(String productList) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // JSON 문자열을 List<Long>으로 변환
+            return objectMapper.readValue(productList, new TypeReference<List<Long>>() {});
+        } catch (Exception e) {
+            throw new RuntimeException("장바구니에서 상품 ID를 가져오는 중 오류가 발생했습니다.", e);
+        }
+    }
+
+    // 상품 ID 목록을 문자열로 변환하는 메서드
+    private String convertIdsToProductList(List<Long> productIds) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // List<Long>을 JSON 문자열로 변환
+            return objectMapper.writeValueAsString(productIds);
+        } catch (Exception e) {
+            throw new RuntimeException("상품 ID 목록을 JSON 문자열로 변환하는 중 오류가 발생했습니다.", e);
+        }
+    }
+
 }

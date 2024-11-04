@@ -29,9 +29,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -54,9 +56,119 @@ public class CustomerApiController {
         );
     }
 
+//    @PostMapping("/shoppingcart")
+//    public ResponseEntity<UrlResponseDTO> addCart(@RequestBody Map<String, Object> payload) {
+//        System.out.println("POST 요청이 도착했습니다: " + payload);
+//        try {
+//            // 구매 요청 처리
+//            if (payload.get("action") != null && payload.get("action").equals("purchase")) {
+//                // 고객 ID가 있는지 확인
+//                if (payload.get("customerId") == null) {
+//                    return ResponseEntity.badRequest().body(
+//                            UrlResponseDTO.builder().message("고객 ID가 필요합니다.").build()
+//                    );
+//                }
+//
+//                Long customerId = Long.parseLong(payload.get("customerId").toString());
+//                // 선택된 상품 ID 가져오기
+//                List<String> productIdStrings = (List<String>) payload.get("productIds");
+//                if (productIdStrings == null || productIdStrings.isEmpty()) {
+//                    return ResponseEntity.badRequest().body(
+//                            UrlResponseDTO.builder().message("선택된 상품이 필요합니다.").build()
+//                    );
+//                }
+//
+//                List<Long> productIds = productIdStrings.stream()
+//                        .map(Long::valueOf)
+//                        .collect(Collectors.toList());
+//
+//
+//                // 장바구니 구매 처리
+//                cartService.PurchaseCart(customerId, productIds); // 장바구니 구매 처리
+//
+//                return ResponseEntity.ok(
+//                        UrlResponseDTO.builder().message("구매가 완료되었습니다.").build()
+//                );
+//            }
+//
+//            // 장바구니에 상품 추가 요청 처리
+//            if (payload.get("customerId") == null || payload.get("productId") == null || payload.get("quantity") == null) {
+//                return ResponseEntity.badRequest().body(
+//                        UrlResponseDTO.builder().message("요청에 필요한 모든 값을 포함해야 합니다.").build()
+//                );
+//            }
+//
+//            Long customerId = Long.parseLong(payload.get("customerId").toString());
+//            Long productId = Long.parseLong(payload.get("productId").toString());
+//            Integer quantity = Integer.parseInt(payload.get("quantity").toString());
+//
+//            cartService.addProductToCart(customerId, productId, quantity);
+//            return ResponseEntity.ok(
+//                    UrlResponseDTO.builder().message("상품이 장바구니에 추가되었습니다. 장바구니를 확인하시겠습니까?").build()
+//            );
+//
+//        } catch (NumberFormatException e) {
+//            e.printStackTrace(); // 로그에 예외 출력
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+//                    UrlResponseDTO.builder().message("입력 형식이 올바르지 않습니다.").build()
+//            );
+//        } catch (RuntimeException e) {
+//            e.printStackTrace(); // 로그에 예외 출력
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+//                    UrlResponseDTO.builder().message("구매 처리 중 오류가 발생했습니다.").build()
+//            );
+//        } catch (Exception e) {
+//            e.printStackTrace(); // 로그에 예외 출력
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+//                    UrlResponseDTO.builder().message("상품 추가 중 오류가 발생했습니다.").build()
+//            );
+//        }
+//    }
+
     @PostMapping("/shoppingcart")
     public ResponseEntity<UrlResponseDTO> addCart(@RequestBody Map<String, Object> payload) {
+        System.out.println("POST 요청이 도착했습니다: " + payload);
         try {
+            // 구매 요청 처리
+            if (payload.get("action") != null && payload.get("action").equals("purchase")) {
+                // 고객 ID가 있는지 확인
+                if (payload.get("customerId") == null) {
+                    return ResponseEntity.badRequest().body(
+                            UrlResponseDTO.builder().message("고객 ID가 필요합니다.").build()
+                    );
+                }
+
+                Long customerId = Long.parseLong(payload.get("customerId").toString());
+
+// 상품 ID 목록이 있는지 확인
+                if (!(payload.get("productIds") instanceof List)) {
+                    return ResponseEntity.badRequest().body(
+                            UrlResponseDTO.builder().message("상품 ID 목록이 필요합니다.").build()
+                    );
+                }
+
+// 선택된 상품 ID 가져오기
+                List<Long> productIds = new ArrayList<>();
+                for (Object id : (List<?>) payload.get("productIds")) {
+                    if (id instanceof Number) {
+                        productIds.add(((Number) id).longValue());
+                    }
+                }
+                if (productIds.isEmpty()) {
+                    return ResponseEntity.badRequest().body(
+                            UrlResponseDTO.builder().message("선택된 상품이 필요합니다.").build()
+                    );
+                }
+
+// 장바구니 구매 처리
+                cartService.PurchaseCart(customerId, productIds);
+
+                return ResponseEntity.ok(
+                        UrlResponseDTO.builder().message("구매가 완료되었습니다.").build()
+                );
+            }
+
+            // 장바구니에 상품 추가 요청 처리
             if (payload.get("customerId") == null || payload.get("productId") == null || payload.get("quantity") == null) {
                 return ResponseEntity.badRequest().body(
                         UrlResponseDTO.builder().message("요청에 필요한 모든 값을 포함해야 합니다.").build()
@@ -71,11 +183,19 @@ public class CustomerApiController {
             return ResponseEntity.ok(
                     UrlResponseDTO.builder().message("상품이 장바구니에 추가되었습니다. 장바구니를 확인하시겠습니까?").build()
             );
+
         } catch (NumberFormatException e) {
+            e.printStackTrace(); // 로그에 예외 출력
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     UrlResponseDTO.builder().message("입력 형식이 올바르지 않습니다.").build()
             );
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // 로그에 예외 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    UrlResponseDTO.builder().message("구매 처리 중 오류가 발생했습니다.").build()
+            );
         } catch (Exception e) {
+            e.printStackTrace(); // 로그에 예외 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     UrlResponseDTO.builder().message("상품 추가 중 오류가 발생했습니다.").build()
             );
@@ -84,6 +204,7 @@ public class CustomerApiController {
 
     @DeleteMapping("/shoppingcart")
     public ResponseEntity<String> deleteFromCart(@RequestBody List<Map<String, Object>> selectedProducts) {
+
 
         try {
             Long customerId = getCurrentCustomerId();
