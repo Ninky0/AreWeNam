@@ -13,7 +13,7 @@
     <h1 th:text="|${customer.name}님 환영합니다.|"></h1>
     <input id="hiddenUserId" type="hidden" th:value="${customer.id}">
     <input id="hiddenUserLoginId" type="hidden" th:value="${customer.loginId}">
-    <a th:href="@{/review/write/${product.id}}" class="btn" id="writeBtn">리뷰 작성하기</a>
+    <a href="#" class="btn" id="writeBtn">리뷰 작성하러 가기</a>
     <!-- 게시판 영역 -->
     <div id="board">
       <table>
@@ -24,6 +24,7 @@
           <th>상품번호</th><!--productId -->
           <th>내용</th><!--content-->
           <th>이미지</th><!--picture-->
+          <th>작성일</th>
         </tr>
         </thead>
         <tbody id="boardContent">
@@ -39,6 +40,6 @@
     </div>
   </div>
 </nav>
-<script th:src="@{/js/review.js}"></script>
+<script th:src="@{/js/review_list.js}"></script>
 </body>
 </html>

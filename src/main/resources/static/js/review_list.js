@@ -1,16 +1,20 @@
-$(document).ready(function() {
+$(document).ready(function () {
     var productId = $('#productId').val();
+    $('#writeBtn').attr('href', '/mypage/history');
+    // alert("review list : "+productId); // 잘 들어옴
+    const start = performance.now();
     loadReviews(0); // 초기 페이지 로드
 
     function loadReviews(page) {
         $.ajax({
             url: `/review/${productId}?page=${page}&size=5`,
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 $('#boardContent').empty();
                 var reviews = response.reviews;
-                reviews.forEach(function(review) {
+                reviews.forEach(function (review) {
                     var customerLoginId = review.customer ? review.customer.loginId : '익명';
+                    var formattedDate = new Date(review.date).toLocaleDateString('ko-KR'); // 'ko-KR'은 한국 날짜 형식으로 변경
                     $('#boardContent').append(
                         `<tr>
                             <td>${review.id}</td>
@@ -18,19 +22,24 @@ $(document).ready(function() {
                             <td>${productId}</td>
                             <td>${review.content}</td>
                             <td><img class="review-image" src="${review.picturePath}" alt="리뷰 이미지"/></td>
+                            <td>${formattedDate}</td>
                         </tr>`
                     );
                 });
                 updatePagination(response.startPage, response.endPage, response.totalPages, page);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("리뷰를 불러오는데 실패했습니다: " + error);
+            },
+            complete: () => {
+                const end = performance.now();
+                console.log(`Page loaded in ${end - start} milliseconds`);
             }
         });
     }
 
     // 페이징 링크에 대한 이벤트 핸들러를 동적으로 설정
-    $('#pagination').on('click', 'a', function(event) {
+    $('#pagination').on('click', 'a', function (event) {
         event.preventDefault();
         var page = $(this).data('page'); // data-page 속성을 통해 페이지 번호를 얻음
         loadReviews(page);

@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
+import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+
+import java.time.LocalDateTime;
 
 @Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +23,7 @@ public class Review {
 
     private String picturePath;
     private String content;
+    private LocalDateTime date;
 
     // Product와의 다대일 관계 설정
     @ManyToOne
@@ -39,5 +43,16 @@ public class Review {
                 .product(product)
                 .customer(customer)
                 .build();
+    }
+
+    // 정적 팩토리 메서드 추가
+    public static Review fromDTO(ReviewWriteRequestDTO requestDTO, String picturePath, Product product, Customer customer) {
+        Review review = new Review();
+        review.setProduct(product);
+        review.setCustomer(customer);
+        review.setPicturePath(picturePath);
+        review.setContent(requestDTO.getContent());
+        review.setDate(LocalDateTime.now());
+        return review;
     }
 }
