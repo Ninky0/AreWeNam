@@ -1,0 +1,85 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+}
+
+th {
+    background-color: #eeeeee;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.review-image{
+    max-width: 100px; /* 최대 너비를 100픽셀로 제한 */
+    max-height: 100px; /* 최대 높이를 100픽셀로 제한 */
+    width: auto; /* 원본 비율 유지 */
+    height: auto; /* 원본 비율 유지 */
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.pagination-container {
+    width: 100%; /* 전체 너비를 차지 */
+    text-align: center; /* 중앙 정렬 */
+    margin-top: 20px; /* 테이블과의 여백 */
+    margin-bottom: 20px; /* 페이지 하단 여백 */
+}
+
+.pagination li a {
+    margin-right: 4px; /* 링크 간 간격 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.pagination li a:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
+}
+
+.pagination .page-item {
+    display: inline-block;
+}
+
+.pagination .page-link {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 15%
+}
+
+.pagination .page-item.active .page-link {
+    font-weight: bold;
+    color: cornflowerblue;
+}

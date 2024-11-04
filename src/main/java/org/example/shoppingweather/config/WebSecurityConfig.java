@@ -25,8 +25,11 @@ public class WebSecurityConfig {
                                         "/static/**", "/css/**", "/js/**", "/images/**", "/uploads/**"
                                 ).permitAll() // 정적 리소스 접근 허용
                                 .requestMatchers(
-                                        "/user/login", "/user/join", "/join", "/home/**", "/user/ootd_list",
-                                        "/user/product/search","/user/product/list", "/user/api/ootd-images" // OOTD 목록 및 이미지 API 접근 허용
+                                        "/user/login", "/user/join", "/join", "/home/**",
+                                        "/user/ootd_list", "/user/product/search",
+                                        "/user/product/detail/**", // 로그인 없이 상품 상세 페이지 접근 허용
+                                        "/user/product_list", "/user/api/ootd-images",
+                                        "/user/ootd/detail/**", "/user/api/ootd/detail/**"
                                 ).permitAll()
                                 .requestMatchers(
                                         "/admin/product/list", "/admin/product/upload", "/admin/**"

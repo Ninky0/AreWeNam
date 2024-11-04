@@ -53,4 +53,5 @@ public class MypageApiController {
         return "redirect:/home";
     }
 
+
 }

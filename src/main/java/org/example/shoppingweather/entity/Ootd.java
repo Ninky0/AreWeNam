@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.shoppingweather.dto.OotdWriteRequestDTO;
 
 import java.time.LocalDateTime;
 
@@ -18,11 +19,10 @@ public class Ootd {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID 자동 생성
     private Long id;  // OOTD 고유 식별자
-
     private Long productId; // 단일 상품 ID 필드
 
     @ManyToOne
-    @JoinColumn(name = "customerId", nullable = false)  // 각 OOTD가 특정 고객과 연관되도록 설정 (nullable = false로 필수 관계 설정)
+    @JoinColumn(name = "customerId", nullable = false)  // customerId로 수정
     private Customer customer;
 
     @Column(nullable = false)
@@ -32,6 +32,16 @@ public class Ootd {
     private String picture; // 이미지 경로를 저장
 
     private String tag; // 태그 정보
+
+    public static Ootd fromDTO(OotdWriteRequestDTO requestDTO, String picturePath, Customer customer) {
+        Ootd ootd = new Ootd();
+        ootd.setProductId(requestDTO.getProductId());
+        ootd.setCustomer(customer);
+        ootd.setDate(LocalDateTime.now());
+        ootd.setPicture(picturePath);
+        ootd.setTag(requestDTO.getTag());
+        return ootd;
+    }
 
     @PrePersist
     protected void onCreate() {

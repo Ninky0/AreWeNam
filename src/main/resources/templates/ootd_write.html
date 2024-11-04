@@ -11,12 +11,13 @@
     <link th:href="@{/css/footer.css}" rel="stylesheet">
     <title>상품등록 페이지</title>
 </head>
-<body class="ootd-registration-body">
+<body class="ootd-registration-body" >
+
 <header>
-    <div th:replace="~{fragments/navbar::navbar}"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
-    <form id="ootdForm" method="POST" enctype="multipart/form-data" action="/user/ootd_write">
+    <form id="ootdForm" method="POST" enctype="multipart/form-data" action="/user/ootd_write/save">
         <h2>게시물 등록</h2>
         <div class="ootd-row">
             <div class="ootd-col-md-4">
@@ -29,18 +30,19 @@
                 </div>
             </div>
             <div class="ootd-col-md-8">
-                <input type="hidden" id="customerId" name="customerId" th:value="${customerId}">
+
+                <input type="hidden" id="customerId" name="customerId" th:value="${customerId}" />
                 <input type="text" id="tag" name="tag" placeholder="태그입력 ex) #겨울패딩 #추천" class="tag-input" required>
                 <div class="tags-container" id="tagsContainer"></div>
-                <input type="hidden" id="product_id" name="productId" th:value="${productId}">
+                <input type="hidden" id="product_id" name="productId" value="">
                 <button id="searchButton" type="button" onclick="openProductSearchModal()">연관 상품 검색<a id="search-product"><i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i></a></button>
                 <!-- 선택된 상품 정보 표시 영역 -->
-                <div id="selectedProductDetails">
+                <div id="selectedProductDetails" aria-labelledby="selectedProductTitle" style="display: none;">
                     <div>
-                        <img id="selectedProductImage" src="">
+                        <img id="selectedProductImage" alt="선택한 상품 이미지" />
                     </div>
                     <div>
-                        <h3>선택한 상품 정보</h3>
+                        <h3 id="selectedProductTitle">선택한 상품 정보</h3>
                         <p>상품명: <span id="selectedProductName"></span></p>
                         <p>가격: <span id="selectedProductPrice"></span></p>
                         <p>카테고리: <span id="selectedProductCategory"></span></p>
@@ -99,5 +101,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

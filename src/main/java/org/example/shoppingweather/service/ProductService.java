@@ -1,6 +1,7 @@
 package org.example.shoppingweather.service;
 
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Product;
@@ -41,5 +42,9 @@ public class ProductService {
     public Page<ProdReadResponseDTO> searchProductsByName(String name, Pageable pageable) {
         return productRepository.findByNameContainingIgnoreCase(name, pageable)
                 .map(Product::toProdReadResponseDTO);
+    }
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
     }
 }

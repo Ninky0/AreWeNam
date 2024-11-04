@@ -23,14 +23,15 @@
       <li><a th:href="@{/user/history}" class="sidebar-button">구매목록</a></li>
       <li><a href="" class="sidebar-button">구매취소</a></li>
       <li><a th:href="@{/user/shoppingcart}" class="sidebar-button">장바구니</a></li>
-      <li><a href="" class="sidebar-button">게시글</a></li>
+      <li><a th:href="@{/mypage/post}" >게시글</a></li>
       <li><a th:href="@{/mypage/edit}" class="sidebar-button">회원정보수정</a></li>
       <li><a th:href="@{/mypage/quitout}" class="sidebar-button">회원탈퇴</a></li>
     </ul>
+    <button class="button" id="logout">로그아웃</button>
   </aside>
 
   <main class="main-content">
-    <button class="button" id="logout">로그아웃</button>
+
     <div class="welcome-section">
       <h1 th:text="|${customer.name}님 반갑습니다.|"></h1>
       <div class="divider"></div> <!-- 굵은 선 추가 -->

@@ -89,4 +89,11 @@ public class MypageViewController {
         return "history";
     }
 
+
+    @GetMapping("/post")
+    public String post(HttpSession session, Model model) {
+        model.addAttribute("customer", customerService.findBySession(session));
+        // 게시글 목록
+        return "customer_post";
+    }
 }
