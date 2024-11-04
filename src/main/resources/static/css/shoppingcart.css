@@ -164,6 +164,7 @@ button {
 }
 
 .order-btn {
+    color: white; /* 글씨 색상을 하얀색으로 설정 */
     background-color: #000;
 }
 

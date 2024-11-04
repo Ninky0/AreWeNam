@@ -187,4 +187,57 @@ $(document).ready(function() {
     }
 
 
+    $('#orderButton').click(function() {
+        // 고객 ID 가져오기
+        var customerId = $('#customerId').val();
+        console.log("customerId: " + customerId);
+
+        // 선택된 상품 ID 가져오기
+        var selectedProductIds = [];
+        $('.checkbox:checked').each(function() {
+            // selectedProductIds.push($(this).val());
+            // 각 체크된 상품 ID를 정수로 변환하여 배열에 추가
+            selectedProductIds.push(parseInt($(this).val(), 10));
+        });
+
+        console.log("selectedProductIds: " + selectedProductIds);
+
+        // 선택된 상품이 없을 경우 처리
+        if (selectedProductIds.length === 0) {
+            alert('상품을 선택하세요.'); // 선택하지 않은 경우 경고
+            return; // 함수 종료
+        }
+
+        // 서버로 요청할 데이터 구성
+        var payload = {
+            action: 'purchase',
+            customerId: customerId,
+            productIds: selectedProductIds
+        };
+
+
+        console.log("전송할 데이터:", JSON.stringify({
+            action: "purchase",
+            customerId: customerId,
+            productIds: selectedProductIds
+        }));
+
+        // AJAX 요청 보내기
+        $.ajax({
+            url: '/user/shoppingcart',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function(response) {
+                // 요청이 성공하면 주문 완료 페이지로 이동
+                alert("구매하시겠습니까?"); // 한 번 더
+                alert(response.message); // 성공 메시지
+                window.location.href = '/user/shoppingcart/ordercomplete'; // 주문 완료 페이지로 이동
+            },
+            error: function(xhr) {
+                alert('주문 처리 중 오류가 발생했습니다: ' + xhr.responseJSON.message);
+            }
+        });
+    });
+
 });
