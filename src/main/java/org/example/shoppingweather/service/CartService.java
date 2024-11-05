@@ -62,22 +62,8 @@ public class CartService {
         List<Product> products = new ArrayList<>();
         String productList = cart.getProductList();
 
-        // 중괄호를 제거하고 문자열을 쉼표로 나눔
-        String cleanList = productList.replaceAll("[{}]", "");
-        String[] items = cleanList.split(",");
 
-        // 제품 ID와 수량을 저장할 맵 생성
-        Map<Long, Integer> productMap = new HashMap<>();
-
-        // 각 항목을 반복하며 제품 ID와 수량 파싱
-        for (String item : items) {
-            String[] parts = item.split(":");
-            if (parts.length == 2) {
-                Long productId = Long.parseLong(parts[0].replace("\"", "").trim());
-                Integer quantity = Integer.parseInt(parts[1].trim());
-                productMap.put(productId, quantity);
-            }
-        }
+        Map<Long, Integer> productMap = parseProductList(productList);
 
 
         // 제품 ID로 제품을 조회하고 리스트에 추가
@@ -99,7 +85,7 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
 
         // JSON 형식의 productList를 Map으로 변환
-        Map<Long, Integer> productMap = parseProductList(cart.getProductList());
+        Map<Long, Integer> productMap = parseProductListToMap(cart.getProductList());
 
         // 제품 삭제 로직
         for (Long productId : productIds) {
@@ -115,7 +101,7 @@ public class CartService {
     }
 
     // JSON 문자열을 Map으로 변환하는 메서드
-    private Map<Long, Integer> parseProductList(String productList) {
+    private Map<Long, Integer> parseProductListToMap(String productList) {
         try {
             return objectMapper.readValue(productList, objectMapper.getTypeFactory().constructMapType(HashMap.class, Long.class, Integer.class));
         } catch (JsonProcessingException e) {
@@ -132,118 +118,7 @@ public class CartService {
         }
     }
 
-//    public void PurchaseCart(Long customerId, List<Long> productIds) {
-//        System.out.println("Customer ID Type: " + ((Object) customerId).getClass().getName());
-//        System.out.println("Customer ID Value: " + customerId);
-//        Cart cart = cartRepository.findByCustomerId(customerId)
-//                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
-//
-//        // 장바구니의 선택된 상품 목록에 대한 구매 처리
-//        for (Long productId : productIds) {
-//            // 상품 정보 가져오기
-//            Product product = productRepository.findById(productId)
-//                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-//
-//            // 장바구니 데이터를 Purchase로 옮기기기
-//            Purchase purchase = Purchase.createPurchase(cart.getCustomer(), cart.getProductList());
-//            purchase.setDate(LocalDateTime.now()); // 현재 시간 저장
-//
-//            // Purchase 엔티티 저장
-//            purchaseRepository.save(purchase);
-//
-//        }
-//
-//        // 장바구니 초기화
-//        cart.setProductList("{}"); // 비워두기
-//        cartRepository.save(cart);
-//
-//    }
-
-//    public void PurchaseCart(Long customerId, List<Long> selectedProductIds) {
-//        System.out.println("Customer ID Type: " + ((Object) customerId).getClass().getName());
-//        System.out.println("Customer ID Value: " + customerId);
-//        Cart cart = cartRepository.findByCustomerId(customerId)
-//                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
-//
-//        // 장바구니의 선택된 상품 목록에 대한 구매 처리
-//        for (Long productId : selectedProductIds) {
-//            // 상품 정보 가져오기
-//            Product product = productRepository.findById(productId)
-//                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-//
-//            // 장바구니 데이터를 Purchase로 옮기기
-//            Purchase purchase = Purchase.createPurchase(cart.getCustomer(), cart.getProductList());
-//            purchase.setDate(LocalDateTime.now()); // 현재 시간 저장
-//
-//            // Purchase 엔티티 저장
-//            purchaseRepository.save(purchase);
-//        }
-//
-//        // 선택되지 않은 상품들만 장바구니에 남기기
-//        List<Long> currentProductIds = getProductIdsFromCart(cart.getProductList());
-//        currentProductIds.removeAll(selectedProductIds); // 선택된 상품 제거
-//
-//        // 남겨진 상품들로 장바구니 업데이트
-//        cart.setProductList(convertIdsToProductList(currentProductIds));
-//        cartRepository.save(cart);
-//    }
-
-
-    public void PurchaseCart(Long customerId, List<Long> selectedProductIds) {
-        System.out.println("Customer ID Type: " + ((Object) customerId).getClass().getName());
-        System.out.println("Customer ID Value: " + customerId);
-        Cart cart = cartRepository.findByCustomerId(customerId)
-                .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
-
-        // 장바구니에서 기존 상품 ID 가져오기
-        List<Long> existingProductIds = getProductIdsFromCart(cart.getProductList());
-
-        // 선택된 상품 ID를 제외한 남겨둘 상품 ID 리스트 작성
-        List<Long> remainingProductIds = existingProductIds.stream()
-                .filter(id -> !selectedProductIds.contains(id))
-                .collect(Collectors.toList());
-
-        // 구매 처리
-        for (Long productId : selectedProductIds) {
-            // 상품 정보 가져오기
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-
-            // Purchase 엔티티 생성 및 저장
-            Purchase purchase = Purchase.createPurchase(cart.getCustomer(), cart.getProductList());
-            purchase.setDate(LocalDateTime.now());
-            purchaseRepository.save(purchase);
-        }
-
-        // 장바구니 초기화 (남겨진 상품 ID로 업데이트)
-        String updatedProductList = convertIdsToProductList(remainingProductIds);
-        cart.setProductList(updatedProductList);
-        cartRepository.save(cart);
-    }
-
-    // 장바구니에서 상품 ID를 가져오는 메서드
-    private List<Long> getProductIdsFromCart(String productList) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // JSON 문자열을 List<Long>으로 변환
-            return objectMapper.readValue(productList, new TypeReference<List<Long>>() {});
-        } catch (Exception e) {
-            throw new RuntimeException("장바구니에서 상품 ID를 가져오는 중 오류가 발생했습니다.", e);
-        }
-    }
-
-    // 상품 ID 목록을 문자열로 변환하는 메서드
-    private String convertIdsToProductList(List<Long> productIds) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // List<Long>을 JSON 문자열로 변환
-            return objectMapper.writeValueAsString(productIds);
-        } catch (Exception e) {
-            throw new RuntimeException("상품 ID 목록을 JSON 문자열로 변환하는 중 오류가 발생했습니다.", e);
-        }
-    }
-
-    public boolean processPurchase(Long customerId, List<PurchaseProductDTO> products) {
+    public boolean processPurchase(Long customerId, List<PurchaseProductDTO> products, Integer grandTotal) {
         try {
             Customer customer = customerRepository.findById(customerId)
                     .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 고객 ID입니다."));
@@ -284,7 +159,7 @@ public class CartService {
             cartRepository.save(cart);
 
             String productListJson = objectMapper.writeValueAsString(productMap);
-            Purchase purchase = Purchase.createPurchase(customer, productListJson);
+            Purchase purchase = Purchase.createPurchase(customer, productListJson, grandTotal);
             purchaseRepository.save(purchase);
 
             return true;
@@ -293,5 +168,47 @@ public class CartService {
             return false;
         }
     }
+
+    public List<Purchase> findAllPurchases() {
+        List<Purchase> orders = purchaseRepository.findAll();
+
+        // 각 주문에 대한 제품 정보 할당
+        for (Purchase order : orders) {
+            List<Product> orderProducts = new ArrayList<>();
+
+            Map<Long, Integer> productMap = parseProductList(order.getProductList());
+
+            // 제품 ID로 제품을 조회하고 리스트에 추가
+            for (Long productId : productMap.keySet()) {
+                Product product = productRepository.findById(productId).orElse(null);
+                if (product != null) {
+                    // 수량을 설정하고 제품을 추가
+                    product.setQuantity(String.valueOf(productMap.get(productId))); // 수량 설정
+                    orderProducts.add(product);
+                }
+            }
+
+            // 여기서 orderProducts를 주문 객체에 설정
+            order.setProducts(orderProducts); // Purchase 객체에 제품 목록 설정
+        }
+
+        return orders;
+    }
+
+    private Map<Long, Integer> parseProductList(String productList) {
+        Map<Long, Integer> productMap = new HashMap<>();
+        String cleanList = productList.replaceAll("[{}]", "");
+        String[] items = cleanList.split(",");
+        for (String item : items) {
+            String[] parts = item.split(":");
+            if (parts.length == 2) {
+                Long productId = Long.parseLong(parts[0].trim().replace("\"", ""));
+                Integer quantity = Integer.parseInt(parts[1].trim());
+                productMap.put(productId, quantity);
+            }
+        }
+        return productMap;
+    }
+
 
 }

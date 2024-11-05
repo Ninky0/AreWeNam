@@ -111,11 +111,14 @@ $(document).ready(function() {
         var customerId = $('#customerId').val(); // 고객 ID 가져오기
         console.log("customerId: " + customerId);
 
+        var grandTotalText = $('#grandTotal').text().replace(/원/g, '').replace(/,/g, '');
+        var grandTotal = parseInt(grandTotalText);
+
         const selectedProducts = $('.checkbox:checked').map(function() {
             const row = $(this).closest('tr');
             const productId = $(this).val(); // value 속성에서 제품 ID 가져오기
             const quantity = row.find('.quantity').text(); // 수량 정보도 함께 가져오기
-            console.log("productId 값:", productId, "수량:", quantity);
+            console.log("productId 값:", productId, "수량:", quantity, "총액:", grandTotal);
             return {
                 productId: productId,
                 quantity: parseInt(quantity) // 문자열을 숫자로 변환
@@ -128,11 +131,11 @@ $(document).ready(function() {
         }
 
         if (confirm('선택한 제품을 구매하시겠습니까?')) {
-            purchaseSelectedProducts(customerId, selectedProducts);
+            purchaseSelectedProducts(customerId, selectedProducts, grandTotal);
         }
     });
 
-    function purchaseSelectedProducts(customerId, selectedProductIds) {
+    function purchaseSelectedProducts(customerId, selectedProductIds, grandTotal) {
         console.log("구매 요청 데이터:", JSON.stringify(selectedProductIds));
 
         $.ajax({
@@ -141,7 +144,8 @@ $(document).ready(function() {
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 customerId: customerId,
-                products: selectedProductIds
+                products: selectedProductIds,
+                grandTotal: grandTotal
             }),
             dataType: 'json',
             success: function(response) {

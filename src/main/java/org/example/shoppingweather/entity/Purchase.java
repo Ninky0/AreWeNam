@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "purchase")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,14 +25,20 @@ public class Purchase {
 
     private LocalDateTime date;
 
+    private Integer grandTotal;
+
     @Lob
     @Column(columnDefinition = "TEXT")
     private String productList; // JSON 형태로 제품 목록을 저장
 
-    public static Purchase createPurchase(Customer customer, String productList) {
+    @Transient
+    private List<Product> products;
+
+    public static Purchase createPurchase(Customer customer, String productList, Integer grandTotal) {
         Purchase purchase = new Purchase();
         purchase.setCustomer(customer);
         purchase.setProductList(productList);
+        purchase.setGrandTotal(grandTotal);
         purchase.setDate(LocalDateTime.now());
         return purchase;
     }

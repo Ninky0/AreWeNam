@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
+import org.example.shoppingweather.entity.Purchase;
 import org.example.shoppingweather.service.AdminService;
+import org.example.shoppingweather.service.CartService;
 import org.example.shoppingweather.service.CustomerService;
 import org.example.shoppingweather.service.ProductService;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminViewController {
 
-    private final AdminService adminService;
+    private final CartService cartService;
     private final ProductService productService;
 
     @GetMapping("/product/list")
@@ -73,6 +75,17 @@ public class AdminViewController {
         ProdReadResponseDTO product = productService.findById(id);
         model.addAttribute("product", product);
         return "edit_product"; // 수정 페이지 HTML 파일 이름
+    }
+
+    @GetMapping("/orders")
+    public String listOrders(Model model) {
+        model.addAttribute("orders", cartService.findAllPurchases());
+        List<Purchase> orders = cartService.findAllPurchases();
+        for (Purchase purchase : orders) {
+            System.out.println(purchase.getProducts());
+        }
+
+        return "order_list";
     }
 
 }
