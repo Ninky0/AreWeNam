@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <title>주문 내역 목록</title>
+</head>
+<body>
+<header>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
+<main class="container mt-5">
+    <h2>주문 내역 목록</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>주문번호</th>
+            <th>구매자 로그인 ID</th>
+            <th>구매 일시</th>
+            <th>구매 내역</th>
+            <th>총액</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.customer.loginId}"></td>
+            <td th:text="${order.date != null ? #temporals.format(order.date, 'yyyy-MM-dd HH:mm') : '날짜 없음'}"></td>
+            <td>
+                <div th:each="product : ${order.products}">
+                    <span th:text="${product.name} + ' * ' + ${product.quantity}"></span><br/>
+                </div>
+            </td>
+            <td th:text="${order.grandTotal}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+</body>
+</html>

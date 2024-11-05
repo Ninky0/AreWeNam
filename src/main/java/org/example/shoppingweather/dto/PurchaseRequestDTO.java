@@ -13,5 +13,6 @@ import java.util.List;
 public class PurchaseRequestDTO {
     private List<PurchaseProductDTO> products;
     private final Long customerId;
+    private Integer grandTotal;
     private LocalDateTime localDateTime;
 }

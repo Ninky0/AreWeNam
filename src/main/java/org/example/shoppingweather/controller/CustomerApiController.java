@@ -162,7 +162,7 @@ public class CustomerApiController {
         try {
             Long customerId = request.getCustomerId();
             // 구매 서비스 로직을 호출하여 각 상품의 ID와 수량을 처리
-            boolean isSuccess = cartService.processPurchase(customerId, request.getProducts());
+            boolean isSuccess = cartService.processPurchase(customerId, request.getProducts(), request.getGrandTotal());
 
             if (isSuccess) {
                 return ResponseEntity.ok(Map.of("message", "선택한 제품이 성공적으로 구매되었습니다."));
