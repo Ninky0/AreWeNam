@@ -17,8 +17,8 @@ body {
 
 .sidebar {
     background-color: #f2f2f2;
-    width: 20%;
-    padding: 20px;
+    width: 8%;
+    padding: 10px;
     position: fixed; /* 사이드바 고정 */
     top: 60px; /* 헤더 아래에 위치하게 */
     bottom: 0;
@@ -55,7 +55,7 @@ a:hover {
 .main-content {
     width: 80%;
     padding: 20px;
-    margin-left: 20%;
+    margin-left: 10%;
     padding-top: 10px;
 }
 

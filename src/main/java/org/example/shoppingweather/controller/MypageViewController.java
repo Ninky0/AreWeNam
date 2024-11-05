@@ -3,14 +3,19 @@ package org.example.shoppingweather.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.entity.Customer;
+import org.example.shoppingweather.entity.Product;
+import org.example.shoppingweather.entity.Purchase;
 import org.example.shoppingweather.service.CustomerService;
+import org.example.shoppingweather.service.ProductService;
+import org.example.shoppingweather.service.PurchaseService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MypageViewController {
 
     private final CustomerService customerService;
+    private final PurchaseService purchaseService;
+    private final ProductService productService;
 
     @GetMapping
     public String mypage(HttpSession session, Model model) {
@@ -83,10 +90,22 @@ public class MypageViewController {
 
     @GetMapping("/history")
     public String history(HttpSession session, Model model) {
+
+        // 세션에서 고객정보 모델에 추가
         model.addAttribute("customer", customerService.findBySession(session));
 
+        // 고객 구매 목록 가져오기
+        Customer customer = (Customer) model.getAttribute("customer");
+        List<Purchase> purchases = purchaseService.getPurchasesByCustomer(customer);
+
+        // 구매 목록 제품 정보 추출
+        List<Product> products = purchaseService.extractProductsFromPurchases(purchases);
+
+        model.addAttribute("purchase", purchases);
+        model.addAttribute("product", products);
+
         // 구매 목록
-        return "history";
+        return "purchaselist";
     }
 
 

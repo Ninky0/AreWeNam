@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PurchaseProductDTO {
     private Long productId;
     private Integer quantity;
+    private Integer price; // 가격 추가
 }
