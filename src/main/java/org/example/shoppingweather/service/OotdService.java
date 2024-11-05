@@ -48,6 +48,7 @@ public class OotdService {
 
         ootdRepository.save(ootd); // OOTD 데이터 저장
     }
+
     public Page<CustomerOotdImageResponseDTO> getOotdPostsByCustomerId(Long customerId, Pageable pageable) {
         return ootdRepository.findByCustomerId(customerId, pageable)
                 .map(ootd -> new CustomerOotdImageResponseDTO(
@@ -59,5 +60,30 @@ public class OotdService {
                         ootd.getCustomer().getLoginId(),
                         ootd.getProduct() != null ? ootd.getProduct().getName() : "Unknown"
                 ));
+    }
+
+
+    public CustomerOotdImageResponseDTO findOotdById(Long id) {
+        Ootd ootd = ootdRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No OOTD found for the given ID"));
+
+        // Create the DTO and populate fields from Ootd
+        CustomerOotdImageResponseDTO responseDTO = new CustomerOotdImageResponseDTO();
+        responseDTO.setId(ootd.getId());
+        responseDTO.setPicture(ootd.getPicture());
+        responseDTO.setTag(ootd.getTag());
+        responseDTO.setProductId(ootd.getProduct() != null ? ootd.getProduct().getId() : null);
+
+        // Fetch and add product information if Product is associated
+        if (ootd.getProduct() != null) {
+            Product product = ootd.getProduct();
+            responseDTO.setProductPrice(String.valueOf(product.getProductPrice()));
+            responseDTO.setProductCategory(product.getProductCategory());
+            responseDTO.setProductSeason(product.getProductSeason());
+            responseDTO.setProductTemperature(product.getProductTemperature());
+            responseDTO.setMainPicturePath(product.getMainPicturePath().replace("\\", "/")); // Clean the path
+        }
+
+        return responseDTO;
     }
 }

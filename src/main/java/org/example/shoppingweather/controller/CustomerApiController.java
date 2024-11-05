@@ -296,7 +296,7 @@ public class CustomerApiController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getOotdDetail(@PathVariable Long id) {
         // Retrieve OOTD entry by ID
-        CustomerOotdImageResponseDTO ootdDetail = customerService.findOotdById(id);
+        CustomerOotdImageResponseDTO ootdDetail = ootdService.findOotdById(id);
 
         if (ootdDetail == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 if not found

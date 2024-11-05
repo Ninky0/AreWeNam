@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
 import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
 import org.example.shoppingweather.entity.Customer;
+import org.example.shoppingweather.entity.Ootd;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.entity.Review;
 import org.example.shoppingweather.repository.CustomerRepository;
@@ -27,7 +28,10 @@ public class ReviewService {
     private final CustomerRepository customerRepository;
 
     public Page<CustomerReviewResponseDTO> findReviewsByProductId(Long productId, Pageable pageable) {
+        // productId를 기반으로 리뷰를 찾는 리포지토리 메소드 호출
         Page<Review> reviewPage = reviewRepository.findByProductId(productId, pageable);
+
+        // Review 엔티티를 CustomerReviewResponseDTO로 변환
         return reviewPage.map(this::convertToDto);
     }
 
@@ -37,6 +41,8 @@ public class ReviewService {
                 .loginId(review.getCustomer().getLoginId()) // customer 테이블의 loginId 포함
                 .picturePath(review.getPicturePath())
                 .content(review.getContent())
+                .product(review.getProduct())
+                .customer(review.getCustomer())
                 .date(review.getDate())
                 .build();
     }
@@ -65,6 +71,9 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
+    public Integer countReview(Long productId) {
+        return reviewRepository.countByProductId(productId).intValue();
+    }
     // customerId로 리뷰 조회 메서드
     public Page<CustomerReviewResponseDTO> findReviewsByCustomerId(Long customerId, Pageable pageable) {
         Page<Review> reviewPage = reviewRepository.findByCustomerId(customerId, pageable);
