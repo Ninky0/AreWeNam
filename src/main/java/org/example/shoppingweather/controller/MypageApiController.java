@@ -37,7 +37,7 @@ public class MypageApiController {
                 UrlResponseDTO.builder()
                         .url("/mypage")
                         .build()
-                );
+        );
     }
 
     @DeleteMapping("/quitout/{id}")
