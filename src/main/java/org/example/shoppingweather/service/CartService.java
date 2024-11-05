@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.PurchaseProductDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
@@ -239,6 +240,57 @@ public class CartService {
             return objectMapper.writeValueAsString(productIds);
         } catch (Exception e) {
             throw new RuntimeException("상품 ID 목록을 JSON 문자열로 변환하는 중 오류가 발생했습니다.", e);
+        }
+    }
+
+    public boolean processPurchase(Long customerId, List<PurchaseProductDTO> products) {
+        try {
+            Customer customer = customerRepository.findById(customerId)
+                    .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 고객 ID입니다."));
+            Cart cart = cartRepository.findByCustomerId(customerId)
+                    .orElseThrow(() -> new IllegalStateException("장바구니를 찾을 수 없습니다."));
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<Long, Integer> cartProducts = objectMapper.readValue(cart.getProductList(), new TypeReference<Map<Long, Integer>>() {});
+
+            Map<Long, Integer> productMap = new HashMap<>();
+            for (PurchaseProductDTO productDTO : products) {
+                Product product = productRepository.findById(productDTO.getProductId())
+                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+                int currentQuantity = Integer.parseInt(product.getQuantity());
+                if (currentQuantity < productDTO.getQuantity()) {
+                    throw new IllegalArgumentException("재고 부족");
+                }
+
+                // 장바구니에서 상품 제거
+                Integer cartQuantity = cartProducts.get(productDTO.getProductId());
+                if (cartQuantity != null) {
+                    if (cartQuantity > productDTO.getQuantity()) {
+                        cartProducts.put(productDTO.getProductId(), cartQuantity - productDTO.getQuantity());
+                    } else {
+                        cartProducts.remove(productDTO.getProductId());
+                    }
+                }
+
+                productMap.put(product.getId(), productDTO.getQuantity());
+                product.setQuantity(String.valueOf(currentQuantity - productDTO.getQuantity()));
+                productRepository.save(product);
+            }
+
+            // 장바구니 업데이트
+            String updatedProductList = objectMapper.writeValueAsString(cartProducts);
+            cart.setProductList(updatedProductList);
+            cartRepository.save(cart);
+
+            String productListJson = objectMapper.writeValueAsString(productMap);
+            Purchase purchase = Purchase.createPurchase(customer, productListJson);
+            purchaseRepository.save(purchase);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
