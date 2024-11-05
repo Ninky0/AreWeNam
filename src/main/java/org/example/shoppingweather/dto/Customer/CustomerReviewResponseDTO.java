@@ -18,4 +18,5 @@ public class CustomerReviewResponseDTO {
     private final Product product;
     private final Customer customer;
     private final LocalDateTime date;
+    private final String loginId;
 }

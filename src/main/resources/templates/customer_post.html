@@ -10,13 +10,14 @@
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/mypage.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
-
     <title>고객 페이지</title>
 </head>
 
 <body>
 <header>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <!-- Hidden input to pass customer ID to JavaScript -->
+    <input type="hidden" id="customerId" th:value="${customer.id}" />
 </header>
 
 <div class="container">
@@ -24,9 +25,9 @@
         <h2>마이페이지</h2>
         <ul>
             <li><a th:href="@{/user/history}" class="sidebar-button">구매목록</a></li>
-            <li><a href="" class="sidebar-button">구매취소</a></li>
+            <li><a href="#" class="sidebar-button">구매취소</a></li>
             <li><a th:href="@{/user/shoppingcart}" class="sidebar-button">장바구니</a></li>
-            <li><a th:href="@{/mypage/post}" >게시글</a></li>
+            <li><a th:href="@{/mypage/post}">게시글</a></li>
             <li><a th:href="@{/mypage/edit}" class="sidebar-button">회원정보수정</a></li>
             <li><a th:href="@{/mypage/quitout}" class="sidebar-button">회원탈퇴</a></li>
         </ul>
@@ -34,26 +35,52 @@
     </aside>
 
     <main class="main-content">
-
         <div class="welcome-section">
-            <h1 th:text="|${customer.name}님 반갑습니다.|"> </h1>
-            <div class="divider"></div> <!-- 굵은 선 추가 -->
+            <h1 th:text="|${customer.name}님 반갑습니다.|"></h1>
+            <!-- 탭 메뉴 -->
+            <div class="tab-menu">
+                <button class="tab-button active" id="ootdTab">나의 OOTD</button>
+                <button class="tab-button" id="reviewTab">나의 리뷰</button>
+            </div>
         </div>
 
-        <div class="order-status">
-            <h2>나의 게시물</h2>
+        <!-- OOTD 게시글 -->
+        <div id="ootdContent">
             <table>
-                <thead>
+                <thead id="post">
                 <tr>
-                    <th>작성일</th>
+                    <th>번호</th>
+                    <th>작성자</th>
+                    <th>상품명</th>
+                    <th>태그</th>
                     <th>이미지</th>
-                    <th>내용</th>
+                    <th>작성일</th>
                 </tr>
                 </thead>
-                <tbody id="post_list">
-                <!-- 게시글이 JavaScript로 동적으로 추가될 부분 -->
+                <tbody id="boardContent">
+                <!-- OOTD 게시글 데이터가 여기에 로드됩니다. -->
                 </tbody>
             </table>
+            <div id="pagination" class="pagination"></div>
+        </div>
+
+        <!-- 리뷰 게시글 -->
+        <div id="reviewContent" style="display: none;">
+            <table>
+                <thead id="post2">
+                <tr>
+                    <th>번호</th>
+                    <th>작성자</th>
+                    <th>내용</th>
+                    <th>이미지</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody id="reviewBoardContent">
+                <!-- 리뷰 게시글 데이터가 여기에 로드됩니다. -->
+                </tbody>
+            </table>
+            <div id="reviewPagination" class="pagination"></div>
         </div>
     </main>
 </div>

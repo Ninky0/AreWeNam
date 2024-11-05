@@ -1,8 +1,8 @@
 main {
-    padding: 20px;
-    margin-top: 40px; /* 필요한 경우 추가 간격 설정 */
+    padding: 66px;
+    /* margin-top: 40px; */
+    background-color: white;
 }
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
@@ -23,7 +23,6 @@ td {
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 1000px;
     text-align: center;
 }

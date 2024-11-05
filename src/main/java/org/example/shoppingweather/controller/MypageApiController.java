@@ -1,13 +1,21 @@
 package org.example.shoppingweather.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
+import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
+import org.example.shoppingweather.dto.Customer.CustomerPostResponseDTO;
 import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.service.CustomerService;
+import org.example.shoppingweather.service.OotdService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class MypageApiController {
 
     private final CustomerService customerService;
+    private final OotdService ootdService;
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<UrlResponseDTO> update(
@@ -51,6 +60,14 @@ public class MypageApiController {
         session.invalidate();
 
         return "redirect:/home";
+    }
+    // 특정 customerId 기준으로 작성한 게시물 조회
+    @GetMapping("/posts/{customerId}")
+    public ResponseEntity<Page<CustomerOotdImageResponseDTO>> getCustomerPosts(
+            @PathVariable Long customerId,
+            Pageable pageable) {
+        Page<CustomerOotdImageResponseDTO> posts = ootdService.getOotdPostsByCustomerId(customerId, pageable);
+        return ResponseEntity.ok(posts);
     }
 
 

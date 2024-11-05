@@ -1,81 +1,134 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('searchButton').addEventListener('click', submitSearchForm);
+    fetchRegionsAndWeather();
 });
 
 let regions = [];
-let temperature=0.0;
+let temperature = 0.0;
 
-// 페이지 로드 시 CSV 데이터를 서버에서 받아옴
-window.onload = function () {
+// 초기 데이터 로드
+function fetchRegionsAndWeather() {
     fetch('/home/weather/regions')
         .then(response => response.json())
         .then(data => {
             regions = data;
             populateRegions();
-            return submitSearchForm(); // Promise 반환을 위해 submitSearchForm 수정 필요
+            return submitSearchForm(); // 날씨 정보를 먼저 가져옴
         })
         .then(() => {
-            fetchRecommendedProducts(); // 온도 설정 후 추천 상품 정보 로드
+            fetchRecommendedProducts(); // 날씨 정보 설정 후 추천 상품 로드
         })
         .catch(error => console.error('Error:', error));
-};
+}
 
 function fetchRecommendedProducts() {
     fetch('/home/recommend/temp?temperature=' + getCurrentTemperature())
-        .then(response => response.json()) // JSON 응답 수신
+        .then(response => response.json())
         .then(products => {
             const slider = document.getElementById('productSlider');
-            slider.innerHTML = ''; // 기존 내용 초기화
+            slider.innerHTML = '';
+
             products.forEach(product => {
-                slider.innerHTML += `
+                const seasonName = getSeasonName(product.season);
+                const item = `
                     <div class="bn2-product-item">
                         <a href="/user/product/detail/${product.id}">
                             <img src="${product.mainPicturePath}" alt="${product.name}">
                         </a>
                         <p class="bn2-title">${product.name}</p>
-                        <p class="bn2-price">${product.price}</p>
+                        <p class="bn2-price">${product.price} 원</p>
+                        <div class="bn2-product-info">
+                            <span>${product.category || '카테고리 없음'}</span>ㆍ
+                            <span>${seasonName}</span>ㆍ
+                            <span>${product.temperature || '온도 정보 없음'}°C</span>
+                        </div>
                     </div>
                 `;
+                slider.innerHTML += item;
             });
+
+            // 슬라이더 끝에 모든 슬라이드 복제하여 무한 스크롤 구현
+            const originalSlides = Array.from(slider.children);
+            originalSlides.forEach(slide => {
+                const clone = slide.cloneNode(true);
+                slider.appendChild(clone);
+            });
+
+            startAutoSlide(originalSlides.length);
         })
         .catch(error => console.error('Error fetching recommended products:', error));
 }
 
+// 계절 숫자를 이름으로 변환하는 함수
+function getSeasonName(season) {
+    switch (season) {
+        case 1: return '봄';
+        case 2: return '여름';
+        case 3: return '가을';
+        case 4: return '겨울';
+        default: return '계절 정보 없음';
+    }
+}
+function startAutoSlide(totalItems) {
+    const slider = document.getElementById('productSlider');
+    const itemWidth = 250; // 아이템 너비
+    const gap = 11; // 간격
+    const slideDistance = itemWidth + gap; // 이동 거리
+    let currentIndex = 0;
+    let autoSlideInterval;
+
+    // 슬라이더의 전체 너비 설정
+    slider.style.width = `${(slider.children.length * slideDistance)}px`;
+
+    autoSlideInterval = setInterval(() => {
+        currentIndex++;
+        slider.style.transition = 'transform 0.5s ease-in-out';
+        slider.style.transform = `translateX(-${slideDistance * currentIndex}px)`;
+
+        // 마지막 슬라이드가 보이는 시점에서 원래의 첫 번째 슬라이드로 이동
+        slider.addEventListener('transitionend', () => {
+            if (currentIndex >= totalItems) { // 원래 슬라이드 길이를 넘어가면
+                currentIndex = 0;
+                slider.style.transition = 'none';
+                slider.style.transform = `translateX(0)`;
+                setTimeout(() => {
+                    slider.style.transition = 'transform 0.5s ease-in-out';
+                }, 50);
+            }
+        });
+    }, 3000); // 3초마다 슬라이드 이동
+}
 
 function getCurrentTemperature() {
     return temperature;
 }
-function setTemperature(temperatureP){
-    temperature = temperatureP;
+
+function setTemperature(temp) {
+    temperature = temp;
 }
 
-
-// 대범위 지역을 <select> 태그에 추가하고 기본값 설정
 function populateRegions() {
     const regionSelect = document.getElementById('region');
-    const uniqueRegions = [...new Set(regions.map(item => item.regionParent))]; // 대범위 지역 중복 제거
+    const uniqueRegions = [...new Set(regions.map(item => item.regionParent))];
 
     uniqueRegions.forEach(region => {
         const option = document.createElement('option');
         option.value = region;
         option.textContent = region;
 
-        // "서울특별시"를 기본값으로 설정
         if (region === "서울특별시") {
             option.selected = true;
         }
         regionSelect.appendChild(option);
     });
 
-    // "서울특별시" 선택 시 소범위 지역도 기본값으로 설정
     populateSubRegions();
 }
 
-// 대범위 지역 선택 시 소범위 지역을 <select> 태그에 추가하고 기본값 설정
 function populateSubRegions() {
     const selectedRegion = document.getElementById('region').value;
     const region2Select = document.getElementById('region2');
-    region2Select.innerHTML = ''; // 기존 옵션 제거
+    region2Select.innerHTML = '';
 
     const subRegions = regions.filter(item => item.regionParent === selectedRegion);
     subRegions.forEach(region => {
@@ -83,7 +136,6 @@ function populateSubRegions() {
         option.value = region.regionChild;
         option.textContent = region.regionChild;
 
-        // "종로구"를 기본값으로 설정
         if (region.regionChild === "종로구") {
             option.selected = true;
         }
@@ -95,11 +147,11 @@ function submitSearchForm() {
     const selectedRegion = document.getElementById('region').value;
     const selectedSubRegion = document.getElementById('region2').value;
 
-    return fetch(`/home/weather/search?parent=${selectedRegion}&child=${selectedSubRegion}`) // fetch의 Promise 반환
+    return fetch(`/home/weather/search?parent=${selectedRegion}&child=${selectedSubRegion}`)
         .then(response => response.json())
         .then(data => {
-            updateWeatherUI(data); // UI 업데이트 및 온도 설정 함수
-            setTemperature(data.temperature); // 온도 설정
+            updateWeatherUI(data);
+            setTemperature(data.temperature);
         })
         .catch(error => {
             console.error('Error fetching weather:', error);
@@ -110,18 +162,16 @@ function submitSearchForm() {
 function updateWeatherUI(data) {
     const weatherTextDiv = document.getElementById('weather-text');
     const weatherIconImg = document.querySelector('.weather-icon-container img');
-    weatherTextDiv.innerHTML = ''; // 기존 내용 제거
+    weatherTextDiv.innerHTML = '';
 
     if (data && data.description && data.temperature) {
         const temperatureText = `${data.temperature}°C`;
         const weatherDescription = data.description;
 
-        // 온도 표시
         const temperatureP = document.createElement('p');
         temperatureP.textContent = temperatureText;
         weatherTextDiv.appendChild(temperatureP);
 
-        // 날씨 상태에 따른 아이콘 이미지 변경
         switch (weatherDescription) {
             case '맑음':
                 weatherIconImg.src = '/images/sunny.png';
@@ -139,14 +189,16 @@ function updateWeatherUI(data) {
                 weatherIconImg.src = '/images/overcast.png';
                 break;
             default:
-                weatherIconImg.src = '/images/cloudy.png'; // 기본 아이콘
+                weatherIconImg.src = '/images/cloudy.png';
         }
 
-        weatherIconImg.alt = "Weather Icon: " + weatherDescription; // alt 속성 업데이트
+        weatherIconImg.alt = "Weather Icon: " + weatherDescription;
     } else {
         weatherTextDiv.textContent = '날씨 정보를 불러오지 못했습니다.';
     }
 }
+
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~아래 코드는 안쓰는데 값 보려고 넣어둔거에요~~~~~~~~~~~~~~~~~~~~~~~
 
