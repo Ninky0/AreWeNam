@@ -18,8 +18,9 @@
 
 <div class="container">
   <aside class="sidebar">
-    <h2>마이페이지</h2>
+    <h2><a th:href="@{/mypage}">마이페이지</a></h2>
     <ul>
+      <li><a th:href="@{/mypage/history}" class="sidebar-button">구매목록</a></li>
       <li><a th:href="@{/admin/product/upload}" class="sidebar-button">상품등록</a></li>
       <li><a th:href="@{/admin/product/list}" class="sidebar-button">판매상품</a></li>
 <!--      <li><a href="" class="sidebar-button">게시글</a></li>-->
@@ -33,25 +34,6 @@
     <div class="welcome-section">
       <h1 th:text="|${customer.name}님 반갑습니다.|"></h1>
       <div class="divider"></div> <!-- 굵은 선 추가 -->
-    </div>
-
-    <div class="order-status">
-      <h2>주문현황</h2>
-      <table>
-        <thead>
-        <tr>
-          <th>주문일</th>
-          <th>고객</th>
-          <th>상품이미지</th>
-          <th>상품명</th>
-          <th>수량</th>
-          <th>금액</th>
-        </tr>
-        </thead>
-        <tbody id="order-tbody">
-        <!-- 주문 내역이 JavaScript로 동적으로 추가될 부분 -->
-        </tbody>
-      </table>
     </div>
   </main>
 </div>

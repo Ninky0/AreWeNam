@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
   <script th:src="@{/js/mypage.js}"></script>
-  <link th:href="@{/css/mypage.css}" rel="stylesheet">
+  <link th:href="@{/css/purchaselist.css}" rel="stylesheet">
   <link th:href="@{/css/heather.css}" rel="stylesheet">
   <link th:href="@{/css/footer.css}" rel="stylesheet">
 
@@ -35,6 +35,36 @@
     <div class="welcome-section">
       <h1 th:text="|${customer.name}님 반갑습니다.|"></h1>
       <div class="divider"></div> <!-- 굵은 선 추가 -->
+    </div>
+
+    <div class="order-status">
+      <h2>주문현황</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>번호</th>
+          <th>주문일</th>
+          <th>상품이미지</th>
+          <th>상품명</th>
+          <th>수량</th>
+          <th>금액</th>
+        </tr>
+        </thead>
+        <tbody id="order-tbody">
+        <tr th:each="purchase, iterStat : ${purchases}">
+          <td th:text="${iterStat.count}">1</td> <!-- 번호 -->
+          <td th:text="${#dates.format(purchase.date, 'yyyy-MM-dd')}">2024-11-05</td> <!-- 주문일 -->
+          <td>
+            <div th:each="product : ${purchase.productList}">
+              <img th:src="@{${#strings.replace(product.mainPicturePath,'src/main/resources/static', '')}}" th:alt="${product.name}"/> <!-- 상품이미지 -->
+            </div>
+          </td>
+          <td th:text="${product.name}">상품명</td> <!-- 상품명 -->
+          <td th:text="${product.quantity}">수량</td> <!-- 수량 -->
+          <td th:text="${product.price}">금액</td> <!-- 금액 -->
+        </tr>
+        </tbody>
+      </table>
     </div>
   </main>
 </div>
