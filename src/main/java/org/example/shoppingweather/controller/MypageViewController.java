@@ -1,5 +1,7 @@
 package org.example.shoppingweather.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.entity.Customer;
@@ -90,7 +92,6 @@ public class MypageViewController {
 
     @GetMapping("/history")
     public String history(HttpSession session, Model model) {
-
         // 세션에서 고객정보 모델에 추가
         model.addAttribute("customer", customerService.findBySession(session));
 
@@ -101,8 +102,8 @@ public class MypageViewController {
         // 구매 목록 제품 정보 추출
         List<Product> products = purchaseService.extractProductsFromPurchases(purchases);
 
-        model.addAttribute("purchase", purchases);
-        model.addAttribute("product", products);
+        model.addAttribute("purchases", purchases); // 모델에 구매 목록 추가
+        model.addAttribute("products", products); // 모델에 제품 목록 추가
 
         // 구매 목록
         return "purchaselist";

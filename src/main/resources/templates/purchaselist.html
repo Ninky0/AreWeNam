@@ -31,10 +31,9 @@
   </aside>
 
   <main class="main-content">
-
     <div class="welcome-section">
       <h1 th:text="|${customer.name}님 반갑습니다.|"></h1>
-      <div class="divider"></div> <!-- 굵은 선 추가 -->
+      <div class="divider"></div>
     </div>
 
     <div class="order-status">
@@ -50,23 +49,26 @@
           <th>금액</th>
         </tr>
         </thead>
-        <tbody id="order-tbody">
+        <tbody>
         <tr th:each="purchase, iterStat : ${purchases}">
-          <td th:text="${iterStat.count}">1</td> <!-- 번호 -->
-          <td th:text="${#dates.format(purchase.date, 'yyyy-MM-dd')}">2024-11-05</td> <!-- 주문일 -->
-          <td>
-            <div th:each="product : ${purchase.productList}">
-              <img th:src="@{${#strings.replace(product.mainPicturePath,'src/main/resources/static', '')}}" th:alt="${product.name}"/> <!-- 상품이미지 -->
-            </div>
+          <td th:text="${iterStat.count}"></td> <!-- 번호, assuming 'index' or use 'iterStat.index' -->
+          <td th:text="${purchase.date}"></td> <!-- 주문일 -->
+          <td colspan="4">
+            <table>
+              <tr th:each="product : ${products}"> <!-- Assuming each purchase has multiple products -->
+                <td><img class="product-image" th:src="@{${product.mainPicturePath}}" th:alt="${product.name}"/></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.quantity}"></td>
+                <td th:text="${product.price}"></td>
+              </tr>
+            </table>
           </td>
-          <td th:text="${product.name}">상품명</td> <!-- 상품명 -->
-          <td th:text="${product.quantity}">수량</td> <!-- 수량 -->
-          <td th:text="${product.price}">금액</td> <!-- 금액 -->
         </tr>
         </tbody>
       </table>
     </div>
   </main>
+
 </div>
 
 <footer>

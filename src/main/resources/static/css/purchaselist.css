@@ -114,8 +114,7 @@ tbody td {
     border-bottom: 1px solid #ccc;
 }
 
-.product-img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
+.product-image {
+    width: 30px; /* 원하는 너비 설정 */
+    height: auto; /* 비율에 맞게 높이 자동 조정 */
 }
