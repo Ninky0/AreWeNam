@@ -28,7 +28,7 @@ public class WebSecurityConfig {
                                         "/user/login", "/user/join", "/join", "/home/**",
                                         "/user/ootd_list", "/user/product/search",
                                         "/user/product/detail/**", // 로그인 없이 상품 상세 페이지 접근 허용
-                                        "/user/product_list", "/user/api/ootd-images",
+                                        "/user/product/list", "/user/api/ootd-images",
                                         "/user/ootd/detail/**", "/user/api/ootd/detail/**"
                                 ).permitAll()
                                 .requestMatchers(

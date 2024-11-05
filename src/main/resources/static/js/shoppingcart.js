@@ -1,144 +1,64 @@
 $(document).ready(function() {
-    // "전체 선택" 체크박스 클릭 시
-    document.getElementById('selectAll').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
+    // 체크박스 클릭 이벤트
+    $('.checkbox').change(function() {
+        updateTotals(); // 체크박스 상태 변경 시 총합 업데이트
     });
 
-    // // 각 체크박스 클릭 시 전체 선택 체크박스 상태 업데이트
-    // const checkboxes = document.querySelectorAll('.checkbox:not(#selectAll)');
-    // checkboxes.forEach(checkbox => {
-    //     checkbox.addEventListener('change', function() {
-    //         const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-    //         document.getElementById('selectAll').checked = allChecked;
-    //     });
-    // });
-
-    // // 모달 열기 및 닫기 기능
-    // const optionChangeBtns = document.querySelectorAll('.option-change-btn');
-    // const modal = document.getElementById('optionModal');
-    // const closeModal = document.querySelector('.close');
-    // const saveChangesBtn = document.getElementById('saveChanges');
-    //
-    // optionChangeBtns.forEach((btn) => {
-    //     btn.addEventListener('click', () => {
-    //         const selectedRows = Array.from(document.querySelectorAll('tbody tr'))
-    //             .filter(row => row.querySelector('.checkbox').checked);
-    //
-    //         if (selectedRows.length === 0) {
-    //             alert('옵션을 변경할 상품을 선택해 주세요.');
-    //             return;
-    //         }
-    //
-    //         // 선택된 행의 첫 번째 행에서 현재 옵션 정보를 불러오기
-    //         const firstRow = selectedRows[0];
-    //         const seasonDisplay = firstRow.querySelector('.seasonDisplay').textContent;
-    //
-    //         // 모달에 현재 옵션 설정
-    //         document.getElementById('season').value = seasonDisplay;
-    //
-    //         // 모달 표시
-    //         modal.style.display = 'block';
-    //     });
-    // });
-    //
-    // closeModal.addEventListener('click', () => {
-    //     modal.style.display = 'none';
-    // });
-    //
-    // window.onclick = function(event) {
-    //     if (event.target == modal) {
-    //         modal.style.display = 'none';
-    //     }
-    // }
-    //
-    // saveChangesBtn.addEventListener('click', () => {
-    //     const season = document.getElementById('season').value;
-    //
-    //     // 모든 선택된 행의 상품 정보를 업데이트
-    //     const selectedRows = Array.from(document.querySelectorAll('tbody tr'))
-    //         .filter(row => row.querySelector('.checkbox').checked);
-    //
-    //     selectedRows.forEach(row => {
-    //         const seasonDisplay = row.querySelector('.seasonDisplay');
-    //         seasonDisplay.textContent = season;
-    //     });
-    //
-    //     // 모달 닫기
-    //     modal.style.display = 'none';
-    // });
-
-    // 페이지 로드 시 총합 및 초기 가격 업데이트
-    document.querySelectorAll('tbody tr').forEach(row => {
-        const priceElement = row.querySelector('.th_2');
-        const quantityElement = row.querySelector('.quantity');
-        const price = parseInt(priceElement.getAttribute('data-price'));
-        const quantity = parseInt(quantityElement.textContent);
-
-        // 주문 금액 업데이트
-        const orderAmount = price * quantity;
-        priceElement.textContent = orderAmount.toLocaleString() + ' 원';
+    // 전체 선택/해제 체크박스
+    $('#selectAll').change(function() {
+        $('tbody .checkbox').prop('checked', this.checked);
+        updateTotals(); // 전체 선택/해제 시 총합 업데이트
     });
 
-    // 수량 변경 버튼 클릭 시 총합 및 주문금액 업데이트
-    document.querySelectorAll('.increaseBtn, .decreaseBtn').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const row = event.target.closest('tr'); // 클릭한 버튼의 부모 행을 찾음
-            const quantityElement = row.querySelector('.quantity'); // 주문 수량 요소
-            const priceElement = row.querySelector('.th_2'); // 가격 요소
-            const price = parseInt(priceElement.getAttribute('data-price')); // 가격 가져오기
-            let quantity = parseInt(quantityElement.textContent); // 현재 수량 가져오기
+    // 수량 변경 로직
+    $('.increaseBtn, .decreaseBtn').click(function(event) {
+        var row = $(this).closest('tr');
+        var quantityElement = row.find('.quantity');
+        var priceElement = row.find('.th_2');
+        var price = parseInt(priceElement.data('price'));
+        var quantity = parseInt(quantityElement.text());
 
-            // 수량 증가 또는 감소
-            if (event.target.classList.contains('increaseBtn')) {
-                quantity += 1; // 수량 증가
-            } else {
-                quantity = Math.max(1, quantity - 1); // 수량 감소 (1 미만으로는 안됨)
-            }
+        if ($(this).hasClass('increaseBtn')) {
+            quantity += 1;
+        } else {
+            quantity = Math.max(1, quantity - 1);
+        }
 
-            // 수량 업데이트
-            quantityElement.textContent = quantity; // 수량 업데이트
+        quantityElement.text(quantity);
+        var orderAmount = price * quantity;
+        priceElement.text(orderAmount.toLocaleString() + ' 원');
 
-            // 주문 금액 업데이트
-            const orderAmount = price * quantity;
-            priceElement.textContent = orderAmount.toLocaleString() + ' 원'; // 총 주문 금액 업데이트
-
-            // 총합 업데이트
-            updateTotals();
-        });
+        updateTotals();
     });
 
     // 총합 업데이트 함수
     function updateTotals() {
-        let totalAmount = 0;
-        const totalShipping = 100000; // 각 상품에 대한 고정 배송비 설정
-        let shippingCost = 0;
+        var totalAmount = 0;
+        var totalShipping = 0; // 배송비를 초기에 0으로 설정
 
-        document.querySelectorAll('tbody tr').forEach(row => {
-            const priceElement = row.querySelector('.th_2');
-            const quantityElement = row.querySelector('.quantity');
+        $('tbody tr').each(function() {
+            var checkbox = $(this).find('.checkbox');
+            if (checkbox.is(':checked')) {
+                var priceElement = $(this).find('.th_2');
+                var quantityElement = $(this).find('.quantity');
+                var price = parseInt(priceElement.data('price'));
+                var quantity = parseInt(quantityElement.text());
 
-            const priceText = priceElement.getAttribute('data-price');
-            const price = parseInt(priceText);
-            const quantity = parseInt(quantityElement.textContent);
-
-            totalAmount += price * quantity;
+                totalAmount += price * quantity; // 체크된 상품의 가격과 수량을 곱하여 totalAmount에 추가
+            }
         });
 
-        const itemCount = document.querySelectorAll('tbody tr').length;
-        shippingCost = itemCount * totalShipping;
-        const grandTotal = totalAmount + shippingCost;
+        if (totalAmount > 0) {
+            totalShipping = 4000; // totalAmount가 0이 아니면 배송비를 4000원으로 설정
+        }
 
-        document.getElementById('totalAmount').textContent = totalAmount.toLocaleString() + ' 원';
-        document.getElementById('totalShipping').textContent = shippingCost.toLocaleString() + ' 원';
-        document.getElementById('grandTotal').textContent = grandTotal.toLocaleString() + ' 원';
+        var grandTotal = totalAmount + totalShipping; // 총합 계산
+        $('#totalAmount').text(totalAmount.toLocaleString() + ' 원');
+        $('#totalShipping').text(totalShipping.toLocaleString() + ' 원');
+        $('#grandTotal').text(grandTotal.toLocaleString() + ' 원');
     }
 
-// 페이지 로드 시 총합을 업데이트
     updateTotals();
-
 
     $('.delete-btn').click(function() {
         const selectedRows = $('.checkbox:checked').map(function() {
@@ -176,8 +96,9 @@ $(document).ready(function() {
             data: JSON.stringify(selectedRows), // 선택된 상품 ID JSON 형식으로 변환
             dataType: 'json',
             success: function(response) {
-                alert('선택된 제품이 삭제되었습니다.');
-                location.reload();
+                console.log("서버 응답:", response); // 서버 응답 로그 출력
+                alert(response.message); // JSON 객체에서 메시지 추출
+                location.reload(); // 페이지 리로드
             },
             error: function(xhr, status, error) {
                 console.error('오류 발생:', xhr.status, xhr.responseText);
@@ -186,58 +107,71 @@ $(document).ready(function() {
         });
     }
 
-
     $('#orderButton').click(function() {
-        // 고객 ID 가져오기
-        var customerId = $('#customerId').val();
+        var customerId = $('#customerId').val(); // 고객 ID 가져오기
         console.log("customerId: " + customerId);
 
-        // 선택된 상품 ID 가져오기
-        var selectedProductIds = [];
-        $('.checkbox:checked').each(function() {
-            // selectedProductIds.push($(this).val());
-            // 각 체크된 상품 ID를 정수로 변환하여 배열에 추가
-            selectedProductIds.push(parseInt($(this).val(), 10));
-        });
+        const selectedProducts = $('.checkbox:checked').map(function() {
+            const row = $(this).closest('tr');
+            const productId = $(this).val(); // value 속성에서 제품 ID 가져오기
+            const quantity = row.find('.quantity').text(); // 수량 정보도 함께 가져오기
+            console.log("productId 값:", productId, "수량:", quantity);
+            return {
+                productId: productId,
+                quantity: parseInt(quantity) // 문자열을 숫자로 변환
+            };
+        }).get(); // jQuery 객체를 배열로 변환
 
-        console.log("selectedProductIds: " + selectedProductIds);
-
-        // 선택된 상품이 없을 경우 처리
-        if (selectedProductIds.length === 0) {
-            alert('상품을 선택하세요.'); // 선택하지 않은 경우 경고
-            return; // 함수 종료
+        if (selectedProducts.length === 0) {
+            alert('상품을 선택하세요.');
+            return;
         }
 
-        // 서버로 요청할 데이터 구성
-        var payload = {
-            action: 'purchase',
-            customerId: customerId,
-            productIds: selectedProductIds
-        };
-
-
-        console.log("전송할 데이터:", JSON.stringify({
-            action: "purchase",
-            customerId: customerId,
-            productIds: selectedProductIds
-        }));
-
-        // AJAX 요청 보내기
-        $.ajax({
-            url: '/user/shoppingcart',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: function(response) {
-                // 요청이 성공하면 주문 완료 페이지로 이동
-                alert("구매하시겠습니까?"); // 한 번 더
-                alert(response.message); // 성공 메시지
-                window.location.href = '/user/shoppingcart/ordercomplete'; // 주문 완료 페이지로 이동
-            },
-            error: function(xhr) {
-                alert('주문 처리 중 오류가 발생했습니다: ' + xhr.responseJSON.message);
-            }
-        });
+        if (confirm('선택한 제품을 구매하시겠습니까?')) {
+            purchaseSelectedProducts(customerId, selectedProducts);
+        }
     });
 
+    function purchaseSelectedProducts(customerId, selectedProductIds) {
+        console.log("구매 요청 데이터:", JSON.stringify(selectedProductIds));
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/purchase',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                customerId: customerId,
+                products: selectedProductIds
+            }),
+            dataType: 'json',
+            success: function(response) {
+                console.log("구매 처리 응답:", response);
+                alert(response.message);
+                location.reload(); // 페이지를 새로 고침하여 구매 후 상태를 반영
+            },
+            error: function(xhr, status, error) {
+                console.error('구매 처리 중 오류 발생:', xhr.status, xhr.responseText);
+                alert('상품 구매 중 오류가 발생했습니다.');
+            }
+        });
+    }
+
 });
+
+//
+// // AJAX 요청 보내기
+// $.ajax({
+//     url: '/user/shoppingcart',
+//     method: 'POST',
+//     contentType: 'application/json',
+//     data: JSON.stringify(payload),
+//     success: function(response) {
+//         // 요청이 성공하면 주문 완료 페이지로 이동
+//         alert("구매하시겠습니까?"); // 한 번 더
+//         alert(response.message); // 성공 메시지
+//         window.location.href = '/user/shoppingcart/ordercomplete'; // 주문 완료 페이지로 이동
+//     },
+//     error: function(xhr) {
+//         alert('주문 처리 중 오류가 발생했습니다: ' + xhr.responseJSON.message);
+//     }
+// });
