@@ -22,17 +22,42 @@ public class OotdService {
 
     // OOTD 게시글의 이미지 목록을 DTO로 가져오는 메서드
     public Page<CustomerOotdImageResponseDTO> getOotdImages(Pageable pageable) {
-        Page<Ootd> ootdPage = ootdRepository.findAll(pageable); // OOTD 엔티티 페이지 가져오기
+        Page<Ootd> ootdPage = ootdRepository.findAll(pageable);
 
         // OOTD 엔티티를 DTO로 변환
-        return ootdPage.map(ootd -> new CustomerOotdImageResponseDTO(ootd.getPicture()));
+        return ootdPage.map(ootd -> new CustomerOotdImageResponseDTO(
+                ootd.getId(),
+                ootd.getPicture(),
+                ootd.getTag(),
+                ootd.getDate(),
+                ootd.getProduct() != null ? ootd.getProduct().getId() : null,
+                ootd.getCustomer().getLoginId(),
+                ootd.getProduct() != null ? ootd.getProduct().getName() : "Unknown"
+        ));
     }
 
     // OOTD 게시글 저장 기능 추가
     public void saveOotdPost(OotdWriteRequestDTO requestDTO, String picturePath) {
-        Customer customer = customerRepository.findById(requestDTO.getCustomerId()).orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
-        Ootd ootd = Ootd.fromDTO(requestDTO, picturePath, customer);
+        Customer customer = customerRepository.findById(requestDTO.getCustomerId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
+
+        Product product = productRepository.findById(requestDTO.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
+
+        Ootd ootd = Ootd.fromDTO(requestDTO, picturePath, customer, product);
 
         ootdRepository.save(ootd); // OOTD 데이터 저장
+    }
+    public Page<CustomerOotdImageResponseDTO> getOotdPostsByCustomerId(Long customerId, Pageable pageable) {
+        return ootdRepository.findByCustomerId(customerId, pageable)
+                .map(ootd -> new CustomerOotdImageResponseDTO(
+                        ootd.getId(),
+                        ootd.getPicture(),
+                        ootd.getTag(),
+                        ootd.getDate(),
+                        ootd.getProduct() != null ? ootd.getProduct().getId() : null,
+                        ootd.getCustomer().getLoginId(),
+                        ootd.getProduct() != null ? ootd.getProduct().getName() : "Unknown"
+                ));
     }
 }

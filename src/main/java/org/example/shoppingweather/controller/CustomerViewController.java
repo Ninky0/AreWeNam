@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -52,10 +49,8 @@ public class CustomerViewController {
 
     @GetMapping("/shoppingcart")
     public String cart(HttpSession session, Model model) {
-        // 세션에서 고객 정보 가져오기
         Customer customer = customerService.findBySession(session);
         if (customer == null) {
-            // 고객 정보가 없는 경우, 로그인 페이지로 리다이렉트
             return "redirect:/login";
         }
 
@@ -66,10 +61,9 @@ public class CustomerViewController {
             model.addAttribute("products", products);
             model.addAttribute("cart", cart);
         } else {
-            // 장바구니가 비어있는 경우, 빈 카트 객체 생성
             Cart emptyCart = Cart.createEmptyCartForCustomer(customer);
-            model.addAttribute("cart", emptyCart); // 빈 카트 객체를 모델에 추가
-            model.addAttribute("products", new ArrayList<Product>()); // 빈 제품 목록 추가
+            model.addAttribute("cart", emptyCart);
+            model.addAttribute("products", new ArrayList<Product>());
         }
 
         return "shoppingcart";
@@ -80,25 +74,19 @@ public class CustomerViewController {
         return "ordercomplete";
     }
 
-    // customer 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail/{id}")
     public String detail(HttpSession session, @PathVariable Long id, Model model) {
-        // id로 상품 정보 찾기
         ProdReadResponseDTO product = productService.findById(id);
 
-        // mainPicture 경로에서 역슬래시(`\`)를 슬래시(`/`)로 변경
         if (product.getMainPicturePath() != null) {
             String mainPicturePath = product.getMainPicturePath().replace("\\", "/");
-            product.setMainPicturePath(mainPicturePath); // 경로 수정 후 다시 설정
+            product.setMainPicturePath(mainPicturePath);
         }
 
-        Customer customer = customerService.findBySession(session);
-
-        // 수정된 product 객체를 모델에 추가
+        Customer customer = (session != null) ? customerService.findBySession(session) : null;
         model.addAttribute("product", product);
-        model.addAttribute("customer",customer);
+        model.addAttribute("customer", customer);
 
-        // 상세 페이지 HTML 파일로 반환
         return "detail";
     }
 
@@ -111,7 +99,7 @@ public class CustomerViewController {
         List<ProdReadResponseDTO> products = productPage.getContent();
 
         int totalPages = productPage.getTotalPages();
-        int pageBlock = 10; // 페이지 블록 크기
+        int pageBlock = 10;
         int startPage = (page / pageBlock) * pageBlock;
         int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
 
@@ -125,14 +113,12 @@ public class CustomerViewController {
         return "total_list";
     }
 
-
     @GetMapping("/ootd_list")
     public String ootdList(Model model, Pageable pageable) {
         Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
         model.addAttribute("ootdImages", ootdImages);
         return "ootd_list";
     }
-
     @GetMapping("/ootd_write")
     public String ootdWrite(Model model, HttpSession session) {
         Customer customer = customerService.findBySession(session);
@@ -144,7 +130,7 @@ public class CustomerViewController {
         return "ootd_write";
     }
 
-    @PostMapping("/ootd_write/save") // URL을 고유하게 변경
+    @PostMapping("/ootd_write/save")
     public ResponseEntity<Map<String, String>> saveOotdPost(
             @ModelAttribute OotdWriteRequestDTO requestDTO) {
 
@@ -152,7 +138,7 @@ public class CustomerViewController {
 
         try {
             String picturePath = reviewService.handleFileUpload(requestDTO.getPicture());
-            ootdService.saveOotdPost(requestDTO, picturePath);
+            ootdService.saveOotdPost(requestDTO, picturePath); // Here, we save Product directly
 
             response.put("url", "/user/ootd_list");
             response.put("message", "상품 등록이 완료되었습니다.");
@@ -165,9 +151,6 @@ public class CustomerViewController {
         }
     }
 
-
-
-    // 상품 목록을 JSON 형태로 반환하는 API, 이름 필터 추가
     @GetMapping("/product/search")
     @ResponseBody
     public Page<ProdReadResponseDTO> searchProducts(
@@ -184,24 +167,24 @@ public class CustomerViewController {
     }
 
     @GetMapping("/seasonproduct_list")
-    public String fourseason(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(required = false) String season,
-                             Model model) {
-        int pageSize = 5; // 페이지 크기를 5로 설정
+    public String fourseason(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String season,
+            Model model) {
+        int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
 
         Page<ProdReadResponseDTO> productPage;
 
-        // season 파라미터가 있을 경우 필터링
         if (season != null && !season.isEmpty()) {
-            productPage = productService.getProductsBySeason(season, pageable); // 계절에 따른 필터링
+            productPage = productService.getProductsBySeason(season, pageable);
         } else {
-            productPage = productService.findAll(pageable); // 전체 상품 목록
+            productPage = productService.findAll(pageable);
         }
 
         List<ProdReadResponseDTO> products = productPage.getContent();
         int totalPages = productPage.getTotalPages();
-        int pageBlock = 3; // 페이지 블록 크기
+        int pageBlock = 3;
         int startPage = (page / pageBlock) * pageBlock;
         int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
 
@@ -213,8 +196,6 @@ public class CustomerViewController {
         model.addAttribute("showNext", endPage < totalPages - 1);
         model.addAttribute("season", season);
 
-        return "fourseason"; // 뷰 이름
+        return "fourseason";
     }
-
-
 }

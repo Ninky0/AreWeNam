@@ -117,19 +117,24 @@ public class CustomerService {
         cartRepository.save(cart);
     }
 
-    // OOTD 게시글 저장 기능 추가
     public void saveOotdPost(Long customerId, String tag, String picturePath, Long productId) {
-        // customerId를 사용하여 Customer 객체를 가져옵니다.
+        // Retrieve Customer by ID
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID: " + customerId));
 
-        Ootd ootd = new Ootd();
-        ootd.setCustomer(customer); // Customer 객체를 설정합니다.
-        ootd.setPicture(picturePath); // 이미지 경로 설정
-        ootd.setTag(tag); // 태그 설정
-        ootd.setProductId(productId); // 선택된 상품 ID 설정
+        // Retrieve Product by ID
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
 
-        ootdRepository.save(ootd); // OOTD 데이터 저장
+        // Create OOTD post
+        Ootd ootd = new Ootd();
+        ootd.setCustomer(customer); // Set Customer entity
+        ootd.setProduct(product);    // Set Product entity
+        ootd.setPicture(picturePath); // Set image path
+        ootd.setTag(tag);             // Set tag
+
+        // Save the OOTD post
+        ootdRepository.save(ootd);
     }
 
     // 장바구니 목록 불러오기
@@ -226,18 +231,16 @@ public class CustomerService {
         responseDTO.setId(ootd.getId());
         responseDTO.setPicture(ootd.getPicture());
         responseDTO.setTag(ootd.getTag());
-        responseDTO.setProductId(ootd.getProductId());
+        responseDTO.setProductId(ootd.getProduct() != null ? ootd.getProduct().getId() : null);
 
-        // Fetch and add product information if productId is available
-        if (ootd.getProductId() != null) {
-            Product product = productService.getProductById(ootd.getProductId()); // Use the new method here
-            if (product != null) {
-                responseDTO.setProductPrice(String.valueOf(product.getProductPrice()));
-                responseDTO.setProductCategory(product.getProductCategory());
-                responseDTO.setProductSeason(product.getProductSeason());
-                responseDTO.setProductTemperature(product.getProductTemperature());
-                responseDTO.setMainPicturePath(product.getMainPicturePath().replace("\\", "/")); // Clean the path
-            }
+        // Fetch and add product information if Product is associated
+        if (ootd.getProduct() != null) {
+            Product product = ootd.getProduct();
+            responseDTO.setProductPrice(String.valueOf(product.getProductPrice()));
+            responseDTO.setProductCategory(product.getProductCategory());
+            responseDTO.setProductSeason(product.getProductSeason());
+            responseDTO.setProductTemperature(product.getProductTemperature());
+            responseDTO.setMainPicturePath(product.getMainPicturePath().replace("\\", "/")); // Clean the path
         }
 
         return responseDTO;
@@ -245,7 +248,13 @@ public class CustomerService {
 
     public List<CustomerPostResponseDTO> getOotdPostsByCustomerId(Long customerId) {
         return ootdRepository.findByCustomerId(customerId).stream()
-                .map(ootd -> new CustomerPostResponseDTO(ootd.getPicture(), ootd.getTag(), ootd.getDate()))
+                .map(ootd -> new CustomerPostResponseDTO(
+                        ootd.getPicture(),
+                        ootd.getTag(),
+                        ootd.getDate(),
+                        ootd.getCustomer().getLoginId(), // Set loginId from Customer
+                        ootd.getProduct() != null ? ootd.getProduct().getName() : "Unknown" // Set productName if product exists
+                ))
                 .collect(Collectors.toList());
     }
 }

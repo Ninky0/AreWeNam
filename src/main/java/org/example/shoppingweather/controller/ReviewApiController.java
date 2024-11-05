@@ -3,6 +3,7 @@ package org.example.shoppingweather.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
 import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
+import org.example.shoppingweather.entity.Review;
 import org.example.shoppingweather.service.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -82,5 +85,16 @@ public class ReviewApiController {
         }
     }
 
+    @GetMapping("/posts")
+    public ResponseEntity<List<CustomerReviewResponseDTO>> getReviewsByCustomerId(
+            @RequestParam("customerId") Long customerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
 
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<CustomerReviewResponseDTO> reviewPage = reviewService.findReviewsByCustomerId(customerId, pageable);
+
+        List<CustomerReviewResponseDTO> reviews = reviewPage.getContent();
+        return ResponseEntity.ok(reviews);
+    }
 }

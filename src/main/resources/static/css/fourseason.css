@@ -4,30 +4,33 @@
     font-weight: 400;
     font-style: normal;
 }
-body {
 
-    font-family: 'Pretendard-Regular', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
+/* 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    transition: background-color 0.5s ease;
+}
+
+a {
+    text-decoration: none;
 }
 
 main {
-    padding-top: 115px; /* 헤더 높이에 맞추어 조정 */
+    padding-top: 115px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    height: auto; /* 높이가 고정되어 있으면 내용이 많을 때 문제가 될 수 있으므로 auto로 설정 */
+    height: auto;
+
 }
 
 .container {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 1000px;
     text-align: center;
 }
 
@@ -37,118 +40,261 @@ h2 {
     font-weight: 600;
 }
 
-.button {
-    display: flex;
-    justify-content: flex-end; /* 오른쪽 정렬 */
-    margin-bottom: 20px; /* 버튼 아래 여백 추가 */
+/* 계절별 배경색 */
+.spring-background {
+    background-color: #FFFAE5;
 }
 
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
+.summer-background {
+    background-color: #E0F7FA;
 }
 
-.form-group label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
+.autumn-background {
+    background-color: #FFF3E0;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+.winter-background {
+    background-color: #E3F2FD;
 }
 
+/* 계절별 상품 마우스 효과 */
+.spring-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(255, 183, 77, 0.5);
+}
 
-/* Table Styles */
-thead th {
-    padding: 10px;
-    border-top: 2px solid #333; /* 맨 윗줄 두꺼운 선 */
-    border-bottom: 1px solid #333; /* 맨 윗줄 두꺼운 선 */
+.summer-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(77, 208, 225, 0.5);
+}
+
+.autumn-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(255, 138, 101, 0.5);
+}
+
+.winter-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(100, 181, 246, 0.5);
+}
+
+/* 상품 그리드 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.product-item {
+    border: 1px solid #ddd;
     text-align: center;
-    border-left: none; /* 세로선 제거 */
-    border-right: none; /* 세로선 제거 */
-}
-
-tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd; /* 나머지 줄 얇은 선 */
-    border-top: none; /* 세로선 제거 */
-    border-left: none; /* 세로선 제거 */
-    border-right: none; /* 세로선 제거 */
-}
-
-th, td {
-    text-align: center;
-}
-table th.th_1, table td:nth-child(1),
-table th.th_1, table td:nth-child(2) {
-    width: 2%; /* 체크박스와 번호 칸 좁게 */
-}
-
-table th.th_3, table td:nth-child(4) {
-    width: 30%; /* 상품명 칸 넓게 */
-}
-
-table th.th_2, table td:nth-child(5),
-table th.th_2, table td:nth-child(6),
-table th.th_1, table td:nth-child(7),
-table th.th_1, table td:nth-child(8) {
-    width: 10%;
-}
-
-input[type="checkbox"] {
-    transform: scale(1.2); /* 체크박스 크기 조절 */
-}
-a {
-    text-decoration: none;
-    color: black;
-}
-img {
-    width: 50px;
+    background-color: #fff;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
-table{
-    border-collapse: collapse; border-spacing: 0;
-    margin: 0 auto;
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.product-name:hover {
+    color: #007BFF;
+}
+
+.product-price {
+    font-size: 14px;
+    margin-top: 5px;
+    color: #888;
+}
+
+.product-details {
+    font-size: 12px;
+    color: #cecece;
+    margin: 5px 0 9px 0;
+}
+
+.product-details span {
+    display: inline-block;
+    margin: 2px 5px;
+    color: #a9a9a9;
 }
 
 .pagination-container {
-    width: 100%; /* 전체 너비를 차지 */
-    text-align: center; /* 중앙 정렬 */
-    margin-top: 20px; /* 테이블과의 여백 */
-    margin-bottom: 20px; /* 페이지 하단 여백 */
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
 }
 
-.pagination li a {
-    margin-right: 4px; /* 링크 간 간격 */
-    text-decoration: none; /* 밑줄 제거 */
+.pagination {
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
 }
 
-.pagination li a:hover {
-    text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
-}
-
-.pagination .page-item {
-    display: inline-block;
+.pagination li {
+    margin: 0 5px;
 }
 
 .pagination .page-link {
     display: block;
-    padding: 8px 16px;
-    text-decoration: none;
+    padding: 8px 12px;
+    font-size: 14px;
     color: black;
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 15%
+    border-radius: 5px;
 }
 
 .pagination .page-item.active .page-link {
     font-weight: bold;
-    color: #000000;
+    color: #000;
+    background-color: #e9ecef;
+}
+
+.pagination .page-link:hover {
+    background-color: #f1f1f1;
+}
+
+/* 탭 메뉴 스타일 */
+.tab-menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    font-weight: normal;
+    transition: color 0.3s ease;
+}
+
+.tab-button.active {
+    font-weight: bold;
+    color: #333;
+}
+
+.tab-button.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #000;
+    border-radius: 2px 2px 0 0;
+}
+.effect-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+/* 통통 튀는 애니메이션 */
+@keyframes bounceAnimation {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2); /* 살짝 커지며 튀는 느낌 */
+        opacity: 0.7;
+    }
+}
+
+/* 봄: 꽃잎 마우스 효과 */
+.trail-petal {
+    width: 20px;
+    height: 20px;
+    background-image: url('/uploads/1.png'); /* 이미지 경로가 정확한지 확인 */
+    background-size: cover;
+    position: absolute;
+    pointer-events: none;
+    animation: trailAnimation 1s ease-out;
+    z-index: 9999;
+}
+
+/* 여름: 물방울 마우스 효과 */
+.trail-raindrop {
+    width: 20px;
+    height: 20px;
+    background-image: url('/uploads/2.png'); /* 이미지 경로가 정확한지 확인 */
+    background-size: cover;
+    position: absolute;
+    pointer-events: none;
+    animation: trailAnimation 1s ease-out;
+    z-index: 9999;
+}
+
+/* 가을: 낙엽 마우스 효과 */
+.trail-leaf {
+    width: 20px;
+    height: 20px;
+    background-image: url('/uploads/3.png'); /* 이미지 경로가 정확한지 확인 */
+    background-size: cover;
+    position: absolute;
+    pointer-events: none;
+    animation: trailAnimation 1s ease-out;
+    z-index: 9999;
+}
+
+/* 겨울: 눈송이 마우스 효과 */
+.trail-snowflake {
+    width: 20px;
+    height: 20px;
+    background-image: url('/uploads/4.png'); /* 이미지 경로가 정확한지 확인 */
+    background-size: cover;
+    position: absolute;
+    pointer-events: none;
+    animation: trailAnimation 1s ease-out;
+    z-index: 9999;
+}
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+.effect-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }

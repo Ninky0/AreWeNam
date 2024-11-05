@@ -16,15 +16,52 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
 }
+table td {
+    word-break: break-word; /* 단어 단위로 줄바꿈 */
+    white-space: normal;    /* 내용이 길 경우 자동 줄바꿈 */
+    max-width: 200px;       /* 필요한 경우 td에 최대 너비 설정 */
+}
+
+/* Table Styles */
+#post tr th {
+    padding: 10px;
+    border-top: 2px solid #333; /* 맨 윗줄 두꺼운 선 */
+    border-bottom: 1px solid #333; /* 맨 윗줄 두꺼운 선 */
+    text-align: center;
+    border-left: none; /* 세로선 제거 */
+    border-right: none; /* 세로선 제거 */
+}
+#post2 tr th {
+    padding: 10px;
+    border-top: 2px solid #333; /* 맨 윗줄 두꺼운 선 */
+    border-bottom: 1px solid #333; /* 맨 윗줄 두꺼운 선 */
+    text-align: center;
+    border-left: none; /* 세로선 제거 */
+    border-right: none; /* 세로선 제거 */
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* 나머지 줄 얇은 선 */
+    border-top: none; /* 세로선 제거 */
+    border-left: none; /* 세로선 제거 */
+    border-right: none; /* 세로선 제거 */
+}
 
 th, td {
     text-align: center;
-    padding: 12px;
-    border-bottom: 1px solid #ccc;
 }
 
-th {
-    background-color: #eeeeee;
+input[type="checkbox"] {
+    transform: scale(1.2); /* 체크박스 크기 조절 */
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+img {
+    width: 50px;
+    border-radius: 10px;
 }
 
 .btn {
@@ -82,4 +119,57 @@ th {
 .pagination .page-item.active .page-link {
     font-weight: bold;
     color: cornflowerblue;
+}
+
+
+div#pagination {
+    margin: 18px auto;
+    text-align: center;
+}
+h2 {
+    text-align: center;
+    margin-top: 100px;
+}
+.tab-menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    /* border-bottom: 2px solid #ddd; */
+}
+
+.tab-button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    color: #333;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    font-weight: normal;
+    transition: color 0.3s ease;
+    top:0;
+}
+
+.tab-button:hover {
+    color: #007BFF;
+}
+
+.tab-button.active {
+    font-weight: bold;
+    color: #333;
+    top:0;
+}
+
+.tab-button.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0%;
+    width: 100%;
+    height: 4px;
+    background-color: #000000;
+    border-radius: 2px 2px 0 0;
+    transition: left 0.3s ease, width 0.3s ease;
 }

@@ -13,6 +13,7 @@ body {
 }
 
 main {
+    background-color: white;
     padding-top: 115px; /* 헤더 높이에 맞추어 조정 */
     display: flex;
     justify-content: flex-start;
@@ -26,7 +27,6 @@ main {
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 1000px;
     text-align: center;
 }

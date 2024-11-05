@@ -9,33 +9,37 @@ import org.example.shoppingweather.dto.OotdWriteRequestDTO;
 
 import java.time.LocalDateTime;
 
-@Table(name = "ootd") // 테이블 이름을 "ootd"로 설정
-@NoArgsConstructor(access = AccessLevel.PUBLIC) // 기본 생성자의 접근 수준을 PUBLIC으로 설정하여 외부에서 인스턴스를 생성 가능하도록 함
+@Table(name = "ootd") // Sets table name as "ootd"
+@NoArgsConstructor(access = AccessLevel.PUBLIC) // Allows public access to the default constructor
 @Getter
 @Setter
 @Entity
 public class Ootd {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID 자동 생성
-    private Long id;  // OOTD 고유 식별자
-    private Long productId; // 단일 상품 ID 필드
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generated ID
+    private Long id;  // Unique identifier for OOTD
 
     @ManyToOne
-    @JoinColumn(name = "customerId", nullable = false)  // customerId로 수정
+    @JoinColumn(name = "productId", nullable = false)  // Links to the associated product ID
+    private Product product; // Single product field
+
+    @ManyToOne
+    @JoinColumn(name = "customerId", nullable = false)  // Links to the associated customer ID
     private Customer customer;
 
     @Column(nullable = false)
-    private LocalDateTime date; // 작성 날짜 및 시간
+    private LocalDateTime date; // Date and time of creation
 
     @Column(nullable = false)
-    private String picture; // 이미지 경로를 저장
+    private String picture; // Stores the image path
 
-    private String tag; // 태그 정보
+    private String tag; // Tag information
 
-    public static Ootd fromDTO(OotdWriteRequestDTO requestDTO, String picturePath, Customer customer) {
+    // Static factory method to create Ootd from DTO
+    public static Ootd fromDTO(OotdWriteRequestDTO requestDTO, String picturePath, Customer customer, Product product) {
         Ootd ootd = new Ootd();
-        ootd.setProductId(requestDTO.getProductId());
+        ootd.setProduct(product); // Set the linked Product
         ootd.setCustomer(customer);
         ootd.setDate(LocalDateTime.now());
         ootd.setPicture(picturePath);
@@ -45,6 +49,6 @@ public class Ootd {
 
     @PrePersist
     protected void onCreate() {
-        this.date = LocalDateTime.now();  // 엔티티가 생성될 때 자동으로 현재 날짜 및 시간을 설정
+        this.date = LocalDateTime.now();  // Automatically sets the date when the entity is created
     }
 }
