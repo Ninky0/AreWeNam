@@ -1,10 +1,9 @@
 $(document).ready(function () {
     let currentPage = 0;
-    let selectedSeason = 1;
+    let selectedSeason = parseInt(document.getElementById('main-season').value); // 숫자로 변환
 
-    loadProducts(selectedSeason, currentPage);
-    $('#springTab').addClass('active');
     applySeasonEffect(selectedSeason);
+    loadProducts(selectedSeason, currentPage);
 
     $('.season-tab').on('click', function () {
         selectedSeason = $(this).data('season');

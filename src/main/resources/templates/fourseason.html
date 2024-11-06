@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>계절별 상품 목록</title>
     <link th:href="@{/css/fourseason.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
     <script th:src="@{/js/fourseason.js}"></script>
 </head>
@@ -23,15 +24,17 @@
 </header>
 
 <main>
+    <input type="hidden" id="main-season" th:value="${season != null ? season : '1'}">
     <div class="container">
         <h2>계절별 추천 상품 목록</h2>
         <!-- 계절 선택 탭 -->
         <div class="season-tabs tab-menu">
-            <button class="season-tab tab-button active" data-season="1">봄</button>
-            <button class="season-tab tab-button" data-season="2">여름</button>
-            <button class="season-tab tab-button" data-season="3">가을</button>
-            <button class="season-tab tab-button" data-season="4">겨울</button>
+            <button class="season-tab tab-button springTab" data-season="1" th:classappend="${season == '1'} ? 'active' : ''">봄</button>
+            <button class="season-tab tab-button" data-season="2" th:classappend="${season == '2'} ? 'active' : ''">여름</button>
+            <button class="season-tab tab-button" data-season="3" th:classappend="${season == '3'} ? 'active' : ''">가을</button>
+            <button class="season-tab tab-button" data-season="4" th:classappend="${season == '4'} ? 'active' : ''">겨울</button>
         </div>
+
 
         <!-- 상품 목록 영역 -->
         <div class="product-grid" id="productGrid"></div>
