@@ -1,0 +1,379 @@
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+.ootd-registration-body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+.ootd-container {
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #fff;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: block;
+    border-radius: 10px;
+}
+
+.ootd-header {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#ootdForm {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 100px auto;
+}
+
+.ootd-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.ootd-col-md-4, .ootd-col-md-8 {
+    display: flex;
+    flex-direction: column;
+}
+
+.ootd-col-md-4 {
+    width: 25%;
+}
+
+.ootd-col-md-8 {
+    width: 70%;
+}
+
+.ootd-label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.ootd-input, .ootd-select, .ootd-textarea {
+    padding: 8px;
+    margin-bottom: 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.ootd-textarea {
+    height: 200px;
+    resize: none;
+}
+
+.ootd-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 42px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.ootd-button:hover {
+    background-color: #555;
+}
+
+/* 이미지 업로드 박스 스타일 */
+.ootd-image-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.ootd-file-input {
+    padding: 10px;
+    font-size: 11px;
+    border: none;
+}
+
+.ootd-mt-2 {
+    margin-top: 10px;
+}
+
+.ootd-mt-3 {
+    margin-top: 20px;
+}
+
+/* TinyMCE 에디터 상자 커스터마이즈 */
+.ootd-detail-page {
+    height: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    padding: 100px 0 0px 0;
+}
+/* Styling for tags */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.tag {
+    background-color: #e1e1e1;
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: #333333;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.tag-input {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 30px;
+    font-size: 12px;
+    margin: 30px 0;
+    text-align: center;
+}
+
+.content-input {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 30px;
+    font-size: 12px;
+    margin: 30px 0;
+    text-align: center;
+    width: 550px;
+    height: 220px;
+}
+
+#searchButton {
+    background-color: #ffffff;
+    color: #000000;
+    /* border-radius: 20px; */
+    padding: 6px;
+    border-bottom: 1px solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 80%;
+    border-radius: 8px;
+    max-width: 600px;
+}
+.close-btn {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+.ootd-image-placeholder {
+    width: 100%;
+    height: 264px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    border-radius: 10px;
+}
+
+#imagePreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+#selectedProductDetails {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    /* border: 1px solid #ddd; */
+    border-radius: 8px;
+    /* background-color: #f9f9f9; */
+}
+
+#selectedProductDetails img {
+    width: 100px;
+    height: auto;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+#selectedProductDetails h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#selectedProductDetails p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경 흐림 효과 */
+    overflow: hidden; /* 모달 외부 스크롤 비활성화 */
+}
+
+/* 모달 콘텐츠 스타일 */
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh; /* 모달 전체 높이를 제한 */
+    border-radius: 8px;
+    overflow-y: auto; /* 모달 내부 스크롤 */
+}
+
+/* 상품 목록 테이블 스타일 */
+.modal-content table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-content thead, .modal-content tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.modal-content tbody {
+    display: block;
+    max-height: 300px; /* 필요에 따라 높이 조정 */
+    overflow-y: auto;
+}
+
+.close-btn {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+/*돋보기 아이콘*/
+i.fa-solid.fa-magnifying-glass {
+    padding: 0 10px;
+}
+
+/*테이블*/
+td {
+    text-align: center;
+    font-size: 12px;
+}
+th {
+    font-size: 12px;
+    background: #8b8b8b;
+    padding: 10px 0;
+    color: white;
+}
+/* 페이지네이션 스타일 */
+.pagination-container {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination li a {
+    color: #000000;
+    text-decoration: none;
+    padding: 8px 12px;
+    /* border: 1px solid #ddd; */
+    border-radius: 33px;
+    margin: 0 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.pagination li a.active, .pagination li a:hover {
+    background-color: #000000;
+    color: #fff;
+    border-color: #000000;
+    font-size: 12px;
+}
+
+.search-container {
+    margin: 0 auto; /* 수평 중앙 정렬 */
+    width: 300px;
+    padding: 15px 0 20px 0;
+    display: flex; /* 플렉스 컨테이너로 설정 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 10px; /* 검색창과 버튼 사이 여백 */
+}
+
+input#productSearchInput {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+table {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1000px;
+    background-color: white;
+}
+

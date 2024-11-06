@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/search.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link th:href="@{/css/search.css}" rel="stylesheet">
+    <link th:href="@{/css/heather.css}" rel="stylesheet">
+    <link th:href="@{/css/footer.css}" rel="stylesheet">
+    <title>검색페이지</title>
+</head>
+<body class="ootd-registration-body">
+
+<header>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+</header>
+
+<main>
+
+    <!-- 상품 목록 영역 -->
+    <section class="productListSection" style="display: block;">
+        <h2>찾으실 상품을 검색해주세요</h2>
+
+        <!-- Search Box and Button -->
+        <div class="search-container">
+            <input type="text" id="productSearchInput" placeholder="상품명을 입력하세요" />
+            <button onclick="searchProducts()">검색</button>
+        </div>
+
+        <!-- Product List Table -->
+        <!-- Product List Table -->
+        <table>
+            <thead id="productTableHeader" style="display: none;">
+            <tr>
+                <th>번호</th>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>추천 계절</th>
+                <th>추천 온도</th>
+            </tr>
+            </thead>
+            <tbody id="productList"></tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <ul class="pagination">
+                <!-- 페이지네이션 버튼이 동적으로 추가됩니다 -->
+            </ul>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+        <ul>
+            <li><a href="#">개인정보 처리방침</a></li>
+            <li><a href="#">이용 약관</a></li>
+        </ul>
+    </div>
+</footer>
+
+</body>
+</html>

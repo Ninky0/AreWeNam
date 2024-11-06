@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
@@ -48,10 +49,8 @@ public class CustomerViewController {
 
     @GetMapping("/shoppingcart")
     public String cart(HttpSession session, Model model) {
-        // 세션에서 고객 정보 가져오기
         Customer customer = customerService.findBySession(session);
         if (customer == null) {
-            // 고객 정보가 없는 경우, 로그인 페이지로 리다이렉트
             return "redirect:/login";
         }
 
@@ -86,13 +85,12 @@ public class CustomerViewController {
         // mainPicture 경로에서 역슬래시(`\`)를 슬래시(`/`)로 변경
         if (product.getMainPicturePath() != null) {
             String mainPicturePath = product.getMainPicturePath().replace("\\", "/");
-            product.setMainPicturePath(mainPicturePath); // 경로 수정 후 다시 설정
+            product.setMainPicturePath(mainPicturePath);
         }
 
         Customer customer = (session != null) ? customerService.findBySession(session) : null;
         model.addAttribute("product", product);
         model.addAttribute("customer", customer);
-        model.addAttribute("customer",customer);
         model.addAttribute("reviewCount", count);
 
         // 상세 페이지 HTML 파일로 반환
@@ -108,7 +106,7 @@ public class CustomerViewController {
         List<ProdReadResponseDTO> products = productPage.getContent();
 
         int totalPages = productPage.getTotalPages();
-        int pageBlock = 10; // 페이지 블록 크기
+        int pageBlock = 10;
         int startPage = (page / pageBlock) * pageBlock;
         int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
 
@@ -140,7 +138,7 @@ public class CustomerViewController {
         return "ootd_write";
     }
 
-    @PostMapping("/ootd_write/save") // URL을 고유하게 변경
+    @PostMapping("/ootd_write/save")
     public ResponseEntity<Map<String, String>> saveOotdPost(
             @ModelAttribute OotdWriteRequestDTO requestDTO) {
 
@@ -148,7 +146,7 @@ public class CustomerViewController {
 
         try {
             String picturePath = reviewService.handleFileUpload(requestDTO.getPicture());
-            ootdService.saveOotdPost(requestDTO, picturePath);
+            ootdService.saveOotdPost(requestDTO, picturePath); // Here, we save Product directly
 
             response.put("url", "/user/ootd_list");
             response.put("message", "상품 등록이 완료되었습니다.");
@@ -210,5 +208,8 @@ public class CustomerViewController {
         return "fourseason";
     }
 
-
+    @GetMapping("/search")
+    public String search() {
+        return "search";
+    }
 }

@@ -1,28 +1,44 @@
 package org.example.shoppingweather.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
+import org.example.shoppingweather.dto.Customer.CustomerPostResponseDTO;
 import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO; // OOTD 이미지 응답 DTO 임포트
 import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
 import org.example.shoppingweather.entity.*;
 import org.example.shoppingweather.repository.*;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import org.example.shoppingweather.entity.Product;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final OotdRepository ootdRepository;  // OOTD 저장을 위한 리포지토리 추가
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ObjectMapper objectMapper;
+    private final ProductService productService;
 
     public void save(SignUpRequestDTO dto) {
         Customer customer = dto.toCustomer(bCryptPasswordEncoder);
