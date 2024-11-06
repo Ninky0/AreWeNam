@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
+    background-color: #ffffff;
     color: #333;
 }
 
@@ -24,6 +24,7 @@ th, td {
     border-bottom: 1px solid #ccc;
 }
 
+
 th {
     background-color: #eeeeee;
 }
@@ -38,7 +39,12 @@ th {
     border-radius: 5px;
     transition: background-color 0.3s;
 }
-
+#longtext{
+    width: 150px;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}
 .review-image{
     max-width: 100px; /* 최대 너비를 100픽셀로 제한 */
     max-height: 100px; /* 최대 높이를 100픽셀로 제한 */
