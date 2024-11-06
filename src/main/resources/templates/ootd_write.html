@@ -17,7 +17,7 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
 <main>
-    <form id="ootdForm" method="POST" enctype="multipart/form-data" action="/user/ootd_write/save">
+    <form id="ootdForm" method="POST" enctype="multipart/form-data" action="/user/ootd_write">
         <h2>게시물 등록</h2>
         <div class="ootd-row">
             <div class="ootd-col-md-4">
@@ -53,7 +53,7 @@
 
             </div>
         </div>
-        <button class="ootd-button" type="button" onclick="submitForm()">상품 등록</button>
+        <button class="ootd-button" type="button" onclick="submitForm()">OOTD 등록</button>
     </form>
 </main>
 <footer>

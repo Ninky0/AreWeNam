@@ -17,7 +17,7 @@
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </header>
 <main>
-    <form id="productForm" method="POST" th:action="@{/admin/product/update/{id}(id=${product.id})}" enctype="multipart/form-data">
+    <form id="productForm" method="PUT" th:action="@{/admin/product/update/{id}(id=${product.id})}" enctype="multipart/form-data">
         <h2>상품 수정</h2>
         <div class="product-row">
             <div class="product-col-md-4">
@@ -54,6 +54,13 @@
                     <option value="6" th:selected="${product.temperature == 6}">11~9℃</option>
                     <option value="7" th:selected="${product.temperature == 7}">8~5℃</option>
                     <option value="8" th:selected="${product.temperature == 8}">4℃ 이하</option>
+                </select>
+
+                <select id="weather" name="weather" class="product-select product-mt-2" required>
+                    <option value="1" th:selected="${product.weather == 1}">무관</option>
+                    <option value="2" th:selected="${product.weather == 2}">비/눈</option>
+                    <option value="3" th:selected="${product.weather == 3}">비</option>
+                    <option value="4" th:selected="${product.weather == 4}">눈</option>
                 </select>
 
                 <!-- 카테고리 선택 드롭다운 -->

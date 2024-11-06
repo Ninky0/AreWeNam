@@ -76,6 +76,23 @@ input[type="submit"]:hover {
     background-color: #444;
 }
 
+input[type="button"]#cancel {
+    width: 100%;
+    background-color: darkslategray; /* 빨간색 배경 */
+    color: white;             /* 흰색 텍스트 */
+    border: none;/* 빨간색 테두리 */
+    border-radius: 5px;       /* 테두리 둥글게 */
+    padding: 12px 20px;       /* 내부 여백 */
+    font-size: 16px;          /* 글자 크기 */
+    cursor: pointer;          /* 포인터 모양을 손가락 모양으로 */
+    margin-top: 3px;
+}
+
+input[type="button"]#cancel:hover {
+    background-color: darkgrey; /* 마우스 호버 시 배경색 변경 */
+}
+
+
 .signup-link {
     margin-top: 20px;
     font-size: 14px;

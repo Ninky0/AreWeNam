@@ -118,3 +118,47 @@ tbody td {
     width: 30px; /* 원하는 너비 설정 */
     height: auto; /* 비율에 맞게 높이 자동 조정 */
 }
+
+.product-name {
+    max-width: 150px; /* 최대 너비를 150px로 설정 */
+    word-wrap: break-word; /* 단어가 너무 길어지면 줄바꿈 */
+    white-space: normal; /* 기본적으로 줄바꿈 허용 */
+}
+
+.review-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 4px;
+    font-size: 16px;
+    color: white;
+    background-color: palevioletred; /* Bootstrap primary blue */
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.review-button:hover {
+    background-color: pink; /* Darken blue shade on hover */
+}
+
+.reviewed-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 4px;
+    font-size: 16px;
+    color: white;
+    background-color: rgba(79,117,60,0.92); /* Bootstrap primary blue */
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reviewed-button:hover {
+    background-color: darkseagreen; /* Darken blue shade on hover */
+}

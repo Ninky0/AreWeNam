@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
@@ -138,7 +137,7 @@ public class CustomerViewController {
         return "ootd_write";
     }
 
-    @PostMapping("/ootd_write/save")
+    @PostMapping("/ootd_write")
     public ResponseEntity<Map<String, String>> saveOotdPost(
             @ModelAttribute OotdWriteRequestDTO requestDTO) {
 

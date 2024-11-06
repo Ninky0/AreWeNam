@@ -16,4 +16,5 @@ public class ProdReadResponseDTO {
     private String category;
     private Integer season;
     private Integer temperature;
+    private Integer weather;
 }

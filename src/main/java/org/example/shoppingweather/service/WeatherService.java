@@ -71,7 +71,7 @@ public class WeatherService {
                         } else if ("SKY".equals(item.getCategory())) {
                             String skyValue = item.getObsrValue();
                             // 기본값으로 구름 많음을 설정
-                            description = "구름 많음";
+                            description = "맑음";
 
                             if ("1".equals(skyValue)) {
                                 description = "맑음"; // 맑음
@@ -85,8 +85,8 @@ public class WeatherService {
                             // PTY 값에 따라 날씨 상태를 설정
                             if ("0".equals(ptyValue)) {
                                 // 비가 아닌 경우 (소나기 등)
-                                if (!(description.equals("맑음")||description.equals("흐림"))) {
-                                    description = "구름 많음"; // 기본적으로 구름 많음
+                                if (!(description.equals("구름 많음")||description.equals("흐림"))) {
+                                    description = "맑음"; // 기본적으로 맑음
                                 }
                             } else if ("1".equals(ptyValue)) {
                                 description = "비"; // 비
@@ -123,9 +123,11 @@ public class WeatherService {
     private String calculateBaseTime(int hour) {
         if (hour >= 9 && hour<12) {
             return "0900";
-        } else if(hour >= 12 && hour<15){
+        } else if(hour >= 12 && hour<14){
             return "1200";
-        } else if(hour>=15 && hour<18){
+        } else if(hour==14 ) {
+            return "1400";
+        }else if(hour>=15 && hour<18){
             return "1500";
         }else if(hour>=18 && hour<21){
             return "1800";

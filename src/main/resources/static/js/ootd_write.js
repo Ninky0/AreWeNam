@@ -57,7 +57,7 @@ function updateProductList(products) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('ootdForm');
-    form.action = '/user/ootd_write/save';
+    form.action = '/user/ootd_write';
 });
 // 계절 표시 함수
 function getSeasonLabel(season) {
@@ -160,7 +160,7 @@ function previewMainImage(event) {
 function submitForm() {
     const formData = new FormData(document.getElementById("ootdForm"));
 
-    fetch('/user/ootd_write/save', { // URL 수정
+    fetch('/user/ootd_write', { // URL 수정
         method: 'POST',
         body: formData
     })

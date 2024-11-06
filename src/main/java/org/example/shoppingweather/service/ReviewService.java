@@ -3,12 +3,10 @@ package org.example.shoppingweather.service;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
 import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
-import org.example.shoppingweather.entity.Customer;
-import org.example.shoppingweather.entity.Ootd;
-import org.example.shoppingweather.entity.Product;
-import org.example.shoppingweather.entity.Review;
+import org.example.shoppingweather.entity.*;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.example.shoppingweather.repository.ProductRepository;
+import org.example.shoppingweather.repository.PurchaseRepository;
 import org.example.shoppingweather.repository.ReviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +24,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final PurchaseRepository purchaseRepository;
 
     public Page<CustomerReviewResponseDTO> findReviewsByProductId(Long productId, Pageable pageable) {
         // productId를 기반으로 리뷰를 찾는 리포지토리 메소드 호출
@@ -66,8 +65,11 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
         Customer customer = customerRepository.findById(Long.parseLong(requestDTO.getCustomerId()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
+        Purchase purchase = purchaseRepository.findById(requestDTO.getPurchaseId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid purchase ID"));
 
-        Review review = Review.fromDTO(requestDTO, picturePath, product, customer);
+
+        Review review = Review.fromDTO(requestDTO, picturePath, product, customer, purchase);
         reviewRepository.save(review);
     }
 
@@ -78,5 +80,10 @@ public class ReviewService {
     public Page<CustomerReviewResponseDTO> findReviewsByCustomerId(Long customerId, Pageable pageable) {
         Page<Review> reviewPage = reviewRepository.findByCustomerId(customerId, pageable);
         return reviewPage.map(this::convertToDto);
+    }
+
+    public Review findByIds(Long purchaseId, Long productId, Long customerId) {
+        return reviewRepository.findByPurchaseIdAndProductIdAndCustomerId(purchaseId, productId, customerId)
+                .orElseThrow(() -> new IllegalArgumentException("No review found for the specified ids"));
     }
 }

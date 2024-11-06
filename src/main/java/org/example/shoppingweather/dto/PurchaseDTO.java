@@ -13,4 +13,6 @@ public class PurchaseDTO {
     private Long purchaseId;              // 구매 ID
     private LocalDateTime date;           // 주문 날짜
     private List<Product> products;
+    private String customerLoginId;
+    private Integer grandTotal;
 }

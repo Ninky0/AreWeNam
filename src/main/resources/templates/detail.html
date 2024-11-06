@@ -39,7 +39,12 @@
                           (product.temperature == 7 ? '8~5°C' :
                           '4°C 이하'))))))}
                            + ' > '
-                           + ${product.category}">
+                           + ${product.category}
+                           + ' > '
+                           + ${product.weather == 1 ? '무관' :
+                               (product.weather == 2 ? '비/눈' :
+                               (product.weather == 3 ? '비' :
+                                '눈'))}">
                     </span>
                 </div>
                 <input type="text" id="name" name="name" class="product-title" th:value="${product.name}" readonly>

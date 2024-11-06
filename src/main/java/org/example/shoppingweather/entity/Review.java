@@ -25,6 +25,11 @@ public class Review {
     private String content;
     private LocalDateTime date;
 
+    // Purchase와의 다대일 관계 설정
+    @ManyToOne
+    @JoinColumn(name = "purchaseId")
+    private Purchase purchase;
+
     // Product와의 다대일 관계 설정
     @ManyToOne
     @JoinColumn(name = "productId")
@@ -35,21 +40,12 @@ public class Review {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
-    public CustomerReviewResponseDTO toCustomerReviewResponseDTO() {
-        return CustomerReviewResponseDTO.builder()
-                .id(id)
-                .picturePath(picturePath)
-                .content(content)
-                .product(product)
-                .customer(customer)
-                .build();
-    }
-
     // 정적 팩토리 메서드 추가
-    public static Review fromDTO(ReviewWriteRequestDTO requestDTO, String picturePath, Product product, Customer customer) {
+    public static Review fromDTO(ReviewWriteRequestDTO requestDTO, String picturePath, Product product, Customer customer, Purchase purchase) {
         Review review = new Review();
         review.setProduct(product);
         review.setCustomer(customer);
+        review.setPurchase(purchase);
         review.setPicturePath(picturePath);
         review.setContent(requestDTO.getContent());
         review.setDate(LocalDateTime.now());
