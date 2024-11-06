@@ -42,6 +42,7 @@ public class CustomerService {
 
     public void save(SignUpRequestDTO dto) {
         Customer customer = dto.toCustomer(bCryptPasswordEncoder);
+        // role이 ROLE_ADMIN인지 ROLE_CUSTOMER인지 설정
         customer.setRole("ROLE_CUSTOMER");  // 권한 설정
         customerRepository.save(customer);
     }
