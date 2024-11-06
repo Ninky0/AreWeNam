@@ -50,6 +50,14 @@
                     <option th:selected="${product.temperature == 8}" value="8">4℃ 이하</option>
                 </select>
 
+                <label class="product-label product-mt-2" for="weather">강수:</label>
+                <select id="weather" name="weather" class="product-select product-mt-2" disabled>
+                    <option value="1" th:selected="${product.weather == 1}">무관</option>
+                    <option value="2" th:selected="${product.weather == 2}">비/눈</option>
+                    <option value="3" th:selected="${product.weather == 3}">비</option>
+                    <option value="4" th:selected="${product.weather == 4}">눈</option>
+                </select>
+
                 <label class="product-label product-mt-2" for="category">카테고리:</label>
                 <select id="category" name="category" class="product-select" disabled>
                     <option th:selected="${product.category == 'tp'}" value="tp">상의</option>

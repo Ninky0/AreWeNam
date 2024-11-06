@@ -20,6 +20,13 @@ h2.sub_title {
     margin: 0px auto;
     text-align: center;
 }
+h2.sub_title2 {
+    padding: 5px 0 0 0;
+    margin: 0px auto;
+    text-align: center;
+    font-size : 18px;
+    color: dimgray;
+}
 
 
 /* 더보기 버튼 스타일 */

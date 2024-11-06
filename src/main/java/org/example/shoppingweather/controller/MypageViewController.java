@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.entity.Purchase;
+import org.example.shoppingweather.entity.Review;
+import org.example.shoppingweather.repository.ReviewRepository;
 import org.example.shoppingweather.service.CustomerService;
 import org.example.shoppingweather.service.ProductService;
 import org.example.shoppingweather.service.PurchaseService;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,6 +30,7 @@ public class MypageViewController {
     private final CustomerService customerService;
     private final PurchaseService purchaseService;
     private final ProductService productService;
+    private final ReviewRepository reviewRepository;
 
     @GetMapping
     public String mypage(HttpSession session, Model model) {
@@ -92,20 +96,20 @@ public class MypageViewController {
 
     @GetMapping("/history")
     public String history(HttpSession session, Model model) {
-        // 세션에서 고객정보 모델에 추가
-        model.addAttribute("customer", customerService.findBySession(session));
+        Customer customer = customerService.findBySession(session);
+        if (customer == null) {
+            return "redirect:/login"; // 고객이 로그인하지 않았다면 로그인 페이지로 리다이렉트
+        }
 
-        // 고객 구매 목록 가져오기
-        Customer customer = (Customer) model.getAttribute("customer");
+        model.addAttribute("customer", customer);
+
         List<Purchase> purchases = purchaseService.getPurchasesByCustomer(customer);
+        purchaseService.enrichPurchasesWithProducts(purchases);
 
-        // 구매 목록 제품 정보 추출
-        List<Product> products = purchaseService.extractProductsFromPurchases(purchases);
 
-        model.addAttribute("purchases", purchases); // 모델에 구매 목록 추가
-        model.addAttribute("products", products); // 모델에 제품 목록 추가
 
-        // 구매 목록
+        model.addAttribute("purchases", purchases);
+
         return "purchaselist";
     }
 

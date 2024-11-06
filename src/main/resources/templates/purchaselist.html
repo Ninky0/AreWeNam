@@ -21,7 +21,6 @@
     <h2><a th:href="@{/mypage}">마이페이지</a></h2>
     <ul>
       <li><a th:href="@{/mypage/history}" class="sidebar-button">구매목록</a></li>
-      <li><a href="" class="sidebar-button">구매취소</a></li>
       <li><a th:href="@{/user/shoppingcart}" class="sidebar-button">장바구니</a></li>
       <li><a th:href="@{/mypage/post}" >게시글</a></li>
       <li><a th:href="@{/mypage/edit}" class="sidebar-button">회원정보수정</a></li>
@@ -47,19 +46,28 @@
           <th>상품명</th>
           <th>수량</th>
           <th>금액</th>
+          <th>리뷰 작성</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="purchase, iterStat : ${purchases}">
-          <td th:text="${iterStat.count}"></td> <!-- 번호, assuming 'index' or use 'iterStat.index' -->
+          <td th:text="${iterStat.count}"></td> <!-- 번호 -->
           <td th:text="${purchase.date}"></td> <!-- 주문일 -->
-          <td colspan="4">
+          <td colspan="5">
             <table>
-              <tr th:each="product : ${products}"> <!-- Assuming each purchase has multiple products -->
+              <tr th:each="product : ${purchase.products}"> <!-- Products are now directly associated with each purchase -->
                 <td><img class="product-image" th:src="@{${product.mainPicturePath}}" th:alt="${product.name}"/></td>
-                <td th:text="${product.name}"></td>
+                <td class="product-name" th:text="${product.name}"></td>
                 <td th:text="${product.quantity}"></td>
-                <td th:text="${purchase.grandTotal}"></td>
+                <td th:text="${product.price}"></td>
+                <td>
+                  <div th:if="${product.isReviewedForPurchase(purchase.id)}">
+                    <a th:href="@{|/review/detail/${product.id}/${purchase.id}|}" class="reviewed-button">작성 완료</a>
+                  </div>
+                  <div th:unless="${product.isReviewedForPurchase(purchase.id)}">
+                    <a th:href="@{|/review/${product.id}/${purchase.id}|}" class="review-button">리뷰 작성</a>
+                  </div>
+                </td>
               </tr>
             </table>
           </td>

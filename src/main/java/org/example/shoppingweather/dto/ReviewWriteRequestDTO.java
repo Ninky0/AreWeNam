@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReviewWriteRequestDTO {
     private Long productId;
     private String customerId;
+    private Long purchaseId;
     private MultipartFile picture;
     private String content;
 }

@@ -29,7 +29,7 @@ import java.util.Map;
 public class ReviewApiController {
     private final ReviewService reviewService;
 
-    @GetMapping("/{productId}")
+    @GetMapping("/list/{productId}")
     public ResponseEntity<Map<String, Object>> getReviewsByProductId(
             @PathVariable Long productId,
             @RequestParam(defaultValue = "0") int page,
@@ -61,9 +61,10 @@ public class ReviewApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{productId}/write")
+    @PostMapping("/{productId}/{purchaseId}")
     public ResponseEntity<Map<String, String>> writeReview(
             @PathVariable Long productId,
+            @PathVariable Long purchaseId,
             @ModelAttribute ReviewWriteRequestDTO requestDTO) {
         System.out.println(requestDTO.getCustomerId()+" "+requestDTO.getProductId()+" "+requestDTO.getContent()+" "+requestDTO.getPicture());
 
@@ -74,7 +75,7 @@ public class ReviewApiController {
             System.out.println(picturePath+"변환됨~!");
             reviewService.saveReview(requestDTO, picturePath);
 
-            response.put("url", "/user/product/detail/" + productId);
+            response.put("url", "/mypage/history");
             response.put("message", "리뷰 등록이 완료되었습니다.");
             return ResponseEntity.ok(response);
 

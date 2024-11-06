@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(document.getElementById('productForm'));
 
         fetch(document.getElementById('productForm').action, {
-            method: 'POST',
+            method: 'PUT',
             body: formData
         })
             .then(response => {

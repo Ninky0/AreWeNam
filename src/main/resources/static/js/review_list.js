@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     function loadReviews(page) {
         $.ajax({
-            url: `/review/${productId}?page=${page}&size=5`,
+            url: `/review/list/${productId}?page=${page}&size=5`,
             type: 'GET',
             success: function (response) {
                 $('#boardContent').empty();

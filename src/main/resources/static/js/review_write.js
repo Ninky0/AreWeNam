@@ -48,5 +48,6 @@ function submitForm() {
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('ootdForm');
     const productId = document.getElementById('productId').value;
-    form.action = '/review/' + productId + '/write'; // Form action 설정
+    const purchaseId = document.getElementById('purchaseId').value;
+    form.action = '/review/' + productId +'/'+ purchaseId; // Form action 설정
 });

@@ -9,20 +9,21 @@ import org.example.shoppingweather.dto.PurchaseDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.entity.Purchase;
+import org.example.shoppingweather.entity.Review;
 import org.example.shoppingweather.repository.ProductRepository;
 import org.example.shoppingweather.repository.PurchaseRepository;
+import org.example.shoppingweather.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PurchaseService {
 
     private final PurchaseRepository purchaseRepository;
-    private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
     private final ObjectMapper objectMapper;
     private final ProductService productService;
 
@@ -54,27 +55,39 @@ public class PurchaseService {
         return purchaseRepository.findByCustomer(customer);
     }
 
-    public List<Product> extractProductsFromPurchases(List<Purchase> purchases) {
-        List<Product> productList = new ArrayList<>();
+    public void enrichPurchasesWithProducts(List<Purchase> purchases) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         for (Purchase purchase : purchases) {
             try {
                 Map<String, Integer> productMap = objectMapper.readValue(purchase.getProductList(), new TypeReference<Map<String, Integer>>() {});
-                for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
-                    String productId = entry.getKey();
-                    Integer quantity = entry.getValue();
-                    Product product = productService.getProductById(Long.valueOf(productId));
-                    product.setQuantity(String.valueOf(quantity));
-                    productList.add(product);
+                List<Product> products = new ArrayList<>();
+                List<Review> reviews = reviewRepository.findByPurchaseId(purchase.getId());
+
+                // 각 제품 ID에 대한 리뷰 여부를 매핑
+                Map<Long, Boolean> reviewedProductIds = new HashMap<>();
+                for (Review review : reviews) {
+                    reviewedProductIds.put(review.getProduct().getId(), true);
                 }
-            } catch (JsonMappingException e) {
-                throw new RuntimeException(e);
+
+                for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
+                    Long productId = Long.valueOf(entry.getKey());
+                    Integer quantity = entry.getValue();
+                    Product product = productService.getProductById(productId);
+                    product.setQuantity(String.valueOf(quantity));
+
+                    // 각 Product 객체에 현재 Purchase의 리뷰 상태 저장
+                    boolean isReviewed = reviewedProductIds.getOrDefault(productId, false);
+                    product.setReviewedForPurchase(purchase.getId(), isReviewed);
+
+                    products.add(product);
+                }
+                purchase.setProducts(products);
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error processing product list from purchase", e);
             }
         }
-        return productList;
     }
+
 
 }

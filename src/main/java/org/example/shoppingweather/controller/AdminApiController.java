@@ -35,6 +35,7 @@ public class AdminApiController {
                 + "카테고리 : " + dto.getCategory() + '\n'
                 + "시즌 : " + dto.getSeason() + '\n'
                 + "온도 : " + dto.getTemperature() + '\n'
+                + "날씨 : " + dto.getWeather() + '\n'
                 + "설명 : " + dto.getDescription() + '\n');
 
         MultipartFile mainPicture = dto.getMainPicture();
@@ -104,7 +105,7 @@ public class AdminApiController {
         }
     }
 
-    @PostMapping("/update/{id}")  // 수정된 경로
+    @PutMapping("/update/{id}")  // 수정된 경로
     public ResponseEntity<Map<String, Object>> updateProduct(@PathVariable Long id, @ModelAttribute ProdUploadRequestDTO dto) {
         Map<String, Object> response = new HashMap<>();
         try {

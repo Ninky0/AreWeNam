@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.PurchaseDTO;
 import org.example.shoppingweather.dto.PurchaseProductDTO;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
@@ -13,6 +15,8 @@ import org.example.shoppingweather.repository.CartRepository;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.example.shoppingweather.repository.ProductRepository;
 import org.example.shoppingweather.repository.PurchaseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -169,31 +173,37 @@ public class CartService {
         }
     }
 
-    public List<Purchase> findAllPurchases() {
-        List<Purchase> orders = purchaseRepository.findAll();
-
-        // 각 주문에 대한 제품 정보 할당
-        for (Purchase order : orders) {
-            List<Product> orderProducts = new ArrayList<>();
-
-            Map<Long, Integer> productMap = parseProductList(order.getProductList());
-
-            // 제품 ID로 제품을 조회하고 리스트에 추가
-            for (Long productId : productMap.keySet()) {
-                Product product = productRepository.findById(productId).orElse(null);
-                if (product != null) {
-                    // 수량을 설정하고 제품을 추가
-                    product.setQuantity(String.valueOf(productMap.get(productId))); // 수량 설정
-                    orderProducts.add(product);
-                }
-            }
-
-            // 여기서 orderProducts를 주문 객체에 설정
-            order.setProducts(orderProducts); // Purchase 객체에 제품 목록 설정
-        }
-
-        return orders;
+    public Page<PurchaseDTO> findAllPurchases(Pageable pageable) {
+        Page<Purchase> page = purchaseRepository.findAll(pageable);
+        Page<PurchaseDTO> dtoPage = page.map(this::convertToDto);
+        return dtoPage;
     }
+
+    private PurchaseDTO convertToDto(Purchase purchase) {
+        List<Product> products = parseProducts(purchase.getProductList());
+        return PurchaseDTO.builder()
+                .purchaseId(purchase.getId())
+                .customerLoginId(purchase.getCustomer().getLoginId())
+                .date(purchase.getDate())
+                .products(products)
+                .grandTotal(purchase.getGrandTotal())
+                .build();
+    }
+
+
+    private List<Product> parseProducts(String productList) {
+        Map<Long, Integer> productMap = parseProductList(productList);
+        List<Product> products = new ArrayList<>();
+        for (Map.Entry<Long, Integer> entry : productMap.entrySet()) {
+            Product product = productRepository.findById(entry.getKey()).orElse(null);
+            if (product != null) {
+                product.setQuantity(String.valueOf(entry.getValue()));
+                products.add(product);
+            }
+        }
+        return products;
+    }
+
 
     private Map<Long, Integer> parseProductList(String productList) {
         Map<Long, Integer> productMap = new HashMap<>();

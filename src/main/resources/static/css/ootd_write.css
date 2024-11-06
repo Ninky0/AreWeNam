@@ -358,3 +358,24 @@ th {
 input#productSearchInput {
     padding: 4px 10px;
 }
+
+.review-image-placeholder {
+    width: 100%;  /* 플레이스홀더의 너비 */
+    height: 300px; /* 고정 높이 또는 반응형으로 설정 가능 */
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.review-image {
+    max-width: 100%; /* 이미지가 컨테이너의 너비를 초과하지 않음 */
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px; /* 선택사항: 모서리를 둥글게 하고 싶다면 */
+}

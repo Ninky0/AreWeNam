@@ -14,6 +14,7 @@ public class ProdUploadRequestDTO {
     private String category;
     private Integer season;
     private Integer temperature; // 범위를 나눠 그룹화하고, 인덱스 부여
+    private Integer weather;
     private String description;
     private MultipartFile mainPicture; // 메인 이미지 파일
     private String mainPicturePath; // 메인 이미지 경로 추가
@@ -26,6 +27,7 @@ public class ProdUploadRequestDTO {
                 .category(category)
                 .season(season)
                 .temperature(temperature)
+                .weather(weather)
                 .description(description)
                 .mainPicturePath(mainPicturePath) // Product 객체에 mainPicturePath 설정
                 .build();

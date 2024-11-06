@@ -2,6 +2,7 @@ package org.example.shoppingweather.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.PurchaseDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
@@ -78,12 +79,28 @@ public class AdminViewController {
     }
 
     @GetMapping("/orders")
-    public String listOrders(Model model) {
-        model.addAttribute("orders", cartService.findAllPurchases());
-        List<Purchase> orders = cartService.findAllPurchases();
-        for (Purchase purchase : orders) {
-            System.out.println(purchase.getProducts());
-        }
+    public String listOrders(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
+
+        Page<PurchaseDTO> orderPage = cartService.findAllPurchases(pageable);
+        List<PurchaseDTO> orders = orderPage.getContent();
+
+        int totalPages = orderPage.getTotalPages();
+        int pageBlock = 10; // 페이지 블록 크기
+        int startPage = (page / pageBlock) * pageBlock;
+        int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
+
+        model.addAttribute("orders", orders);
+        model.addAttribute("orderPage", orderPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("showPrevious", startPage > 0);
+        model.addAttribute("showNext", endPage < totalPages - 1);
+
+
+
+        model.addAttribute("orders", cartService.findAllPurchases(pageable));
 
         return "order_list";
     }
