@@ -59,7 +59,7 @@
                 <td><img class="product-image" th:src="@{${product.mainPicturePath}}" th:alt="${product.name}"/></td>
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.quantity}"></td>
-                <td th:text="${product.price}"></td>
+                <td th:text="${purchase.grandTotal}"></td>
               </tr>
             </table>
           </td>
