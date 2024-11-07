@@ -3,6 +3,7 @@ package org.example.shoppingweather.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.config.security.CustomUserDetails;
 import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
+import org.example.shoppingweather.dto.PurchaseProductDTO;
 import org.example.shoppingweather.dto.PurchaseRequestDTO;
 import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
@@ -154,6 +155,23 @@ public class CustomerApiController {
             e.printStackTrace(); // 예외 로그 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("message", "서버 오류 발생"));
+        }
+    }
+
+    @PostMapping("/purchase/direct")
+    public ResponseEntity purchaseDirectly(@RequestBody PurchaseProductDTO request) {
+        try{
+            Long customerId = request.getCustomerId();
+            boolean isSuccess = cartService.directPurchase(customerId, request.getProductId(), request.getQuantity());
+
+            if (isSuccess) {
+                return ResponseEntity.ok(Map.of("message", "선택한 제품이 성공적으로 구매되었습니다. 주문 내역을 확인하시겠습니까?"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("message", "상품 구매 처리에 실패했습니다."));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류 발생"));
         }
     }
 
