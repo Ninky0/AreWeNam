@@ -77,7 +77,7 @@ public class CustomerViewController {
     // customer 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail/{id}")
     public String detail(HttpSession session, @PathVariable Long id, Model model) {
-        // id로 상품 정보 찾기
+        // 상품 정보 찾기
         ProdReadResponseDTO product = productService.findById(id);
         Integer count = reviewService.countReview(id);
 
@@ -87,18 +87,18 @@ public class CustomerViewController {
             product.setMainPicturePath(mainPicturePath);
         }
 
+        // 세션을 통해 로그인 여부 확인 (세션이 null일 때도 처리)
         Customer customer = (session != null) ? customerService.findBySession(session) : null;
         model.addAttribute("product", product);
         model.addAttribute("customer", customer);
         model.addAttribute("reviewCount", count);
 
-        // 상세 페이지 HTML 파일로 반환
         return "detail";
     }
 
     @GetMapping("/product/list")
     public String productList(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 5;
+        int pageSize = 15;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
 
         Page<ProdReadResponseDTO> productPage = productService.findAll(pageable);
@@ -117,6 +117,22 @@ public class CustomerViewController {
         model.addAttribute("showNext", endPage < totalPages - 1);
 
         return "total_list";
+    }
+    @GetMapping("/product/api/list")
+    @ResponseBody
+    public Map<String, Object> getProductListJson(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<ProdReadResponseDTO> productPage = productService.findAll(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", productPage.getContent());
+        response.put("last", productPage.isLast());
+        response.put("totalPages", productPage.getTotalPages());
+        response.put("currentPage", page);
+
+        return response;
     }
 
     @GetMapping("/ootd_list")
