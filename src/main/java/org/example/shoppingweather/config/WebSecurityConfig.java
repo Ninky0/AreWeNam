@@ -22,27 +22,24 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(
-                                        "/static/**", "/css/**", "/js/**", "/images/**", "/uploads/**", "/static/uploads/**" // Allow access to static resources
+                                        "/static/**", "/css/**", "/js/**", "/images/**", "/uploads/**", "/static/uploads/**"
                                 ).permitAll()
                                 .requestMatchers(
                                         "/user/login", "/user/join", "/join", "/home/**",
                                         "/user/ootd_list", "/user/product/list",
                                         "/user/seasonproduct_list", "/user/seasonproduct_list?season=1",
                                         "/user/seasonproduct_list?season=2", "/user/seasonproduct_list?season=3",
-                                        "/user/seasonproduct_list?season=4", "/user/product/detail/**",
-                                        "/product/list", "/product/ootd_detail/**", "/ootd_list",
-                                        "/product/detail/**", "/seasonproduct_list",
-                                        "/user/product/search/**", "/user/api/ootd-images/**", "/user/api/ootd/detail/**",
-                                        "/user/ootd/detail/**", "/user/api/ootd/detail/**",
-                                        "/user/review_list" // Allow access to review list without login
+                                        "/user/seasonproduct_list?season=4", "/user/product/detail/**", // <-- 여기 수정
+                                        "/user/product/list", "/user/product/api/list", "/product/ootd_detail/**", "/ootd_list",
+                                        "/user/review_list", "/user/api/ootd-images/**", "/user/api/ootd/detail/**"
                                 ).permitAll()
                                 .requestMatchers(
-                                        "/user/cart/add", "/user/buy" // Require login for cart and purchase functions
+                                        "/user/cart/add", "/user/buy"
                                 ).authenticated()
                                 .requestMatchers(
                                         "/admin/product/list", "/admin/product/upload", "/admin/**"
-                                ).hasRole("ADMIN") // Allow admin access
-                                .anyRequest().authenticated() // All other requests require authentication
+                                ).hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .formLogin(
                         form -> form
@@ -56,7 +53,7 @@ public class WebSecurityConfig {
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/user/login")
                 )
-                .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for testing purposes only
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

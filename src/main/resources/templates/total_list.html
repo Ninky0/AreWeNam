@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
     <script th:src="@{/js/total_list.js}"></script>
-    <link th:href="@{/css/product_list.css}" rel="stylesheet">
+    <link th:href="@{/css/total_list.css}" rel="stylesheet">
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
 
@@ -18,73 +18,16 @@
 <main>
     <div class="container">
         <h2>전체 상품 목록</h2>
-        <table>
-            <thead>
-            <tr>
-                <th class="th_1">번호</th>
-                <th class="th_2">이미지</th>
-                <th class="th_3">상품명</th>
-                <th class="th_2">가격</th>
-                <th class="th_1">추천계절</th>
-                <th class="th_1">추천온도</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="product, iterStat : ${products}">
-                <td th:text="${iterStat.count}"></td>
-                <td>
-                    <a th:href="@{/user/product/detail/{id}(id=${product.id})}">
-                        <img th:src="@{${#strings.replace(product.mainPicturePath,'src/main/resources/static', '')}}" th:alt="${product.name}"/>
-                    </a>
-                </td>
-                <td>
-                    <a th:href="@{/user/product/detail/{id}(id=${product.id})}" th:text="${product.name}"></a>
-                </td>
-                <td th:text="${#numbers.formatDecimal(product.price, 1, 0)}"></td>
-                <td th:text="${product.season == 1 ? '봄' : (product.season == 2 ? '여름' : (product.season == 3 ? '가을' : '겨울'))}"></td>
-                <td th:text="${product.temperature == 1 ? '≥28°C' :
-                          (product.temperature == 2 ? '27~23°C' :
-                          (product.temperature == 3 ? '22~20°C' :
-                          (product.temperature == 4 ? '19~17°C' :
-                          (product.temperature == 5 ? '16~12°C' :
-                          (product.temperature == 6 ? '11~9°C' :
-                          (product.temperature == 7 ? '8~5°C' :
-                          '≤4°C'))))))}">
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div>
-            <ul class="pagination">
-                <!-- 첫 페이지로 이동 -->
-                <li th:if="${productPage.number > 0}" class="page-item">
-                    <a class="page-link" th:href="@{/user/product/list(page=0)}">처음</a>
-                </li>
-
-                <!-- 이전 페이지 블록으로 이동 -->
-                <li th:if="${showPrevious}" class="page-item">
-                    <a class="page-link" th:href="@{/user/product/list(page=${startPage - 1})}">이전</a>
-                </li>
-
-                <!-- 페이지 번호 -->
-                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
-                    th:class="${productPage.number == i} ? 'active page-item' : 'page-item'">
-                    <a class="page-link" th:href="@{/user/product/list(page=${i})}" th:text="${i + 1}">1</a>
-                </li>
-
-                <!-- 다음 페이지 블록으로 이동 -->
-                <li th:if="${showNext}" class="page-item">
-                    <a class="page-link" th:href="@{/user/product/list(page=${endPage + 1})}">다음</a>
-                </li>
-
-                <!-- 마지막 페이지로 이동 -->
-                <li th:if="${productPage.number < productPage.totalPages - 1}" class="page-item">
-                    <a class="page-link" th:href="@{/user/product/list(page=${productPage.totalPages - 1})}">마지막</a>
-                </li>
-            </ul>
+        <div id="productGrid" class="product-grid">
+            <!-- 상품 아이템이 JavaScript를 통해 동적으로 추가됩니다. -->
+        </div>
+        <!-- 더보기 버튼 추가 -->
+        <div class="load-more-container">
+            <button id="loadMoreBtn" class="load-more-btn">더보기</button>
         </div>
     </div>
 </main>
+
 <footer>
     <div class="footer-container">
         <p>&copy; 2024 WeatherWear. All rights reserved.</p>

@@ -21,9 +21,9 @@
 
         <div class="product-detail-row">
             <input type="hidden" id="productId" th:value="${product.id}">
-            <input type="hidden" id="customerId" th:value="${customer.id}">
+            <input type="hidden" id="customerId" th:if="${customer != null}" th:value="${customer.id}">
             <div class="product-col-md-4">
-                <img th:src="@{${#strings.replace(product.mainPicturePath,'src/main/resources/static', '')}}" alt="상세 이미지">
+                <img th:src="@{${#strings.replace(product.mainPicturePath, 'src/main/resources/static', '')}}" alt="상세 이미지">
             </div>
 
             <div class="product-col-md-8">
@@ -57,7 +57,7 @@
                     <input type="number" id="quantityInput" class="quantity-input" name="quantity" value="1" min="1"
                            max="100">
                 </div>
-                <!--이벤트 배너 임의등록-->
+                <!-- 이벤트 배너 -->
                 <img class="product-detail-image" src="/images/detail_event_bn1.png" alt="상품 이미지">
 
                 <div class="product-detail-info">
@@ -79,7 +79,7 @@
         <div class="product-description">
             <h2>상세정보</h2>
             <div class="description-image">
-                <div th:utext="${#strings.replace(product.description.substring(1),'src/main/resources/static', '')}"
+                <div th:utext="${#strings.replace(product.description.substring(1), 'src/main/resources/static', '')}"
                      class="product-description-content"></div>
             </div>
             <div th:replace="~{fragments/review_list::review_list}"></div>
