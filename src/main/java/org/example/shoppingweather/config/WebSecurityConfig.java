@@ -22,19 +22,27 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(
-                                        "/static/**", "/css/**", "/js/**", "/images/**", "/uploads/**", "/static/uploads/**" // 정적 리소스 접근 허용
+                                        "/static/**", "/css/**", "/js/**", "/images/**", "/uploads/**", "/static/uploads/**" // Allow access to static resources
                                 ).permitAll()
                                 .requestMatchers(
                                         "/user/login", "/user/join", "/join", "/home/**",
-                                        "/user/ootd_list/**", "/user/product/search/**", "/user/api/ootd-images/**", "/user/api/ootd/detail/**",
-                                        "/user/product/detail/**", // 로그인 없이 상품 상세 페이지 접근 허용
-                                        "/user/product_list", "/user/api/ootd-images",
-                                        "/user/ootd/detail/**", "/user/api/ootd/detail/**"
+                                        "/user/ootd_list", "/user/product/list",
+                                        "/user/seasonproduct_list", "/user/seasonproduct_list?season=1",
+                                        "/user/seasonproduct_list?season=2", "/user/seasonproduct_list?season=3",
+                                        "/user/seasonproduct_list?season=4", "/user/product/detail/**",
+                                        "/product/list", "/product/ootd_detail/**", "/ootd_list",
+                                        "/product/detail/**", "/seasonproduct_list",
+                                        "/user/product/search/**", "/user/api/ootd-images/**", "/user/api/ootd/detail/**",
+                                        "/user/ootd/detail/**", "/user/api/ootd/detail/**",
+                                        "/user/review_list" // Allow access to review list without login
                                 ).permitAll()
                                 .requestMatchers(
+                                        "/user/cart/add", "/user/buy" // Require login for cart and purchase functions
+                                ).authenticated()
+                                .requestMatchers(
                                         "/admin/product/list", "/admin/product/upload", "/admin/**"
-                                ).hasRole("ADMIN") // 관리자 접근 허용
-                                .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
+                                ).hasRole("ADMIN") // Allow admin access
+                                .anyRequest().authenticated() // All other requests require authentication
                 )
                 .formLogin(
                         form -> form
@@ -48,7 +56,7 @@ public class WebSecurityConfig {
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/user/login")
                 )
-                .csrf(AbstractHttpConfigurer::disable); // 테스트 용도에서만 CSRF 비활성화
+                .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for testing purposes only
 
         return http.build();
     }

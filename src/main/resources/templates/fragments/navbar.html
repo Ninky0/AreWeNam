@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <script th:src="@{/js/heather.js}"></script>
+
+    <!-- 헤더 영역 시작 -->
     <div class="header">
         <div class="logo">
-            <h1><a th:href="@{/home}">WeatherWear</a></h1>
+            <h1><a th:href="@{/home}">WeatherWear</a></h1> <!-- 로고 링크 -->
         </div>
+
+        <!-- 메인 네비게이션 -->
         <nav class="main-nav">
             <ul>
                 <li><a th:href="@{/user/product/list}">전체상품</a></li>
@@ -18,15 +22,32 @@
                 <li><a th:href="@{/user/ootd_list}">커뮤니티</a></li>
             </ul>
         </nav>
+
+        <!-- 아이콘 및 로그인/로그아웃 버튼 -->
         <div class="icon-container">
             <ul>
+                <!-- '내 정보' 아이콘 및 사용자 이름 표시 -->
                 <li><a th:href="@{/mypage}"><i class="fa-regular fa-user" style="color: #000000;"></i></a></li>
+                <li th:if="${customer != null}">
+                    <span th:text="${customer.name}">사용자</span>
+                </li>
+
+                <!-- 고객 전용 아이콘들: 주문 내역, 장바구니, 검색 (로그인 필요) -->
                 <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/mypage/history}"><i class="fa-solid fa-truck" style="color: #000000;"></i></a></li>
                 <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/user/shoppingcart}"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a></li>
                 <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/user/search}"><i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i></a></li>
+
+                <!-- 로그인 상태에 따른 로그인/로그아웃 버튼 -->
+                <li sec:authorize="isAuthenticated()"> <!-- 로그인한 경우 -->
+                    <a th:href="@{/logout}">로그아웃</a>
+                </li>
+                <li sec:authorize="isAnonymous()"> <!-- 비로그인 상태인 경우 -->
+                    <a th:href="@{/user/login}">로그인</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
+
 </body>
 </html>

@@ -221,4 +221,28 @@ public class CartService {
     }
 
 
+    public boolean directPurchase(Long customerId, Long productId, Integer quantity) {
+        try{
+            Customer customer = customerRepository.findById(customerId)
+                    .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 고객 ID입니다."));
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+            Integer toalAmount = product.getPrice() * quantity;
+
+            String productJson = "{\""+productId+"\":"+quantity+"}";
+
+            Purchase purchase = Purchase.createPurchase(customer, productJson, toalAmount);
+
+            purchaseRepository.save(purchase);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 }

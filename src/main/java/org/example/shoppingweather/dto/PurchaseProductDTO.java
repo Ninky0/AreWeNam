@@ -10,6 +10,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class PurchaseProductDTO {
+    private Long customerId;
     private Long productId;
     private Integer quantity;
     private Integer price; // 가격 추가
