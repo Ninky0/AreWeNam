@@ -89,6 +89,7 @@ public class Product {
                 .category(category)
                 .season(season)
                 .temperature(temperature)
+                .weather(weather)
                 .build();
     }
 
