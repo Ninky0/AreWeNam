@@ -86,23 +86,26 @@ public class AdminViewController {
         Page<PurchaseDTO> orderPage = cartService.findAllPurchases(pageable);
         List<PurchaseDTO> orders = orderPage.getContent();
 
+        // 총 수익 계산
+        int totalRevenue = (int) orders.stream()
+                .mapToDouble(PurchaseDTO::getGrandTotal)
+                .sum();
+
         int totalPages = orderPage.getTotalPages();
         int pageBlock = 10; // 페이지 블록 크기
         int startPage = (page / pageBlock) * pageBlock;
         int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
 
         model.addAttribute("orders", orders);
+        model.addAttribute("totalRevenue", totalRevenue); // 모델에 총 수익 추가
         model.addAttribute("orderPage", orderPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("showPrevious", startPage > 0);
         model.addAttribute("showNext", endPage < totalPages - 1);
 
-
-
-        model.addAttribute("orders", cartService.findAllPurchases(pageable));
-
         return "order_list";
     }
+
 
 }

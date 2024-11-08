@@ -37,27 +37,6 @@ h2 {
     font-weight: 600;
 }
 
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-
 /* Table Styles */
 thead th {
     padding: 10px;
@@ -141,6 +120,7 @@ img {
     width: 15px;
     height: 15px;
 }
+
 table{
     border-collapse: collapse; border-spacing: 0;
     margin: 0 auto;

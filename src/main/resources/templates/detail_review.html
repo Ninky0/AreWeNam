@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-    <script th:src="@{/js/review_write.js}"></script>
+    <script th:src="@{/js/review_detail.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link th:href="@{/css/ootd_write.css}" rel="stylesheet">
     <link th:href="@{/css/heather.css}" rel="stylesheet">
@@ -36,7 +36,8 @@
             <input type="text" id="content" name="content" th:value="${review.content}" class="content-input" readonly>
 
         </div>
-        <button class="review-button" type="button" onclick="submitForm()">리뷰 수정</button>
+        <a class="review-button" th:href="@{/review/edit/{prodid}/{purchid}(prodid=${productId}, purchid=${purchaseId})}">수정</a>
+        <button class="review-button delete-button" type="button">삭제하기</button>
     </form>
 </main>
 <footer>
