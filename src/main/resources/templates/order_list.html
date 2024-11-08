@@ -6,66 +6,76 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link th:href="@{/css/heather.css}" rel="stylesheet">
     <link th:href="@{/css/footer.css}" rel="stylesheet">
-    <title>주문 내역 목록</title>
+    <link th:href="@{/css/order_list.css}" rel="stylesheet">
+    <title>주문 현황</title>
 </head>
 <body>
 <header>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
-<main class="container mt-5">
-    <h2>주문 내역 목록</h2>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>주문번호</th>
-            <th>구매자 로그인 ID</th>
-            <th>구매 일시</th>
-            <th>구매 내역</th>
-            <th>총액</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.purchaseId}"></td>
-            <td th:text="${order.customerLoginId}"></td>
-            <td th:text="${order.date != null ? #temporals.format(order.date, 'yyyy-MM-dd HH:mm') : '날짜 없음'}"></td>
-            <td>
-                <div th:each="product : ${order.products}">
-                    <span th:text="${product.name} + ' * ' + ${product.quantity}"></span><br/>
-                </div>
-            </td>
-            <td th:text="${order.grandTotal}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <div>
-        <ul class="pagination">
-            <!-- 첫 페이지로 이동 -->
-            <li th:if="${orderPage.number > 0}" class="page-item">
-                <a class="page-link" th:href="@{/admin/orders(page=0)}">처음</a>
-            </li>
+<main>
+    <div class="container mt-5">
+        <div class="row mb-3">
+            <div class="col-12 text-center">
+                <h2>주문 현황</h2>
+            </div>
+            <div class="col-12 text-right">
+                <div id="profit" class="profit">총 수익: <span th:text="${totalRevenue}"></span>원</div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>주문번호</th>
+                <th>구매자 로그인 ID</th>
+                <th>구매 일시</th>
+                <th>구매 내역</th>
+                <th>총액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.purchaseId}"></td>
+                <td th:text="${order.customerLoginId}"></td>
+                <td th:text="${order.date != null ? #temporals.format(order.date, 'yyyy-MM-dd HH:mm') : '날짜 없음'}"></td>
+                <td>
+                    <div th:each="product : ${order.products}">
+                        <span th:text="${product.name} + ' * ' + ${product.quantity}"></span><br/>
+                    </div>
+                </td>
+                <td th:text="${order.grandTotal}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination-container">
+            <ul class="pagination">
+                <!-- 첫 페이지로 이동 -->
+                <li th:if="${orderPage.number > 0}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/orders(page=0)}">처음</a>
+                </li>
 
-            <!-- 이전 페이지 블록으로 이동 -->
-            <li th:if="${showPrevious}" class="page-item">
-                <a class="page-link" th:href="@{/admin/orders(page=${startPage - 1})}">이전</a>
-            </li>
+                <!-- 이전 페이지 블록으로 이동 -->
+                <li th:if="${showPrevious}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/orders(page=${startPage - 1})}">이전</a>
+                </li>
 
-            <!-- 페이지 번호 -->
-            <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
-                th:class="${orderPage.number == i} ? 'active page-item' : 'page-item'">
-                <a class="page-link" th:href="@{/admin/orders(page=${i})}" th:text="${i + 1}">1</a>
-            </li>
+                <!-- 페이지 번호 -->
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                    th:class="${orderPage.number == i} ? 'active page-item' : 'page-item'">
+                    <a class="page-link" th:href="@{/admin/orders(page=${i})}" th:text="${i + 1}">1</a>
+                </li>
 
-            <!-- 다음 페이지 블록으로 이동 -->
-            <li th:if="${showNext}" class="page-item">
-                <a class="page-link" th:href="@{/admin/orders(page=${endPage + 1})}">다음</a>
-            </li>
+                <!-- 다음 페이지 블록으로 이동 -->
+                <li th:if="${showNext}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/orders(page=${endPage + 1})}">다음</a>
+                </li>
 
-            <!-- 마지막 페이지로 이동 -->
-            <li th:if="${orderPage.number < orderPage.totalPages - 1}" class="page-item">
-                <a class="page-link" th:href="@{/admin/orders(page=${orderPage.totalPages - 1})}">마지막</a>
-            </li>
-        </ul>
+                <!-- 마지막 페이지로 이동 -->
+                <li th:if="${orderPage.number < orderPage.totalPages - 1}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.totalPages - 1})}">마지막</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </main>
 <footer>
