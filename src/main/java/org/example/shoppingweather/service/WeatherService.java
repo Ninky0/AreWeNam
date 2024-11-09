@@ -1,30 +1,22 @@
 package org.example.shoppingweather.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.example.shoppingweather.client.WeatherClient;
 import org.example.shoppingweather.dto.weather.Region;
 import org.example.shoppingweather.dto.weather.WeatherId;
 import org.example.shoppingweather.dto.weather.WeatherResponse;
-import org.example.shoppingweather.dto.weather.Weatherdescription;
 import org.example.shoppingweather.entity.Weather;
 import org.example.shoppingweather.repository.WeatherRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

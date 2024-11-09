@@ -6,13 +6,10 @@ import org.example.shoppingweather.dto.product.ProdUploadRequestDTO;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.repository.ProductRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.StringUtils;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +17,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,19 +83,6 @@ public class AdminService {
         return "/uploads/" + fileName;
     }
 
-    public String saveDetail(MultipartFile file, String name) throws IOException {
-        String uploadDir = "src/main/resources/static/uploads/";
-        String fileName = generateUniqueFileName(name);
-        Path filePath = Paths.get(uploadDir + fileName);
-
-        if (!Files.exists(filePath.getParent())) {
-            Files.createDirectories(filePath.getParent());
-        }
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return "/uploads/" + fileName;
-    }
-
     private String generateUniqueFileName(String originalName) {
         String baseName = StringUtils.stripFilenameExtension(originalName);
         String extension = StringUtils.getFilenameExtension(originalName);
@@ -112,8 +95,4 @@ public class AdminService {
         LOGGER.info("Deleted products with IDs: " + productIds);
     }
 
-    public Page<Product> getProducts(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return productRepository.findAll(pageable);
-    }
 }

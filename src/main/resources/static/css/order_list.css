@@ -1,0 +1,80 @@
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+main {
+    background-color: white;
+    padding-top: 80px; /* 헤더 높이에 맞추어 조정 */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.h2 {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.profit {
+    padding-right: 15px; /* 우측 패딩 조정 */
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 전체 너비를 사용 */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: nowrap;
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+}
+
+.pagination .page-item {
+    display: inline-block; /* 각 페이지 항목을 인라인 블록으로 표시 */
+}
+
+.pagination .page-link {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 15%; /* 모서리 둥글게 */
+    margin-right: 4px; /* 링크 간 간격 */
+}
+
+.pagination .page-link:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
+}
+
+.pagination li a {
+    margin-right: 4px; /* 링크 간 간격 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.pagination .page-item.active .page-link {
+    font-weight: bold;
+    color: white;
+    background-color: cornflowerblue;
+}
