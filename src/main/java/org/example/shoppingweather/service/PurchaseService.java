@@ -24,32 +24,7 @@ public class PurchaseService {
 
     private final PurchaseRepository purchaseRepository;
     private final ReviewRepository reviewRepository;
-    private final ObjectMapper objectMapper;
     private final ProductService productService;
-
-//    // 특정 구매의 제품 목록 가져오기
-//    public List<Product> getProductsFromPurchase(Long purchaseId) throws Exception {
-//        Purchase purchase = purchaseRepository.findById(purchaseId).orElseThrow();
-//        String productListJson = purchase.getProductList();
-//        return objectMapper.readValue(productListJson, new TypeReference<List<Product>>() {});
-//    }
-//
-//    // 고객 ID로 구매 상세 내역과 제품 정보 가져오기
-//    public List<PurchaseDTO> getPurchaseDetailsByCustomerId(Long customerId) throws Exception {
-//        List<Purchase> purchases = purchaseRepository.findByCustomerId(customerId);
-//        List<PurchaseDTO> purchaseDTOs = new ArrayList<>();
-//
-//        for (Purchase purchase : purchases) {
-//            List<Product> products = getProductsFromPurchase(purchase.getId());
-//            PurchaseDTO purchaseDTO = new PurchaseDTO(
-//                    purchase.getId(),
-//                    purchase.getDate(),
-//                    products
-//            );
-//            purchaseDTOs.add(purchaseDTO);
-//        }
-//        return purchaseDTOs;
-//    }
 
     public List<Purchase> getPurchasesByCustomer(Customer customer) {
         return purchaseRepository.findByCustomer(customer);

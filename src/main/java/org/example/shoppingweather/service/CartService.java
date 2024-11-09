@@ -35,7 +35,6 @@ public class CartService {
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final PurchaseRepository purchaseRepository;
-    private final ProductService productService;
     private final ObjectMapper objectMapper;
 
     // 장바구니 추가
