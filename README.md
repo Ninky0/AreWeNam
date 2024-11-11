@@ -1,4 +1,4 @@
-# Weather Wear, What to Wear ; WWWW
+<img width="578" alt="image" src="https://github.com/user-attachments/assets/77f31edc-77bc-4ee6-950b-9f8fc9249cbf"># Weather Wear, What to Wear ; WWWW
 
 *날씨*에 따라 *옷을 추천*해주는 쇼핑몰, '**웨더웨어, 왓투웨어**' 입니다~
 
@@ -13,7 +13,20 @@
       - 선택한 지역에 대한 기온을 가져와, 기온에 맞는 상품들을 추천해줍니다.
 <img width="1377" alt="image" src="https://github.com/user-attachments/assets/76dde608-7523-4fb7-93da-0737d6b8549c">
 
+- 메인화면 2
+    - 선택한 계절에 맞는 상품들을 추천해줍니다.
+<img width="1417" alt="image" src="https://github.com/user-attachments/assets/797d52f0-75c5-4a21-a624-634e23f7b872">
+<img width="578" alt="image" src="https://github.com/user-attachments/assets/cbd5fb12-42ed-43f7-afed-a1d9fa88f02d">
 
+- 커뮤니티 (OOTD)
+      - 고객은 자신의 평소 코디 사진, 해시태그와 함께, 쇼핑몰 내의 연관 상품을 연결하여 게시물을 등록할 수 있습니다.
+  <img width="290" alt="image" src="https://github.com/user-attachments/assets/b30a2a3c-86b3-491e-a5b8-f5b074e26e40">
+  <img width="602" alt="image" src="https://github.com/user-attachments/assets/acf36438-5f90-4b1a-a375-e13a462447fb">
+
+
+- 판매자 판매글 등록
+      - 판매자는 날씨, 기온, 계절들을 선택하여 상품을 등록할 수 있습니다.
+  <img width="302" alt="image" src="https://github.com/user-attachments/assets/e6ec5288-8f68-4054-a372-4db989fe596e">
 
 
 # 기술 스택
