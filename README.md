@@ -1,4 +1,4 @@
-<img width="578" alt="image" src="https://github.com/user-attachments/assets/77f31edc-77bc-4ee6-950b-9f8fc9249cbf"># Weather Wear, What to Wear ; WWWW
+# Weather Wear, What to Wear ; WWWW
 
 *날씨*에 따라 *옷을 추천*해주는 쇼핑몰, '**웨더웨어, 왓투웨어**' 입니다~
 
