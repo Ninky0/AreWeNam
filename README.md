@@ -8,6 +8,11 @@
 
 - 판매 상품, 리뷰, 주문 현황 등, 대량의 데이터를 불러오는 페이지에 페이징 처리를 하여, 로딩 지연시간에 대한 문제를 개선시켰습니다.
 
+# ER - Diagram
+
+<img width="547" alt="image" src="https://github.com/user-attachments/assets/86458470-0f62-4ac1-8bef-d4e5856a828b">
+
+
 # 실행 화면
 - 메인화면 1
       - 선택한 지역에 대한 기온을 가져와, 기온에 맞는 상품들을 추천해줍니다.
@@ -20,12 +25,14 @@
 
 - 커뮤니티 (OOTD)
       - 고객은 자신의 평소 코디 사진, 해시태그와 함께, 쇼핑몰 내의 연관 상품을 연결하여 게시물을 등록할 수 있습니다.
+  
   <img width="290" alt="image" src="https://github.com/user-attachments/assets/b30a2a3c-86b3-491e-a5b8-f5b074e26e40">
   <img width="602" alt="image" src="https://github.com/user-attachments/assets/acf36438-5f90-4b1a-a375-e13a462447fb">
 
 
 - 판매자 판매글 등록
       - 판매자는 날씨, 기온, 계절들을 선택하여 상품을 등록할 수 있습니다.
+  
   <img width="302" alt="image" src="https://github.com/user-attachments/assets/e6ec5288-8f68-4054-a372-4db989fe596e">
 
 
