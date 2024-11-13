@@ -89,7 +89,7 @@ $(document).ready(function () {
 
     function loadProducts(season, page) {
         $.ajax({
-            url: '/user/seasonproduct_list',
+            url: '/home/seasonproduct_list',
             method: 'POST',
             data: {season: season, page: page},
             success: function (data) {

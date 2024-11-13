@@ -118,22 +118,6 @@ public class CustomerViewController {
 
         return "total_list";
     }
-    @GetMapping("/product/api/list")
-    @ResponseBody
-    public Map<String, Object> getProductListJson(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "15") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-        Page<ProdReadResponseDTO> productPage = productService.findAll(pageable);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("products", productPage.getContent());
-        response.put("last", productPage.isLast());
-        response.put("totalPages", productPage.getTotalPages());
-        response.put("currentPage", page);
-
-        return response;
-    }
 
     @GetMapping("/ootd_list")
     public String ootdList(Model model, Pageable pageable) {
@@ -153,75 +137,6 @@ public class CustomerViewController {
         return "ootd_write";
     }
 
-    @PostMapping("/ootd_write")
-    public ResponseEntity<Map<String, String>> saveOotdPost(
-            @ModelAttribute OotdWriteRequestDTO requestDTO) {
-
-        Map<String, String> response = new HashMap<>();
-
-        try {
-            String picturePath = reviewService.handleFileUpload(requestDTO.getPicture());
-            ootdService.saveOotdPost(requestDTO, picturePath); // Here, we save Product directly
-
-            response.put("url", "/user/ootd_list");
-            response.put("message", "상품 등록이 완료되었습니다.");
-            return ResponseEntity.ok(response);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    // 상품 목록을 JSON 형태로 반환하는 API, 이름 필터 추가
-    @GetMapping("/product/search")
-    @ResponseBody
-    public Page<ProdReadResponseDTO> searchProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(required = false) String name) {
-        Pageable pageable = PageRequest.of(page, size);
-
-        if (name != null && !name.isEmpty()) {
-            return productService.searchProductsByName(name, pageable);
-        } else {
-            return adminService.findAll(pageable);
-        }
-    }
-
-    @GetMapping("/seasonproduct_list")
-    public String fourseason(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(required = false) String season,
-                             Model model) {
-        int pageSize = 5; // 페이지 크기를 5로 설정
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
-
-        Page<ProdReadResponseDTO> productPage;
-
-        // season 파라미터가 있을 경우 필터링
-        if (season != null && !season.isEmpty()) {
-            productPage = productService.getProductsBySeason(season, pageable); // 계절에 따른 필터링
-        } else {
-            productPage = productService.findAll(pageable); // 전체 상품 목록
-        }
-
-        List<ProdReadResponseDTO> products = productPage.getContent();
-        int totalPages = productPage.getTotalPages();
-        int pageBlock = 3;
-        int startPage = (page / pageBlock) * pageBlock;
-        int endPage = Math.min(startPage + pageBlock - 1, totalPages - 1);
-
-        model.addAttribute("products", products);
-        model.addAttribute("productPage", productPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("showPrevious", startPage > 0);
-        model.addAttribute("showNext", endPage < totalPages - 1);
-        model.addAttribute("season", season);
-
-        return "fourseason";
-    }
 
     @GetMapping("/search")
     public String search() {

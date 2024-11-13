@@ -9,7 +9,7 @@ $(document).ready(function() {
 
         selectedSeason = season;
 
-        const url = `/user/seasonproduct_list?season=${season}`;
+        const url = `/home/seasonproduct_list?season=${season}`;
         window.location.href = url; // 페이지 이동
     });
 
