@@ -27,9 +27,9 @@ public class WebSecurityConfig {
                                 .requestMatchers(
                                         "/user/login", "/user/join", "/join", "/home/**",
                                         "/user/ootd_list", "/user/product/list",
-                                        "/user/seasonproduct_list", "/user/seasonproduct_list?season=1",
-                                        "/user/seasonproduct_list?season=2", "/user/seasonproduct_list?season=3",
-                                        "/user/seasonproduct_list?season=4", "/user/product/detail/**", // <-- 여기 수정
+                                        "/home/seasonproduct_list", "/home/seasonproduct_list?season=1",
+                                        "/home/seasonproduct_list?season=2", "/home/seasonproduct_list?season=3",
+                                        "/home/seasonproduct_list?season=4", "/user/product/detail/**", // <-- 여기 수정
                                         "/user/product/list", "/user/product/api/list", "/product/ootd_detail/**", "/ootd_list",
                                         "/user/review_list", "/user/api/ootd-images/**", "/user/api/ootd/detail/**"
                                 ).permitAll()

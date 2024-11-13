@@ -3,6 +3,7 @@ package org.example.shoppingweather.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.config.security.CustomUserDetails;
 import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
+import org.example.shoppingweather.dto.OotdWriteRequestDTO;
 import org.example.shoppingweather.dto.PurchaseProductDTO;
 import org.example.shoppingweather.dto.PurchaseRequestDTO;
 import org.example.shoppingweather.dto.UrlResponseDTO;
@@ -21,8 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -32,6 +33,8 @@ public class CustomerApiController {
     private final CustomerService customerService;
     private final CartService cartService;
     private final ProductService productService;
+    private final ReviewService reviewService;
+    private final AdminService adminService;
     private final OotdService ootdService;
     private String request;
 
@@ -45,74 +48,38 @@ public class CustomerApiController {
         );
     }
 
-//    @PostMapping("/shoppingcart")
-//    public ResponseEntity<UrlResponseDTO> addCart(@RequestBody Map<String, Object> payload) {
-//        System.out.println("POST 요청이 도착했습니다: " + payload);
-//        try {
-//            // 구매 요청 처리
-//            if (payload.get("action") != null && payload.get("action").equals("purchase")) {
-//                // 고객 ID가 있는지 확인
-//                if (payload.get("customerId") == null) {
-//                    return ResponseEntity.badRequest().body(
-//                            UrlResponseDTO.builder().message("고객 ID가 필요합니다.").build()
-//                    );
-//                }
-//
-//                Long customerId = Long.parseLong(payload.get("customerId").toString());
-//                // 선택된 상품 ID 가져오기
-//                List<String> productIdStrings = (List<String>) payload.get("productIds");
-//                if (productIdStrings == null || productIdStrings.isEmpty()) {
-//                    return ResponseEntity.badRequest().body(
-//                            UrlResponseDTO.builder().message("선택된 상품이 필요합니다.").build()
-//                    );
-//                }
-//
-//                List<Long> productIds = productIdStrings.stream()
-//                        .map(Long::valueOf)
-//                        .collect(Collectors.toList());
-//
-//
-//                // 장바구니 구매 처리
-//                cartService.PurchaseCart(customerId, productIds); // 장바구니 구매 처리
-//
-//                return ResponseEntity.ok(
-//                        UrlResponseDTO.builder().message("구매가 완료되었습니다.").build()
-//                );
-//            }
-//
-//            // 장바구니에 상품 추가 요청 처리
-//            if (payload.get("customerId") == null || payload.get("productId") == null || payload.get("quantity") == null) {
-//                return ResponseEntity.badRequest().body(
-//                        UrlResponseDTO.builder().message("요청에 필요한 모든 값을 포함해야 합니다.").build()
-//                );
-//            }
-//
-//            Long customerId = Long.parseLong(payload.get("customerId").toString());
-//            Long productId = Long.parseLong(payload.get("productId").toString());
-//            Integer quantity = Integer.parseInt(payload.get("quantity").toString());
-//
-//            cartService.addProductToCart(customerId, productId, quantity);
-//            return ResponseEntity.ok(
-//                    UrlResponseDTO.builder().message("상품이 장바구니에 추가되었습니다. 장바구니를 확인하시겠습니까?").build()
-//            );
-//
-//        } catch (NumberFormatException e) {
-//            e.printStackTrace(); // 로그에 예외 출력
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    UrlResponseDTO.builder().message("입력 형식이 올바르지 않습니다.").build()
-//            );
-//        } catch (RuntimeException e) {
-//            e.printStackTrace(); // 로그에 예외 출력
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-//                    UrlResponseDTO.builder().message("구매 처리 중 오류가 발생했습니다.").build()
-//            );
-//        } catch (Exception e) {
-//            e.printStackTrace(); // 로그에 예외 출력
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-//                    UrlResponseDTO.builder().message("상품 추가 중 오류가 발생했습니다.").build()
-//            );
-//        }
-//    }
+    @GetMapping("/product/api/list")
+    @ResponseBody
+    public Map<String, Object> getProductListJson(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<ProdReadResponseDTO> productPage = productService.findAll(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", productPage.getContent());
+        response.put("last", productPage.isLast());
+        response.put("totalPages", productPage.getTotalPages());
+        response.put("currentPage", page);
+
+        return response;
+    }
+
+    // 상품 목록을 JSON 형태로 반환하는 API, 이름 필터 추가
+    @GetMapping("/product/search")
+    @ResponseBody
+    public Page<ProdReadResponseDTO> searchProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String name) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (name != null && !name.isEmpty()) {
+            return productService.searchProductsByName(name, pageable);
+        } else {
+            return adminService.findAll(pageable);
+        }
+    }
 
     @PostMapping("/shoppingcart")
     public ResponseEntity<UrlResponseDTO> addCart(@RequestBody Map<String, Object> payload) {
@@ -212,19 +179,26 @@ public class CustomerApiController {
         throw new RuntimeException("사용자가 인증되지 않았습니다");
     }
 
-//    // OOTD 이미지 API 엔드포인트
-//    @GetMapping("/api/ootd-images")
-//    public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
-//        Pageable pageable = PageRequest.of(offset / limit, limit);
-//        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
-//
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("images", ootdImages.getContent());
-//        response.put("totalElements", ootdImages.getTotalElements());
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @PostMapping("/ootd_write")
+    public ResponseEntity<Map<String, String>> saveOotdPost(
+            @ModelAttribute OotdWriteRequestDTO requestDTO) {
 
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            String picturePath = reviewService.handleFileUpload(requestDTO.getPicture());
+            ootdService.saveOotdPost(requestDTO, picturePath); // Here, we save Product directly
+
+            response.put("url", "/user/ootd_list");
+            response.put("message", "상품 등록이 완료되었습니다.");
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
     // ootd리스트에서 클릭하면 열리는 모달창안의 이미지
     @GetMapping("/api/ootd-images")
     public ResponseEntity<Map<String, Object>> getOotdImages(@RequestParam int offset, @RequestParam int limit) {
