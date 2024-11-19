@@ -1,11 +1,9 @@
 package org.example.shoppingweather.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
 import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
-import org.example.shoppingweather.dto.Customer.CustomerPostResponseDTO;
 import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.UrlResponseDTO;
 import org.example.shoppingweather.service.CustomerService;
@@ -14,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -69,6 +65,5 @@ public class MypageApiController {
         Page<CustomerOotdImageResponseDTO> posts = ootdService.getOotdPostsByCustomerId(customerId, pageable);
         return ResponseEntity.ok(posts);
     }
-
 
 }

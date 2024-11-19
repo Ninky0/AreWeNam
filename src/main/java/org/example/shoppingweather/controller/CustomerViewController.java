@@ -46,34 +46,6 @@ public class CustomerViewController {
         return "login";
     }
 
-    @GetMapping("/shoppingcart")
-    public String cart(HttpSession session, Model model) {
-        Customer customer = customerService.findBySession(session);
-        if (customer == null) {
-            return "redirect:/login";
-        }
-
-        Optional<Cart> optionalCart = cartRepository.findByCustomerId(customer.getId());
-        if (optionalCart.isPresent()) {
-            Cart cart = optionalCart.get();
-            List<Product> products = cartService.getProductsFromCart(cart);
-            model.addAttribute("products", products);
-            model.addAttribute("cart", cart);
-        } else {
-            // 장바구니가 비어있는 경우, 빈 카트 객체 생성
-            Cart emptyCart = Cart.createEmptyCartForCustomer(customer);
-            model.addAttribute("cart", emptyCart); // 빈 카트 객체를 모델에 추가
-            model.addAttribute("products", new ArrayList<Product>()); // 빈 제품 목록 추가
-        }
-
-        return "shoppingcart";
-    }
-
-    @GetMapping("/shoppingcart/ordercomplete")
-    public String ordercomplete() {
-        return "ordercomplete";
-    }
-
     // customer 상품 상세 정보 매핑 추가
     @GetMapping("/product/detail/{id}")
     public String detail(HttpSession session, @PathVariable Long id, Model model) {
@@ -137,9 +109,36 @@ public class CustomerViewController {
         return "ootd_write";
     }
 
-
     @GetMapping("/search")
     public String search() {
         return "search";
+    }
+
+    @GetMapping("/shoppingcart")
+    public String cart(HttpSession session, Model model) {
+        Customer customer = customerService.findBySession(session);
+        if (customer == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Cart> optionalCart = cartRepository.findByCustomerId(customer.getId());
+        if (optionalCart.isPresent()) {
+            Cart cart = optionalCart.get();
+            List<Product> products = cartService.getProductsFromCart(cart);
+            model.addAttribute("products", products);
+            model.addAttribute("cart", cart);
+        } else {
+            // 장바구니가 비어있는 경우, 빈 카트 객체 생성
+            Cart emptyCart = Cart.createEmptyCartForCustomer(customer);
+            model.addAttribute("cart", emptyCart); // 빈 카트 객체를 모델에 추가
+            model.addAttribute("products", new ArrayList<Product>()); // 빈 제품 목록 추가
+        }
+
+        return "shoppingcart";
+    }
+
+    @GetMapping("/shoppingcart/ordercomplete")
+    public String ordercomplete() {
+        return "ordercomplete";
     }
 }
