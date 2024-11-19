@@ -217,53 +217,6 @@ public class CustomerApiController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/ootd_write")
-//    public ResponseEntity<Map<String, String>> createPost(
-//            HttpSession session,
-//            @RequestParam("tag") String tag,
-//            @RequestParam("picture") MultipartFile pictureFile,
-//            @RequestParam("productId") Long productId) {
-//
-//        Map<String, String> response = new HashMap<>();
-//
-//        try {
-//            // 로그인된 사용자 확인
-//            String loginId = (String) session.getAttribute("loginId");
-//            if (loginId == null) {
-//                response.put("message", "로그인이 필요합니다.");
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-//            }
-//
-//            // 세션에서 사용자 가져오기
-//            Customer customer = customerService.findBySession(session);
-//            Long customerId = customer.getId();
-//
-//            // 이미지 경로 설정
-//            String picturePath = null;
-//            if (pictureFile != null && !pictureFile.isEmpty()) {
-//                String fileExtension = pictureFile.getOriginalFilename().substring(pictureFile.getOriginalFilename().lastIndexOf("."));
-//                String fileName = "picture_" + System.currentTimeMillis() + fileExtension;
-//                Path savePath = Paths.get("src/main/resources/static/uploads/", fileName);
-//
-//                Files.createDirectories(savePath.getParent());
-//                Files.copy(pictureFile.getInputStream(), savePath);
-//                picturePath = "/uploads/" + fileName;
-//            }
-//
-//            // OOTD 게시물 데이터와 이미지 경로를 저장
-//            customerService.saveOotdPost(customerId, tag, picturePath, productId);
-//
-//            response.put("url", "/user/ootd_list");
-//            response.put("message", "상품 등록이 완료되었습니다.");
-//            return ResponseEntity.ok(response);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//        }
-//    }
-
     // ootd등록페이지에서 상품검색시 보여지는 모달창 안의 상세페이지내용
     @GetMapping("/product/ootd_detail/{id}")
     @ResponseBody

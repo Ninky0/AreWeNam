@@ -1,16 +1,10 @@
 package org.example.shoppingweather.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.entity.Customer;
-import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.entity.Purchase;
-import org.example.shoppingweather.entity.Review;
-import org.example.shoppingweather.repository.ReviewRepository;
 import org.example.shoppingweather.service.CustomerService;
-import org.example.shoppingweather.service.ProductService;
 import org.example.shoppingweather.service.PurchaseService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,8 +22,6 @@ public class MypageViewController {
 
     private final CustomerService customerService;
     private final PurchaseService purchaseService;
-    private final ProductService productService;
-    private final ReviewRepository reviewRepository;
 
     @GetMapping
     public String mypage(HttpSession session, Model model) {
@@ -60,26 +51,6 @@ public class MypageViewController {
         return "redirect:/user/login";
     }
 
-
-//        // 세션에서 loginId를 가져옴 (String으로 캐스팅)
-//        String loginId = (String) session.getAttribute("loginId");
-//
-//        // loginId로 고객 정보를 데이터베이스에서 조회
-//        Customer customer = customerRepository.findByLoginId(loginId);
-//
-//        // 모델에 고객 정보를 추가
-//        model.addAttribute("customer", customer);
-//
-//        // 위의 과정을 한줄로
-//        // 비즈니스 로직을 서비스 계층에 몰아넣고, 컨트롤러는 단순히 요청을 처리 및 응답만.
-//        model.addAttribute("customer", customerService.findBySession(session));
-//
-//        // 고객의 ID 출력
-//        //System.out.println(customer.getId());
-//
-//        return "mypage";
-
-
     @GetMapping("/edit")
     public String update(HttpSession session, Model model) {
         model.addAttribute("customer", customerService.findBySession(session));
@@ -105,8 +76,6 @@ public class MypageViewController {
 
         List<Purchase> purchases = purchaseService.getPurchasesByCustomer(customer);
         purchaseService.enrichPurchasesWithProducts(purchases);
-
-
 
         model.addAttribute("purchases", purchases);
 
