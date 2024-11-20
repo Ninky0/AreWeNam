@@ -1,7 +1,6 @@
 package org.example.shoppingweather.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.config.security.CustomUserDetails;
 import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
 import org.example.shoppingweather.dto.OotdWriteRequestDTO;
 import org.example.shoppingweather.dto.PurchaseProductDTO;
@@ -18,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -107,24 +104,6 @@ public class CustomerApiController {
         }
     }
 
-    @DeleteMapping("/shoppingcart")
-    public ResponseEntity<Map<String, String>> deleteFromCart(@RequestBody List<Map<String, Object>> selectedProducts) {
-        try {
-            Long customerId = getCurrentCustomerId();
-            List<Long> productIds = selectedProducts.stream()
-                    .map(product -> Long.parseLong(product.get("productId").toString()))
-                    .toList();
-            cartService.removeFromCart(customerId, productIds);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "선택한 제품이 삭제되었습니다.");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace(); // 예외 로그 출력
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "서버 오류 발생"));
-        }
-    }
-
     @PostMapping("/purchase/direct")
     public ResponseEntity purchaseDirectly(@RequestBody PurchaseProductDTO request) {
         try{
@@ -158,25 +137,6 @@ public class CustomerApiController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류 발생"));
         }
-    }
-
-    private Long getCurrentCustomerId() {
-        // SecurityContext에서 현재 인증 정보를 가져옵니다.
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // 인증된 사용자가 있는지 확인합니다.
-        if (authentication != null && authentication.isAuthenticated()) {
-            // 사용자 정보를 가져옵니다. (예: UserDetails 객체에서 ID를 가져오는 방식)
-            // 여기서는 UserDetails 인터페이스를 구현한 CustomUserDetails를 가정합니다.
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-            // 사용자 ID를 반환합니다.
-            // Customer 객체에서 ID를 가져옴
-            return userDetails.getCustomer().getId();
-        }
-
-        // 인증되지 않은 경우, 예외를 던지거나 null을 반환합니다.
-        throw new RuntimeException("사용자가 인증되지 않았습니다");
     }
 
     @PostMapping("/ootd_write")

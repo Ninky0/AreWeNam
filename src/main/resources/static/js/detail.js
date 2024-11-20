@@ -89,13 +89,13 @@ $(document).ready(function () {
         // 실제로 서버로 전송 (이 부분은 데이터 확인 후 실행)
         $.ajax({
             type: "POST",
-            url: "/user/shoppingcart",
+            url: "/mypage/shoppingcart",
             contentType: "application/json",
             data: jsonData,
             success: function (response) {
                 if (response.message) {
                     if (confirm(response.message)) {
-                        window.location.href = '/user/shoppingcart'; // 사용자가 확인 버튼을 클릭하면 장바구니 페이지로 이동
+                        window.location.href = '/mypage/shoppingcart'; // 사용자가 확인 버튼을 클릭하면 장바구니 페이지로 이동
                     }
                 }
             },

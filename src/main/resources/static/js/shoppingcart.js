@@ -91,7 +91,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'DELETE',
-            url: '/user/shoppingcart',
+            url: '/mypage/shoppingcart',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(selectedRows), // 선택된 상품 ID JSON 형식으로 변환
             dataType: 'json',
@@ -161,21 +161,3 @@ $(document).ready(function() {
     }
 
 });
-
-//
-// // AJAX 요청 보내기
-// $.ajax({
-//     url: '/user/shoppingcart',
-//     method: 'POST',
-//     contentType: 'application/json',
-//     data: JSON.stringify(payload),
-//     success: function(response) {
-//         // 요청이 성공하면 주문 완료 페이지로 이동
-//         alert("구매하시겠습니까?"); // 한 번 더
-//         alert(response.message); // 성공 메시지
-//         window.location.href = '/user/shoppingcart/ordercomplete'; // 주문 완료 페이지로 이동
-//     },
-//     error: function(xhr) {
-//         alert('주문 처리 중 오류가 발생했습니다: ' + xhr.responseJSON.message);
-//     }
-// });
