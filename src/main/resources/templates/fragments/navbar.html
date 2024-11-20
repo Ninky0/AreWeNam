@@ -34,7 +34,7 @@
 
                 <!-- 고객 전용 아이콘들: 주문 내역, 장바구니, 검색 (로그인 필요) -->
                 <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/mypage/history}"><i class="fa-solid fa-truck" style="color: #000000;"></i></a></li>
-                <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/user/shoppingcart}"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a></li>
+                <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/mypage/shoppingcart}"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a></li>
                 <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a th:href="@{/user/search}"><i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i></a></li>
 
                 <!-- 로그인 상태에 따른 로그인/로그아웃 버튼 -->
