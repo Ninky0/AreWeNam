@@ -73,6 +73,20 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
+    public void updateReview(ReviewWriteRequestDTO requestDTO, String picturePath) {
+        // 기존 리뷰를 찾는 로직
+        Review existingReview = reviewRepository.findByPurchaseIdAndProductIdAndCustomerId(
+                        requestDTO.getPurchaseId(), requestDTO.getProductId(), Long.parseLong(requestDTO.getCustomerId()))
+                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
+        // 기존 리뷰 데이터 업데이트
+        existingReview.updateFromDTO(requestDTO, picturePath);
+
+        // 리뷰 저장
+        reviewRepository.save(existingReview);
+    }
+
+
     public Integer countReview(Long productId) {
         return reviewRepository.countByProductId(productId).intValue();
     }

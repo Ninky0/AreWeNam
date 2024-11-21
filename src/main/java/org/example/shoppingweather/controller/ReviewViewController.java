@@ -51,4 +51,22 @@ public class ReviewViewController {
 
         return "detail_review";
     }
+
+    @GetMapping("/edit/{productId}/{purchaseId}")
+    public String editReview(@PathVariable Long productId, @PathVariable Long purchaseId, Model model, HttpSession session) {
+        Customer customer = customerService.findBySession(session);
+
+        if (customer == null) {
+            return "redirect:/user/login";
+        }
+
+        model.addAttribute("productId", productId);
+        model.addAttribute("purchaseId", purchaseId);
+        model.addAttribute("customerId", customer.getId());
+
+        Review review = reviewService.findByIds(purchaseId, productId, customer.getId());
+        model.addAttribute("review", review);
+
+        return "edit_review";
+    }
 }

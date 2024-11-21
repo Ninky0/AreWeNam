@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:height="http://www.w3.org/1999/xhtml"
+      xmlns:font-size="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+  <script th:src="@{/js/review_edit.js}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link th:href="@{/css/ootd_write.css}" rel="stylesheet">
+  <link th:href="@{/css/heather.css}" rel="stylesheet">
+  <link th:href="@{/css/footer.css}" rel="stylesheet">
+  <title>리뷰수정 페이지</title>
+</head>
+<body class="ootd-registration-body">
+<header>
+  <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+<main>
+  <form id="ootdForm" method="PUT" enctype="multipart/form-data">
+    <input type="hidden" id="customerId" name="customerId" th:value="${customerId}">
+    <input type="hidden" id="productId" name="productId" th:value="${productId}">
+    <input type="hidden" id="purchaseId" name="purchaseId" th:value="${purchaseId}">
+    <h2>리뷰 상세</h2>
+    <div class="ootd-row">
+      <div class="ootd-col-md-4">
+        <div class="ootd-image-upload">
+          <div class="ootd-image-placeholder">
+            <img th:src="@{${#strings.replace(review.picturePath,'src/main/resources/static', '')}}"
+                 alt="리뷰 이미지"
+                 class="review-image"
+                 th:style="${review.picturePath != null} ? 'display: block;' : 'display: none;'" />
+          </div>
+          <input type="file" id="picture" name="picture" accept="image/*" class="ootd-file-input" required onchange="previewMainImage(event)">
+        </div>
+      </div>
+      <input type="text" id="content" name="content" th:value="${review.content}" class="content-input" required>
+
+    </div>
+    <button class="review-button update-button" type="button" onclick="submitForm()">수정하기</button>
+  </form>
+</main>
+<footer>
+  <div class="footer-container">
+    <p>&copy; 2024 WeatherWear. All rights reserved.</p>
+    <ul>
+      <li><a href="#">개인정보 처리방침</a></li>
+      <li><a href="#">이용 약관</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

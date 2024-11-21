@@ -86,6 +86,31 @@ public class ReviewApiController {
         }
     }
 
+    @PutMapping("/{productId}/{purchaseId}")
+    public ResponseEntity<Map<String, String>> editReview(
+            @PathVariable Long productId,
+            @PathVariable Long purchaseId,
+            @ModelAttribute ReviewWriteRequestDTO requestDTO) {
+
+        System.out.println("API 컨트롤러 입성");
+
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            String picturePath = reviewService.handleFileUpload(requestDTO.getPicture());
+            reviewService.updateReview(requestDTO, picturePath);
+
+            response.put("url", "/mypage/history");
+            response.put("message", "리뷰 수정이 완료되었습니다.");
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     @GetMapping("/posts")
     public ResponseEntity<List<CustomerReviewResponseDTO>> getReviewsByCustomerId(
             @RequestParam("customerId") Long customerId,

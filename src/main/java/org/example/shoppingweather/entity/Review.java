@@ -51,4 +51,11 @@ public class Review {
         review.setDate(LocalDateTime.now());
         return review;
     }
+
+    // DTO로부터 데이터를 받아와 엔티티를 업데이트하는 메소드
+    public void updateFromDTO(ReviewWriteRequestDTO dto, String newPicturePath) {
+        this.content = dto.getContent();  // 리뷰 내용 업데이트
+        this.picturePath = newPicturePath;  // 새 이미지 경로 업데이트
+        this.date = LocalDateTime.now();
+    }
 }

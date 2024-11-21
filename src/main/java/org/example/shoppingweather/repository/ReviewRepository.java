@@ -21,7 +21,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Page<Review> findByCustomerId(Long customerId, Pageable pageable);
 
-    boolean existsByProductIdAndPurchaseId(Long productId, Long purchaseId);
     List<Review> findByPurchaseId(Long purchaseId);
 
     Optional<Review> findByPurchaseIdAndProductIdAndCustomerId(Long purchaseId, Long productId, Long customerId);
