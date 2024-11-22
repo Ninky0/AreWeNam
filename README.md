@@ -29,6 +29,10 @@
   <img width="290" alt="image" src="https://github.com/user-attachments/assets/b30a2a3c-86b3-491e-a5b8-f5b074e26e40">
   <img width="602" alt="image" src="https://github.com/user-attachments/assets/acf36438-5f90-4b1a-a375-e13a462447fb">
 
+- 구매자 마이페이지
+- 장바구니
+- 구매목록 - 리뷰
+- 작성한 글 -리뷰 & ootd
 
 - 판매자 판매글 등록
       - 판매자는 날씨, 기온, 계절들을 선택하여 상품을 등록할 수 있습니다.
