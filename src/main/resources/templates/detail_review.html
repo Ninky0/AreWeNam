@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:height="http://www.w3.org/1999/xhtml"
-      xmlns:font-size="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +16,7 @@
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </header>
 <main>
-    <form id="ootdForm" method="POST" enctype="multipart/form-data">
+    <form id="ootdForm">
         <input type="hidden" id="customerId" name="customerId" th:value="${customerId}">
         <input type="hidden" id="productId" name="productId" th:value="${productId}">
         <input type="hidden" id="purchaseId" name="purchaseId" th:value="${purchaseId}">
@@ -34,10 +33,9 @@
                 </div>
             </div>
             <input type="text" id="content" name="content" th:value="${review.content}" class="content-input" readonly>
-
         </div>
         <a class="review-button" th:href="@{/review/edit/{prodid}/{purchid}(prodid=${productId}, purchid=${purchaseId})}">수정</a>
-        <button class="review-button delete-button" type="button">삭제하기</button>
+        <button class="review-button delete-button" id="deleteButton" type="button">삭제하기</button>
     </form>
 </main>
 <footer>

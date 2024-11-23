@@ -86,6 +86,11 @@ public class ReviewService {
         reviewRepository.save(existingReview);
     }
 
+    public void deleteReview(Long productId, Long purchaseId) {
+        Review existingReview = reviewRepository.findByPurchaseIdAndProductId(purchaseId,productId)
+                .orElseThrow(()->new IllegalArgumentException("Review not found"));
+        reviewRepository.delete(existingReview);
+    }
 
     public Integer countReview(Long productId) {
         return reviewRepository.countByProductId(productId).intValue();
