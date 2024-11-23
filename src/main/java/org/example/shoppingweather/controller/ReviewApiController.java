@@ -3,7 +3,6 @@ package org.example.shoppingweather.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
 import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
-import org.example.shoppingweather.entity.Review;
 import org.example.shoppingweather.service.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,14 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,8 +86,6 @@ public class ReviewApiController {
             @PathVariable Long purchaseId,
             @ModelAttribute ReviewWriteRequestDTO requestDTO) {
 
-        System.out.println("API 컨트롤러 입성");
-
         Map<String, String> response = new HashMap<>();
 
         try {
@@ -109,6 +101,20 @@ public class ReviewApiController {
             response.put("message", "이미지 업로드 중 오류가 발생했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    @DeleteMapping("/{productId}/{purchaseId}")
+    public ResponseEntity<Map<String, String>> deleteReview(
+            @PathVariable Long productId,
+            @PathVariable Long purchaseId) {
+        Map<String, String> response = new HashMap<>();
+
+        reviewService.deleteReview(productId, purchaseId);
+
+        response.put("url", "/mypage/history");
+        response.put("message", "리뷰 삭제가 완료되었습니다.");
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/posts")

@@ -17,61 +17,31 @@ function previewMainImage(event) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButton = document.getElementById('deleteButton');
+    deleteButton.addEventListener('click', function() {
+        const confirmation = confirm('정말로 이 리뷰를 삭제하시겠습니까?');
 
-function updateReview() {
-    const form = document.getElementById("ootdForm");
-    const formData = new FormData(form);
+        if (confirmation) {
+            const form = document.getElementById('ootdForm');
+            const productId = form.productId.value;
+            const purchaseId = form.purchaseId.value;
+            const url = `/review/${productId}/${purchaseId}`;
 
-    fetch('/review/edit/' + form.productId.value + '/' + form.purchaseId.value, {
-        method: 'PUT',
-        body: formData
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("서버에서 문제가 발생했습니다: " + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.url) {
-                alert(data.message || "리뷰가 성공적으로 수정되었습니다.");
-                window.location.href = data.url; // 서버에서 전달된 URL로 페이지 이동
-            } else {
-                alert("서버 응답에 URL이 포함되어 있지 않습니다.");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("리뷰 수정 과정에서 오류가 발생했습니다: " + error.message);
-        });
-}
-
-document.querySelector(".update-button").addEventListener('click', updateReview);
-
-
-
-function deleteReview() {
-    const form = document.getElementById("ootdForm");
-
-    if (!confirm("이 리뷰를 삭제하시겠습니까?")) return;
-
-    fetch('/review/delete/' + form.productId.value + '/' + form.purchaseId.value, {
-        method: 'DELETE'
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("리뷰가 성공적으로 삭제되었습니다.");
-                window.location.href = data.url; // 삭제 후 리다이렉션할 URL
-            } else {
-                alert(data.message || "리뷰 삭제 실패");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("리뷰 삭제 과정에서 오류가 발생했습니다: " + error.message);
-        });
-}
-
-document.querySelector(".delete-button").addEventListener('click', deleteReview);
-
+            fetch(url, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('리뷰가 성공적으로 삭제되었습니다.');
+                        window.location.href = response.url;
+                    } else {
+                        throw new Error('리뷰를 삭제하는 데 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+    });
+});
