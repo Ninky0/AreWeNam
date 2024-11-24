@@ -1,8 +1,8 @@
 package org.example.shoppingweather.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
-import org.example.shoppingweather.dto.OotdWriteRequestDTO;
+import org.example.shoppingweather.dto.ootd.CustomerOotdImageResponseDTO;
+import org.example.shoppingweather.dto.ootd.OotdWriteRequestDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Ootd;
 import org.example.shoppingweather.entity.Product;
@@ -34,6 +34,18 @@ public class OotdService {
                 ootd.getCustomer().getLoginId(),
                 ootd.getProduct() != null ? ootd.getProduct().getName() : "Unknown"
         ));
+    }
+
+    // 모달창 안의 이미지
+    public Page<CustomerOotdImageResponseDTO> getOotdModalImage(Pageable pageable) {
+        Page<Ootd> ootdPage = ootdRepository.findAll(pageable);
+        return ootdPage.map(ootd -> {
+            CustomerOotdImageResponseDTO responseDTO = new CustomerOotdImageResponseDTO();
+            responseDTO.setId(ootd.getId()); // OOTD ID 설정
+            responseDTO.setPicture(ootd.getPicture()); // 이미지 경로 설정
+            // 필요한 필드가 있으면 추가로 설정
+            return responseDTO;
+        });
     }
 
     // OOTD 게시글 저장 기능 추가

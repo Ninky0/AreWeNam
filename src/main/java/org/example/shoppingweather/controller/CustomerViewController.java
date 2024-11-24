@@ -3,7 +3,7 @@ package org.example.shoppingweather.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
-import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO;
+import org.example.shoppingweather.dto.ootd.CustomerOotdImageResponseDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.service.*;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,6 @@ public class CustomerViewController {
 
     private final CustomerService customerService;
     private final ProductService productService;
-    private final OotdService ootdService;
     private final ReviewService reviewService;
 
     @GetMapping("/join")
@@ -79,24 +78,6 @@ public class CustomerViewController {
         model.addAttribute("showNext", endPage < totalPages - 1);
 
         return "total_list";
-    }
-
-    @GetMapping("/ootd_list")
-    public String ootdList(Model model, Pageable pageable) {
-        Page<CustomerOotdImageResponseDTO> ootdImages = ootdService.getOotdImages(pageable);
-        model.addAttribute("ootdImages", ootdImages);
-        return "ootd_list";
-    }
-
-    @GetMapping("/ootd_write")
-    public String ootdWrite(Model model, HttpSession session) {
-        Customer customer = customerService.findBySession(session);
-        if (customer != null) {
-            model.addAttribute("customerId", customer.getId());
-        } else {
-            return "redirect:/user/login";
-        }
-        return "ootd_write";
     }
 
     @GetMapping("/search")

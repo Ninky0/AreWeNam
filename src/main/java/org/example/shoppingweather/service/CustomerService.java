@@ -1,32 +1,19 @@
 package org.example.shoppingweather.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.Customer.CustomerDeleteRequestDTO;
-import org.example.shoppingweather.dto.Customer.CustomerPostResponseDTO;
-import org.example.shoppingweather.dto.Customer.CustomerUpdateRequestDTO;
+import org.example.shoppingweather.dto.customer.CustomerDeleteRequestDTO;
+import org.example.shoppingweather.dto.customer.CustomerUpdateRequestDTO;
 import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
-import org.example.shoppingweather.dto.Customer.CustomerOotdImageResponseDTO; // OOTD 이미지 응답 DTO 임포트
-import org.example.shoppingweather.dto.sign.SignUpRequestDTO;
+import org.example.shoppingweather.dto.ootd.CustomerOotdImageResponseDTO; // OOTD 이미지 응답 DTO 임포트
+import org.example.shoppingweather.dto.customer.SignUpRequestDTO;
 import org.example.shoppingweather.entity.*;
 import org.example.shoppingweather.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-import org.example.shoppingweather.entity.Product;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,17 +69,6 @@ public class CustomerService {
         } else {
             throw new RuntimeException("Incorrect password.");
         }
-    }
-
-    public Page<CustomerOotdImageResponseDTO> getOotdImages(Pageable pageable) {
-        Page<Ootd> ootdPage = ootdRepository.findAll(pageable);
-        return ootdPage.map(ootd -> {
-            CustomerOotdImageResponseDTO responseDTO = new CustomerOotdImageResponseDTO();
-            responseDTO.setId(ootd.getId()); // OOTD ID 설정
-            responseDTO.setPicture(ootd.getPicture()); // 이미지 경로 설정
-            // 필요한 필드가 있으면 추가로 설정
-            return responseDTO;
-        });
     }
 
 }

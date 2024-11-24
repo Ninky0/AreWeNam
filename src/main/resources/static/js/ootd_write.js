@@ -57,7 +57,7 @@ function updateProductList(products) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('ootdForm');
-    form.action = '/user/ootd_write';
+    form.action = '/ootd/write';
 });
 // 계절 표시 함수
 function getSeasonLabel(season) {
@@ -106,7 +106,7 @@ function updatePagination(data) {
 function selectProduct(productId) {
     document.getElementById('product_id').value = productId;
 
-    fetch(`/user/product/ootd_detail/${productId}`)
+    fetch(`/ootd/detail/product/${productId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('네트워크 응답에 문제가 있습니다.');
@@ -160,7 +160,7 @@ function previewMainImage(event) {
 function submitForm() {
     const formData = new FormData(document.getElementById("ootdForm"));
 
-    fetch('/user/ootd_write', { // URL 수정
+    fetch('/ootd/write', { // URL 수정
         method: 'POST',
         body: formData
     })

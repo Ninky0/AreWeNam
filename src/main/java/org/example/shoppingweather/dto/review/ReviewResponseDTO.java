@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto.Customer;
+package org.example.shoppingweather.dto.review;
 
 import lombok.*;
 import org.example.shoppingweather.entity.Customer;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @RequiredArgsConstructor
-public class CustomerReviewResponseDTO {
+public class ReviewResponseDTO {
     private final Long id;
     private final String picturePath;
     private final String content;

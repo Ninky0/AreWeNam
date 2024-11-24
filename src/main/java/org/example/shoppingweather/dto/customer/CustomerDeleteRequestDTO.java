@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto.Customer;
+package org.example.shoppingweather.dto.customer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

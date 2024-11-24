@@ -26,12 +26,12 @@ public class WebSecurityConfig {
                                 ).permitAll()
                                 .requestMatchers(
                                         "/user/login", "/user/join", "/join", "/home/**",
-                                        "/user/ootd_list", "/user/product/list",
+                                        "/ootd/list", "/user/product/list",
                                         "/home/seasonproduct_list", "/home/seasonproduct_list?season=1",
                                         "/home/seasonproduct_list?season=2", "/home/seasonproduct_list?season=3",
                                         "/home/seasonproduct_list?season=4", "/user/product/detail/**", // <-- 여기 수정
-                                        "/user/product/list", "/user/product/api/list", "/product/ootd_detail/**", "/ootd_list",
-                                        "/user/review_list", "/user/api/ootd-images/**", "/user/api/ootd/detail/**"
+                                        "/user/product/list", "/user/product/api/list", "/ootd/detail/product/**", "/ootd/list",
+                                        "/user/review_list", "/ootd/images/**", "/ootd/detail/**"
                                 ).permitAll()
                                 .requestMatchers(
                                         "/user/cart/add", "/user/buy"

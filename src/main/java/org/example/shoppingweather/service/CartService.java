@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.PurchaseDTO;
-import org.example.shoppingweather.dto.PurchaseProductDTO;
-import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.purchase.PurchaseDTO;
+import org.example.shoppingweather.dto.purchase.PurchaseProductDTO;
 import org.example.shoppingweather.entity.Cart;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
@@ -21,12 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -1,0 +1,73 @@
+package org.example.shoppingweather.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.weather.Region;
+import org.example.shoppingweather.dto.weather.WeatherResponse;
+import org.example.shoppingweather.entity.Product;
+import org.example.shoppingweather.service.ProductService;
+import org.example.shoppingweather.service.WeatherService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/home")
+public class HomeApiController {
+    private final WeatherService weatherService;
+    private final ProductService productService;
+
+    @GetMapping("/weather/regions")
+    @ResponseBody
+    public List<Region> getRegionList() {
+        //csv파일 읽어옴(지역별 위도 경도)
+        return weatherService.getRegionsFromCSV();
+    }
+
+    @GetMapping("/weather/search")
+    public ResponseEntity searchWeather(@RequestParam String parent, @RequestParam String child) {
+        WeatherResponse weather = weatherService.selectWeatherData(parent, child);
+        return ResponseEntity.ok(weather);
+    }
+
+    @GetMapping("/recommend/temp")
+    public ResponseEntity<List<Product>> getRecommendedProducts(@RequestParam("temperature") double temperature) {
+        int tempIndex = mapTemperatureToIndex(temperature);
+        List<Product> recommendedProducts = productService.findByTemperatureIndex(tempIndex);
+        return ResponseEntity.ok(recommendedProducts);
+    }
+
+    private int mapTemperatureToIndex(double temperature) {
+        if (temperature >= 28) {
+            return 1;  // 28℃ 이상
+        } else if (temperature >= 23 && temperature < 28) {
+            return 2;  // 23℃ ~ 27℃
+        } else if (temperature >= 20 && temperature < 23) {
+            return 3;  // 20℃ ~ 22℃
+        } else if (temperature >= 17 && temperature < 20) {
+            return 4;  // 17℃ ~ 19℃
+        } else if (temperature >= 12 && temperature < 17) {
+            return 5;  // 12℃ ~ 16℃
+        } else if (temperature >= 9 && temperature < 12) {
+            return 6;  // 9℃ ~ 11℃
+        } else if (temperature >= 5 && temperature < 9) {
+            return 7;  // 5℃ ~ 8℃
+        } else {
+            return 8;  // 4℃ 이하
+        }
+    }
+
+    // AJAX 요청에 대한 JSON 응답
+    @PostMapping("/seasonproduct_list")
+    @ResponseBody
+    public Page<ProdReadResponseDTO> filterProductsBySeason(@RequestParam String season, int page) {
+        Pageable pageable = PageRequest.of(page, 5); // 페이지당 5개
+        return productService.getProductsBySeason(season, pageable);
+    }
+
+}

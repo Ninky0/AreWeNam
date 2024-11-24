@@ -1,4 +1,4 @@
-package org.example.shoppingweather.dto.sign;
+package org.example.shoppingweather.dto.customer;
 
 import lombok.Getter;
 import org.example.shoppingweather.entity.Customer;
