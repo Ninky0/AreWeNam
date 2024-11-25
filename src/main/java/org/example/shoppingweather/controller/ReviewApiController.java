@@ -1,8 +1,8 @@
 package org.example.shoppingweather.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
-import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
+import org.example.shoppingweather.dto.review.ReviewResponseDTO;
+import org.example.shoppingweather.dto.review.ReviewWriteRequestDTO;
 import org.example.shoppingweather.service.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +32,7 @@ public class ReviewApiController {
         long startTime = System.currentTimeMillis(); // 시작 시간 기록
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-        Page<CustomerReviewResponseDTO> reviewPage = reviewService.findReviewsByProductId(productId, pageable);
+        Page<ReviewResponseDTO> reviewPage = reviewService.findReviewsByProductId(productId, pageable);
 
         int totalPages = reviewPage.getTotalPages();
         int pageBlock = 10;
@@ -118,15 +118,15 @@ public class ReviewApiController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<CustomerReviewResponseDTO>> getReviewsByCustomerId(
+    public ResponseEntity<List<ReviewResponseDTO>> getReviewsByCustomerId(
             @RequestParam("customerId") Long customerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<CustomerReviewResponseDTO> reviewPage = reviewService.findReviewsByCustomerId(customerId, pageable);
+        Page<ReviewResponseDTO> reviewPage = reviewService.findReviewsByCustomerId(customerId, pageable);
 
-        List<CustomerReviewResponseDTO> reviews = reviewPage.getContent();
+        List<ReviewResponseDTO> reviews = reviewPage.getContent();
         return ResponseEntity.ok(reviews);
     }
 }

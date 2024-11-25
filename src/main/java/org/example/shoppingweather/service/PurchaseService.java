@@ -2,21 +2,17 @@ package org.example.shoppingweather.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.PurchaseDTO;
 import org.example.shoppingweather.entity.Customer;
 import org.example.shoppingweather.entity.Product;
 import org.example.shoppingweather.entity.Purchase;
 import org.example.shoppingweather.entity.Review;
-import org.example.shoppingweather.repository.ProductRepository;
 import org.example.shoppingweather.repository.PurchaseRepository;
 import org.example.shoppingweather.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -1,8 +1,8 @@
 package org.example.shoppingweather.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
-import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
+import org.example.shoppingweather.dto.review.ReviewResponseDTO;
+import org.example.shoppingweather.dto.review.ReviewWriteRequestDTO;
 import org.example.shoppingweather.entity.*;
 import org.example.shoppingweather.repository.CustomerRepository;
 import org.example.shoppingweather.repository.ProductRepository;
@@ -26,7 +26,7 @@ public class ReviewService {
     private final CustomerRepository customerRepository;
     private final PurchaseRepository purchaseRepository;
 
-    public Page<CustomerReviewResponseDTO> findReviewsByProductId(Long productId, Pageable pageable) {
+    public Page<ReviewResponseDTO> findReviewsByProductId(Long productId, Pageable pageable) {
         // productId를 기반으로 리뷰를 찾는 리포지토리 메소드 호출
         Page<Review> reviewPage = reviewRepository.findByProductId(productId, pageable);
 
@@ -34,8 +34,8 @@ public class ReviewService {
         return reviewPage.map(this::convertToDto);
     }
 
-    private CustomerReviewResponseDTO convertToDto(Review review) {
-        return CustomerReviewResponseDTO.builder()
+    private ReviewResponseDTO convertToDto(Review review) {
+        return ReviewResponseDTO.builder()
                 .id(review.getId())
                 .loginId(review.getCustomer().getLoginId()) // customer 테이블의 loginId 포함
                 .picturePath(review.getPicturePath())
@@ -96,7 +96,7 @@ public class ReviewService {
         return reviewRepository.countByProductId(productId).intValue();
     }
     // customerId로 리뷰 조회 메서드
-    public Page<CustomerReviewResponseDTO> findReviewsByCustomerId(Long customerId, Pageable pageable) {
+    public Page<ReviewResponseDTO> findReviewsByCustomerId(Long customerId, Pageable pageable) {
         Page<Review> reviewPage = reviewRepository.findByCustomerId(customerId, pageable);
         return reviewPage.map(this::convertToDto);
     }

@@ -5,9 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.shoppingweather.dto.Customer.CustomerReviewResponseDTO;
-import org.example.shoppingweather.dto.ReviewWriteRequestDTO;
-import org.example.shoppingweather.dto.product.ProdReadResponseDTO;
+import org.example.shoppingweather.dto.review.ReviewWriteRequestDTO;
 
 import java.time.LocalDateTime;
 

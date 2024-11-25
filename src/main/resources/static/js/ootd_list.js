@@ -9,7 +9,7 @@ $(document).ready(function () {
         isLoading = true;
 
         $.ajax({
-            url: '/user/api/ootd-images', // API 엔드포인트
+            url: '/ootd/images', // API 엔드포인트
             method: 'GET',
             data: {
                 offset: currentOffset,
@@ -75,7 +75,7 @@ $(document).ready(function () {
 
 function openOotdDetailModal(ootdId) {
     $.ajax({
-        url: `/user/api/ootd/detail/${ootdId}`,
+        url: `/ootd/detail/${ootdId}`,
         method: 'GET',
         success: function (data) {
             if (data) {
