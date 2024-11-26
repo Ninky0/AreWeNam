@@ -31,8 +31,17 @@
 
 - 구매자 마이페이지
 - 장바구니
-- 구매목록 - 리뷰
-- 작성한 글 -리뷰 & ootd
+    <img width="1347" alt="image" src="https://github.com/user-attachments/assets/06a594a2-d0eb-48a4-ae6a-a646d82ab1ac">
+ 
+- 구매내역 - 리뷰
+    <img width="1409" alt="image" src="https://github.com/user-attachments/assets/713d00fa-03b1-4099-b79e-c823eef57b8b">
+
+- 작성한 글 - ootd & 리뷰
+  <img width="916" alt="image" src="https://github.com/user-attachments/assets/d1c09db9-71ee-4c65-9308-7217556e9854">
+
+  <img width="835" alt="image" src="https://github.com/user-attachments/assets/8c4e48c8-649d-411b-8e7d-829ab44239fe">
+
+
 
 - 판매자 판매글 등록
       - 판매자는 날씨, 기온, 계절들을 선택하여 상품을 등록할 수 있습니다.
